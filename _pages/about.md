@@ -18,8 +18,38 @@ selected_papers: true # includes a list of papers marked as "selected={true}"
 social: true # includes social icons at the bottom of the page
 ---
 
-Write your biography here. Tell the world about yourself. Link to your favorite [subreddit](http://reddit.com). You can put a picture in, too. The code is already in, just name your picture `prof_pic.jpg` and put it in the `img/` folder.
+[Mechanical Engineer](https://en.wikipedia.org/wiki/Mechanical_engineering) turned [Computational Scientist](https://en.wikipedia.org/wiki/Computational_science) turned [Mathematician](https://en.wikipedia.org/wiki/Mathematician). Quite expectedly enjoys projects that call for both [Math](https://en.wikipedia.org/wiki/Mathematics) and [programming](https://en.wikipedia.org/wiki/Computer_programming). Is well versed to a certain degree in what is known as [Mathematical Analysis](https://en.wikipedia.org/wiki/Mathematical_analysis) and [Scientific Programming Languages](https://en.wikipedia.org/wiki/Scientific_programming_language) like [C](https://en.wikipedia.org/wiki/C_(programming_language)), [C++](https://en.wikipedia.org/wiki/C%2B%2B), [Python](https://en.wikipedia.org/wiki/Python_(programming_language)), [Julia](https://en.wikipedia.org/wiki/Julia_(programming_language)) and will abandon ship if necessary.       
+    Likes [Darwin](https://github.com/apple/darwin-xnu)/[Linux](https://www.kernel.org/) and in turn [MacBooks](https://www.apple.com/mac/)/[system76](https://system76.com/).
+ His Five:-) [horsemen of the Apocalypse](https://en.wikipedia.org/wiki/Four_Horsemen_of_the_Apocalypse) are the said [OS](https://en.wikipedia.org/wiki/Operating_system)s, [zsh](https://www.zsh.org), [Alacritty](https://alacritty.org/), [tmux](https://github.com/tmux/), and [vim](https://www.vim.org) for handling the basic workflow.  
+Owes a great debt to [S. Shahshahani](http://sharif.ir/~shahshah/), [M. Jalali](https://sites.google.com/site/mirabbasjalali/home?pli=1), [S. Rezaei](http://sina.sharif.edu/~srezaei/), [M. Itskov](https://www.km.rwth-aachen.de/cms/KM/Das-Lehr-und-Forschungsgebiet/Team/Leitung/~qpvr/Mikhail-Itskov/?allou=1&mobile=1&lidx=1), [N. Tager](https://www.sz.rwth-aachen.de/cms/SZ/Das-Sprachenzentrum/Unser-Team/~iinn/Mitarbeiter-CAMPUS-/?gguid=0x446EA780660F524D9C00FBBD05DBC761&allou=1), and finally [B. Berkels](https://www.aices.rwth-aachen.de/en/people/berkels).
 
-Put your address / P.O. box / other info right below your picture. You can also disable any of these elements by editing `profile` property of the YAML header of your `_pages/about.md`. Edit `_bibliography/papers.bib` and Jekyll will render your [publications page](/al-folio/publications/) automatically.
+##### Short/Extended Resume
 
-Link to your social media connections, too. This theme is set up to use [Font Awesome icons](https://fontawesome.com/) and [Academicons](https://jpswalsh.github.io/academicons/), like the ones below. Add your Facebook, Twitter, LinkedIn, Google Scholar, or just disable all of them.
+* short resume(upon request)
+* extended resume(upon request)
+
+##### Degrees and Transcripts
+
+* [MSc Degree](upon request)
+* [Master Transcripts](upon request)
+* [BSc Degree](upon request)  
+* [Bachelor Transcripts](upon request)  
+
+##### Programming Certificates
+
+* [C++ by Dr. Klaus Iglberger](upon request)  
+* [Machine Learning by TU Darmstadt](upon request)  
+* [Kaggle(All)](upon request)  
+
+##### English Certificates
+
+* [TOEFL(Test of English as a Foreign Language) by ETS]({{ site.url }}/assets/pdf/TOEFL.pdf)  
+* [GRE(Graduate Record Examinations) by ETS]({{ site.url }}/assets/pdf/GRE.pdf)  
+* [CAE Preparation Course by RWTH Aachen University]({{ site.url }}/assets/pdf/english_certificate_c1_CAE_preparation_course.pdf)  
+* [Advanced English for Academic Purposes by RWTH Aachen University]({{ site.url }}/assets/pdf/english_certificate_c1_advanced_academic_english.pdf)  
+
+##### Letters of Recommendation
+
+* [Prof. of Mathematics at RWTH Aachen University](upon request)
+* [Prof. of Mechanical Engineering at Sharif University of Technology](upon request)  
+* [Prof. of Mechanical Engineering at Sharif University of Technology](upon request)  
