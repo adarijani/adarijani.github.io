@@ -2,11 +2,11 @@
   type: map
   contents:
     - name: Full Name
-      value: Albert Einstein
+      value: Ali Darijani
     - name: Date of Birth
-      value: 14th March 1879
+      value: Classified
     - name: Languages
-      value: English, German
+      value: Classified
 
 - title: Education
   type: time_table
