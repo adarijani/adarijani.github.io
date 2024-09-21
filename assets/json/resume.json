@@ -56,82 +56,96 @@
     }
   ],
 
-  "work": [
-    {
-      "name": "Institute for Advanced Study, Princeton University",
-      "position": "Professor of Theoretical Physics",
-      "url": "https://example.com",
-      "startDate": "1933-01-01",
-      "endDate": "1955-01-01",
-      "summary": "Teaching at Palmer Physical Laboratory (now 302 Frist Campus Center). While not a professor at Princeton, I associated with the physics professors and continued to give lectures on campus.",
-      "highlights": ["Relativity"]
-    }
-  ],
-  "volunteer": [
-    {
-      "organization": "People's Climate March",
-      "location": "Zurich, Switzerland",
-      "position": "Lead Organizer",
-      "url": "https://example.com",
-      "startDate": "2014-04-01",
-      "endDate": "2015-07-01",
-      "summary": "Lead organizer for the New York City branch of the People's Climate March, the largest climate march in history.",
-      "highlights": ["Awarded 'Climate Hero' award by Greenpeace for my efforts organizing the march.", "Men of the year 2014 by Time magazine"]
-    }
-  ],
+  // "work": [
+  //   {
+  //     "name": "Institute for Advanced Study, Princeton University",
+  //     "position": "Professor of Theoretical Physics",
+  //     "url": "https://example.com",
+  //     "startDate": "1933-01-01",
+  //     "endDate": "1955-01-01",
+  //     "summary": "Teaching at Palmer Physical Laboratory (now 302 Frist Campus Center). While not a professor at Princeton, I associated with the physics professors and continued to give lectures on campus.",
+  //     "highlights": ["Relativity"]
+  //   }
+  // ],
+  // "volunteer": [
+  //   {
+  //     "organization": "People's Climate March",
+  //     "location": "Zurich, Switzerland",
+  //     "position": "Lead Organizer",
+  //     "url": "https://example.com",
+  //     "startDate": "2014-04-01",
+  //     "endDate": "2015-07-01",
+  //     "summary": "Lead organizer for the New York City branch of the People's Climate March, the largest climate march in history.",
+  //     "highlights": ["Awarded 'Climate Hero' award by Greenpeace for my efforts organizing the march.", "Men of the year 2014 by Time magazine"]
+  //   }
+  // ],
   "awards": [
     {
-      "title": "Nobel Prize in Physics",
-      "date": "1921-11-01",
-      "awarder": "Royal Swedish Academy of Sciences",
-      "url": "https://www.nobelprize.org/prizes/physics/1921/einstein/biographical/",
-      "summary": "The Nobel Prizes are five separate prizes that, according to Alfred Nobel's will of 1895, are awarded to 'those who, during the preceding year, have conferred the greatest benefit to humankind.'"
+      "title": "Full Scholarship for PhD",
+      "date": "2024",
+      "awarder": "KIT/Fraunhofer",
+      "url": "https://kit.edu",
+      "summary": ""
+    },
+    {
+      "title": "Full Scholarship for MSc",
+      "date": "2017",
+      "awarder": "UOIT",
+      "url": "https://ontariotechu.ca/",
+      "summary": ""
+    },
+    {
+      "title": "Full Scholarship for BSc",
+      "date": "2010",
+      "awarder": "SUT",
+      "url": "https://en.sharif.ir/",
+      "summary": ""
     }
   ],
-  "certificates": [
-    {
-      "name": "Machine Learning",
-      "date": "2018-01-01",
-      "issuer": "Stanford University",
-      "url": "https://example.com",
-      "icon": "fa-solid fa-location-dot"
-    },
-    {
-      "name": "Quantum Computing",
-      "date": "2018-01-01",
-      "issuer": "Stanford University",
-      "url": "https://example.com",
-      "icon": "fa-solid fa-tag"
-    },
-    {
-      "name": "Quantum Information",
-      "date": "2018-01-01",
-      "issuer": "Stanford University",
-      "url": "https://example.com",
-      "icon": "fa-solid fa-envelope"
-    },
-    {
-      "name": "Quantum Cryptography",
-      "date": "2018-01-01",
-      "issuer": "Stanford University",
-      "url": "https://example.com",
-      "icon": "fa-solid fa-hashtag"
-    },
-    {
-      "name": "Quantum Communication",
-      "date": "2018-01-01",
-      "issuer": "Stanford University",
-      "url": "https://example.com",
-      "icon": "fa-solid fa-calendar"
-    },
-    {
-      "name": "Quantum Teleportation",
-      "date": "2018-01-01",
-      "issuer": "Stanford University",
-      "url": "https://example.com",
-      "icon": "fa-solid fa-clipboard-check"
-    }
-  ],
+  // "certificates": [
+  //   {
+  //     "name": "Machine Learning",
+  //     "date": "2018-01-01",
+  //     "issuer": "Stanford University",
+  //     "url": "https://example.com",
+  //     "icon": "fa-solid fa-location-dot"
+  //   },
+  //   {
+  //     "name": "Quantum Computing",
+  //     "date": "2018-01-01",
+  //     "issuer": "Stanford University",
+  //     "url": "https://example.com",
+  //     "icon": "fa-solid fa-tag"
+  //   },
+  //   {
+  //     "name": "Quantum Information",
+  //     "date": "2018-01-01",
+  //     "issuer": "Stanford University",
+  //     "url": "https://example.com",
+  //     "icon": "fa-solid fa-envelope"
+  //   },
+  //   {
+  //     "name": "Quantum Cryptography",
+  //     "date": "2018-01-01",
+  //     "issuer": "Stanford University",
+  //     "url": "https://example.com",
+  //     "icon": "fa-solid fa-hashtag"
+  //   },
+  //   {
+  //     "name": "Quantum Communication",
+  //     "date": "2018-01-01",
+  //     "issuer": "Stanford University",
+  //     "url": "https://example.com",
+  //     "icon": "fa-solid fa-calendar"
+  //   },
+  //   {
+  //     "name": "Quantum Teleportation",
+  //     "date": "2018-01-01",
+  //     "issuer": "Stanford University",
+  //     "url": "https://example.com",
+  //     "icon": "fa-solid fa-clipboard-check"
+  //   }
+  // ],
   // "publications": [
   //   {
   //     "name": "Zur Elektrody/namik bewegter Körper",
@@ -185,26 +199,36 @@
       ]
     }
   ],
-  "languages": [
+  // "languages": [
+  //   {
+  //     "language": "English",
+  //     // "fluency": "Native speaker",
+  //     "icon": ""
+  //   },
+  //   {
+  //     "language": "German",
+  //     // "fluency": "Fluent",
+  //     "icon": ""
+  //   }
+  // ],
+  // "interests": [
+  //   {
+  //     "name": "Math",
+  //     "icon": "fa-solid fa-tag",
+  //     "keywords": [
+  //       "Uncertainty Quantification",
+  //       "Functional Analysis"
+  //     ]
+  //   }
+  // ],
+  "projects": [
     {
-      "language": "English",
-      // "fluency": "Native speaker",
-      "icon": ""
-    },
-    {
-      "language": "German",
-      // "fluency": "Fluent",
-      "icon": ""
-    }
-  ],
-  "interests": [
-    {
-      "name": "Math",
-      "icon": "fa-solid fa-tag",
-      "keywords": [
-        "Uncertainty Quantification",
-        "Functional Analysis"
-      ]
+      "name": "SFB 1574",
+      "summary": "The SFB \"Circular Factory\" aims to enable integrated linear and circular production on an industrial scale..",
+      "highlights": [" Deutsche Forschungsgemeinschaft (DFG)", "SFB 1574:  A Circular Factory for the Perpetual Product"],
+      "startDate": "2024-04-01",
+      "endDate": "2036-04-01",
+      "url": "https://gepris-extern.dfg.de/gepris/projekt/471687386?language=en"
     }
   ],
   "references": [
@@ -235,15 +259,5 @@
     }
 
 
-  ],
-  "projects": [
-    {
-      "name": "SFB 1574",
-      "summary": "The SFB \"Circular Factory\" aims to enable integrated linear and circular production on an industrial scale..",
-      "highlights": [" Deutsche Forschungsgemeinschaft (DFG)", "SFB 1574:  A Circular Factory for the Perpetual Product"],
-      "startDate": "2024-04-01",
-      "endDate": "2036-04-01",
-      "url": "https://gepris-extern.dfg.de/gepris/projekt/471687386?language=en"
-    }
   ]
 }
