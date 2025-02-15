@@ -10,11 +10,18 @@ ninja.data = [{
       window.location.href = "/";
     },
   },{id: "nav-teaching",
-          title: "teaching",
-          description: "Materials for courses you taught. Replace this text with your description.",
+          title: "Teaching",
+          description: "teaching activities; present and past.",
           section: "Navigation",
           handler: () => {
-            window.location.href = "/teaching/";
+            window.location.href = "/Teaching/";
+          },
+        },{id: "nav-cv",
+          title: "CV",
+          description: "This is a description of the page. You can modify it in &#39;_pages/cv.md&#39;. You can also change or remove the top pdf download button.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/CV/";
           },
         },{id: "post-a-post-with-image-galleries",
       
@@ -424,6 +431,61 @@ ninja.data = [{
           description: "another project with an image 🎉",
           section: "Projects",handler: () => {
               window.location.href = "/projects/9_project/";
+            },},{id: "projects-optimization-for-data-sciences",
+          title: 'Optimization for Data Sciences',
+          description: "",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/teaching_KIT_001/";
+            },},{id: "projects-pattern-recognition",
+          title: 'Pattern Recognition',
+          description: "",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/teaching_KIT_002/";
+            },},{id: "projects-calculus",
+          title: 'Calculus',
+          description: "",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/teaching_MISC_001/";
+            },},{id: "projects-advanced-calculus",
+          title: 'Advanced Calculus',
+          description: "",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/teaching_MISC_002/";
+            },},{id: "projects-undergraduate-analysis",
+          title: 'Undergraduate Analysis',
+          description: "",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/teaching_MISC_003/";
+            },},{id: "projects-graduate-analysis",
+          title: 'Graduate Analysis',
+          description: "",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/teaching_MISC_004/";
+            },},{id: "projects-undergraduate-linear-algebra",
+          title: 'Undergraduate Linear Algebra',
+          description: "",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/teaching_MISC_005/";
+            },},{id: "projects-graduate-linear-algebra",
+          title: 'Graduate Linear Algebra',
+          description: "",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/teaching_MISC_006/";
+            },},{id: "projects-stochastic-simulation",
+          title: 'Stochastic Simulation',
+          description: "",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/teaching_MISC_007/";
+            },},{id: "projects-heat-transfer-i-amp-ii",
+          title: 'Heat Transfer I&amp;amp;II',
+          description: "",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/teaching_SUT_001/";
+            },},{id: "projects-technical-english-for-mechanical-engineers",
+          title: 'Technical English for Mechanical Engineers',
+          description: "",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/teaching_SUT_002/";
             },},{
         id: 'social-email',
         title: 'email',
