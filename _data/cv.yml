@@ -2,96 +2,116 @@
   type: map
   contents:
     - name: Full Name
-      value: Albert Einstein
-    - name: Date of Birth
-      value: 14th March 1879
-    - name: Languages
-      value: English, German
+      value: Ali Darijani
+    - name: Email
+      value: ali.darijani@iosb.fraunhofer.de
+    - name: Email
+      value: ali.darijani@kit.edu 
+    - name: Email
+      value: ali.darijani@rwth-aachen.de
+    - name: Email
+      value: ali.darijani@alum.sharif.edu
+    # - name: Date of Birth
+      # value: HIDDEN
+    # - name: Languages
+      # value: HIDDEN
 
 - title: Education
   type: time_table
   contents:
-    - title: PhD
-      institution: University of Zurich, Zurich, Switzerland
-      year: 1905
+    - title: PhD in Computer Science
+      institution: KIT
+      year: 2028
       description:
-        - Description 1.
-        - Description 2.
+        - TO BE COMPLETED.
+        - TO BE COMPLETED.
+        - TO BE COMPLETED.
         - title: Description 3.
           contents:
             - Sub-description 1.
             - Sub-description 2.
-    - title: Federal teaching diploma
-      institution: Eidgenössische Technische Hochschule, Zurich, Switzerland
-      year: 1900
+    - title: M. Sc. RWTH in Simulation Sciences
+      institution: RWTH
+      year: 2023
       description:
-        - Description 1.
-        - Description 2.
-
-- title: Experience
-  type: time_table
-  contents:
-    - title: Professor of Theoretical Physics
-      institution: Institute for Advanced Study, Princeton University
-      year: 1933 - 1955
+        - TO BE COMPLETED.
+        - TO BE COMPLETED.
+        - TO BE COMPLETED.
+    - title: BSc in Mechanical Engineering
+      institution: SUT
+      year: 2016
       description:
-        - Description 1.
-        - Description 2.
-        - title: Description 3.
-          contents:
-            - Sub-description 1.
-            - Sub-description 2.
-    - title: Visiting Professor
-      institution: California Institute of Technology, Pasadena, California, US
-      year: 1933
-      description:
-        - Description 1.
-        - Description 2.
+        - TO BE COMPLETED.
+        - TO BE COMPLETED.
+        - TO BE COMPLETED.
 
-    - title: Director
-      institution: Kaiser Wilhelm Institute for Physics, Berlin, Germany.
-      year: 1917-1933
+# - title: Experience
+#   type: time_table
+#   contents:
+#     - title: Professor of Theoretical Physics
+#       institution: Institute for Advanced Study, Princeton University
+#       year: 1933 - 1955
+#       description:
+#         - Description 1.
+#         - Description 2.
+#         - title: Description 3.
+#           contents:
+#             - Sub-description 1.
+#             - Sub-description 2.
+#     - title: Visiting Professor
+#       institution: California Institute of Technology, Pasadena, California, US
+#       year: 1933
+#       description:
+#         - Description 1.
+#         - Description 2.
 
-    - title: Professor of Theoretical Physics
-      institution: Karl-Ferdinand University, Prague, Czechoslovakia
-      year: 1911 - 1917
-      description:
+#     - title: Director
+#       institution: Kaiser Wilhelm Institute for Physics, Berlin, Germany.
+#       year: 1917-1933
 
-    - title: Associate Professor of Theoretical Physics
-      institution: University of Zurich, Zurich, Switzerland
-      year: 1909 - 1911
+#     - title: Professor of Theoretical Physics
+#       institution: Karl-Ferdinand University, Prague, Czechoslovakia
+#       year: 1911 - 1917
+#       description:
 
-- title: Open Source Projects
-  type: time_table
-  contents:
-    - title: <a href="https://github.com/alshedivat/al-folio">al-folio</a>
-      year: 2015-now
-      description: A beautiful, simple, clean, and responsive Jekyll theme for academics.
+#     - title: Associate Professor of Theoretical Physics
+#       institution: University of Zurich, Zurich, Switzerland
+#       year: 1909 - 1911
 
-- title: Honors and Awards
-  type: time_table
-  contents:
-    - year: 1921
-      items:
-        - Nobel Prize in Physics
-        - Matteucci Medal
-    - year: 2029
-      items:
-        - Max Planck Medal
+# - title: Open Source Projects
+  # type: time_table
+  # contents:
+    # - title: <a href="https://github.com/alshedivat/al-folio">al-folio</a>
+      # year: 2015-now
+      # description: A beautiful, simple, clean, and responsive Jekyll theme for academics.
+
+# - title: Honors and Awards
+  # type: time_table
+  # contents:
+    # - year: 1921
+      # items:
+        # - Nobel Prize in Physics
+        # - Matteucci Medal
+    # - year: 2029
+      # items:
+        # - Max Planck Medal
 
 - title: Academic Interests
   type: nested_list
   contents:
-    - title: Topic 1.
+    - title: Probabilistic Artificial Intelligence 
       items:
-        - Description 1.
-        - Description 2.
-    - title: Topic 2.
+        - Normalizing Flow
+    - title: Bayesian Fusion
       items:
-        - Description 1.
-        - Description 2.
+        - Gaussian Mixture Models
+        - Finite Mixture Models
+    - title: Mathematical Image Processing
+      items:
+        - Classical Image Processing
+        - Variational Image Processing
 
-- title: Other Interests
-  type: list
-  contents:
-    - <u>Hobbies:</u> Hobby 1, Hobby 2, etc.
+# - title: Interests
+#   type: list
+#   contents:
+#     - Google-Fu, Badminton
