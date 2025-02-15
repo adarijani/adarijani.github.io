@@ -5,7 +5,7 @@ permalink: /
 description: Available Theses, HIWI/WIHI
 # nav: true
 # nav_order: 1
-display_categories: [MSc Thesis, BSc Thesis, HIWI/WIHI]
+display_categories: [BSc/MSc Theses, HIWI/WIHI, Internships]
 horizontal: false
 ---
 
