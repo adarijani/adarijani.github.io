@@ -492,7 +492,7 @@ ninja.data = [{
           section: "Projects",handler: () => {
               window.location.href = "/projects/thesis_01/";
             },},{id: "projects-operator-overloading-for-gaussian-mixture",
-          title: 'Operator OVerloading for Gaussian Mixture',
+          title: 'Operator Overloading for Gaussian Mixture',
           description: "",
           section: "Projects",handler: () => {
               window.location.href = "/projects/thesis_02/";
