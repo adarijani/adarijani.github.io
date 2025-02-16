@@ -386,9 +386,9 @@ ninja.data = [{
             },},{id: "news-a-simple-inline-announcement-with-markdown-emoji-sparkles-smile",
           title: 'A simple inline announcement with Markdown emoji! :sparkles: :smile:',
           description: "",
-          section: "News",},{id: "projects-optimal-gaussian-mixture-approximation-of-the-product-of-gaussian-mixtures",
-          title: 'Optimal Gaussian Mixture Approximation of the Product of Gaussian Mixtures',
-          description: "with background image dfklg sdrg;jserg esrg;sergsergerg",
+          section: "News",},{id: "projects-gaussian-mixture-reduction",
+          title: 'Gaussian Mixture Reduction',
+          description: "",
           section: "Projects",handler: () => {
               window.location.href = "/projects/1_project/";
             },},{id: "projects-project-2",
