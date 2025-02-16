@@ -486,11 +486,16 @@ ninja.data = [{
           description: "",
           section: "Projects",handler: () => {
               window.location.href = "/projects/teaching_SUT_002/";
-            },},{id: "projects-project-1",
-          title: 'project 1',
-          description: "with background image",
+            },},{id: "projects-gaussian-mixture-reduction",
+          title: 'Gaussian Mixture Reduction',
+          description: "",
           section: "Projects",handler: () => {
               window.location.href = "/projects/thesis_01/";
+            },},{id: "projects-operator-overloading-for-gaussian-mixture",
+          title: 'Operator OVerloading for Gaussian Mixture',
+          description: "",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/thesis_02/";
             },},{
         id: 'social-email',
         title: 'email',
