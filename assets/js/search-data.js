@@ -471,11 +471,31 @@ ninja.data = [{
           description: "",
           section: "Projects",handler: () => {
               window.location.href = "/projects/teaching_MISC_006/";
+            },},{id: "projects-matrix-computations",
+          title: 'Matrix Computations',
+          description: "",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/teaching_MISC_007/";
+            },},{id: "projects-mathematics-of-signal-and-image-processing",
+          title: 'Mathematics of Signal and Image Processing',
+          description: "",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/teaching_MISC_008/";
+            },},{id: "projects-deep-learning",
+          title: 'Deep Learning',
+          description: "",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/teaching_MISC_009/";
             },},{id: "projects-stochastic-simulation",
           title: 'Stochastic Simulation',
           description: "",
           section: "Projects",handler: () => {
-              window.location.href = "/projects/teaching_MISC_007/";
+              window.location.href = "/projects/teaching_MISC_010/";
+            },},{id: "projects-street-fighting-math",
+          title: 'Street Fighting Math',
+          description: "",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/teaching_MISC_011/";
             },},{id: "projects-heat-transfer-i-amp-ii",
           title: 'Heat Transfer I&amp;amp;II',
           description: "",
