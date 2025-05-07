@@ -516,6 +516,11 @@ ninja.data = [{
           description: "",
           section: "Projects",handler: () => {
               window.location.href = "/projects/thesis_02/";
+            },},{id: "projects-probabilistic-generative-ai-using-gaussian-mixtures",
+          title: 'Probabilistic Generative AI Using Gaussian Mixtures',
+          description: "",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/thesis_03/";
             },},{
         id: 'social-email',
         title: 'email',
