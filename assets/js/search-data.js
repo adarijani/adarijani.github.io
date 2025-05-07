@@ -521,6 +521,11 @@ ninja.data = [{
           description: "",
           section: "Projects",handler: () => {
               window.location.href = "/projects/thesis_03/";
+            },},{id: "projects-deep-unfolding-in-gaussian-mixture-learning",
+          title: 'Deep Unfolding in Gaussian Mixture Learning',
+          description: "",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/thesis_04/";
             },},{
         id: 'social-email',
         title: 'email',
