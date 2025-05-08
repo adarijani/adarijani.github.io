@@ -526,6 +526,11 @@ ninja.data = [{
           description: "",
           section: "Projects",handler: () => {
               window.location.href = "/projects/thesis_04/";
+            },},{id: "projects-on-the-samplings-of-gaussian-mixtures",
+          title: 'On the Samplings of Gaussian Mixtures',
+          description: "",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/thesis_05/";
             },},{
         id: 'social-email',
         title: 'email',
