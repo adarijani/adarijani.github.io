@@ -431,6 +431,16 @@ ninja.data = [{
           description: "another project with an image 🎉",
           section: "Projects",handler: () => {
               window.location.href = "/projects/9_project/";
+            },},{id: "projects-internship-at-the-kit",
+          title: 'Internship at The KIT',
+          description: "",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/intern_01/";
+            },},{id: "projects-sfb-1574",
+          title: 'SFB 1574',
+          description: "",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/ra_01/";
             },},{id: "projects-optimization-for-data-sciences",
           title: 'Optimization for Data Sciences',
           description: "",
