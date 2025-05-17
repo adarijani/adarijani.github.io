@@ -531,6 +531,11 @@ ninja.data = [{
           description: "",
           section: "Projects",handler: () => {
               window.location.href = "/projects/thesis_05/";
+            },},{id: "projects-gaussian-mixture-library-for-probabilistic-ai",
+          title: 'Gaussian Mixture Library for Probabilistic AI',
+          description: "",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/thesis_06/";
             },},{
         id: 'social-email',
         title: 'email',
