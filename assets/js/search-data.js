@@ -539,6 +539,11 @@ ninja.data = [{
           description: "",
           section: "Projects",handler: () => {
               window.location.href = "/projects/thesis_06/";
+            },},{id: "projects-different-distances-and-divergences-for-gaussian-mixture",
+          title: 'Different Distances and Divergences for Gaussian Mixture',
+          description: "",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/thesis_07/";
             },},{
         id: 'social-email',
         title: 'email',
