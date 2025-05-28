@@ -3,7 +3,7 @@ layout: page
 permalink: /Teaching/
 title: Teaching
 description: teaching activities; present and past.
-nav: true
+# nav: true
 nav_order: 3
 # nav: true
 # nav_order: 1
