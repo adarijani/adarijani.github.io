@@ -537,6 +537,11 @@ ninja.data = [{
           description: "",
           section: "Projects",handler: () => {
               window.location.href = "/projects/thesis_07/";
+            },},{id: "projects-ontology-of-gaussian-mixture-inference",
+          title: 'Ontology of Gaussian Mixture Inference',
+          description: "",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/thesis_08/";
             },},{
         id: 'social-email',
         title: 'email',
