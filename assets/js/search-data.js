@@ -547,6 +547,11 @@ ninja.data = [{
           description: "",
           section: "Projects",handler: () => {
               window.location.href = "/projects/thesis_09/";
+            },},{id: "projects-gaussian-mixture-compression",
+          title: 'Gaussian Mixture Compression',
+          description: "",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/thesis_10/";
             },},{
         id: 'social-email',
         title: 'email',
