@@ -542,6 +542,11 @@ ninja.data = [{
           description: "",
           section: "Projects",handler: () => {
               window.location.href = "/projects/thesis_08/";
+            },},{id: "projects-high-performance-em-for-gaussian-mixture",
+          title: 'High Performance EM for Gaussian Mixture',
+          description: "",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/thesis_09/";
             },},{
         id: 'social-email',
         title: 'email',
