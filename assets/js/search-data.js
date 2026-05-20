@@ -552,6 +552,31 @@ ninja.data = [{
           description: "",
           section: "Projects",handler: () => {
               window.location.href = "/projects/thesis_10/";
+            },},{id: "projects-plane-curve-learning-using-gaussian-mixture",
+          title: 'Plane Curve Learning Using Gaussian Mixture',
+          description: "",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/thesis_11/";
+            },},{id: "projects-space-curve-learning-using-gaussian-mixture",
+          title: 'Space Curve Learning Using Gaussian Mixture',
+          description: "",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/thesis_12/";
+            },},{id: "projects-surface-learning-using-gaussian-mixture",
+          title: 'Surface Learning Using Gaussian Mixture',
+          description: "",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/thesis_13/";
+            },},{id: "projects-manifold-learning-using-gaussian-mixture",
+          title: 'Manifold Learning Using Gaussian Mixture',
+          description: "",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/thesis_14/";
+            },},{id: "projects-gaussian-equivalent-of-primitive-geometries",
+          title: 'Gaussian Equivalent of Primitive Geometries',
+          description: "",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/thesis_15/";
             },},{
         id: 'social-email',
         title: 'email',

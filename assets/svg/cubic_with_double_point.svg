@@ -1,0 +1,18 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+	"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="12.0cm" height="12.0cm" viewBox="0 0 301 301"
+	xmlns="http://www.w3.org/2000/svg" version="1.1">
+<line x1="0.0" y1="150.0" x2="300.0" y2="150.0" stroke="black" stroke-width="1" />
+<line x1="148.0" y1="50.0" x2="152.0" y2="50.0" stroke="black" stroke-width="1" />
+<line x1="150.0" y1="300.0" x2="150.0" y2="0.0" stroke="black" stroke-width="1" />
+<line x1="250.0" y1="148.0" x2="250.0" y2="152.0" stroke="black" stroke-width="1" />
+<polygon fill="black" stroke="black" stroke-width="1" points="300.0,150.0 290.0,147.0 290.0,153.0" />
+<polygon fill="black" stroke="black" stroke-width="1" points="150.0,0.0 147.0,10.0 153.0,10.0" />
+<path stroke="red" fill="none" stroke-width="1" d="M 254.81249 0 C -18.2708301 490.816953 -18.2708301 -190.816953 254.81249 300" />
+<text fill="black" text-anchor="end" x="299.0" y="165.0" font-style="italic" font-size="14" font-family="Times">x</text>
+<text fill="black" text-anchor="middle" x="250.0" y="165.0" font-size="14" font-family="Times">1</text>
+<text fill="black" text-anchor="end" x="147.0" y="55.0" font-size="14" font-family="Times">1</text>
+<text fill="black" text-anchor="end" x="144.0" y="10.0" font-style="italic" font-size="14" font-family="Times">y</text>
+<text fill="black" text-anchor="end" x="148.0" y="170.0" font-size="14" font-family="Times">0</text>
+</svg>
