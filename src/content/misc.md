@@ -1,3 +1,1 @@
-- Member of an open-research methods working group.
-- Reviewer for conferences in computational social science.
-- Interested in maps, public libraries, and careful data visualization.
+<!-- - Member of the [SFB1574/CRC1574](https://www.sfb1574.kit.edu/english/index.php) -->

@@ -23,6 +23,7 @@ const METADATA_FIELDS = [
   "abstract",
   "arxiv",
   "award",
+  "draft",
   "eprint",
   "selected",
   "equalfirst",

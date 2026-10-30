@@ -69,6 +69,7 @@ export interface Publication {
   eprint?: string
   venue?: string
   selected?: boolean
+  draft?: boolean
   [key: string]: unknown
 }
 
@@ -283,8 +284,8 @@ export function parseBibTeX(bibContent: string): Publication[] {
       // Copy every non-standard field the site knows how to display
       for (const fieldName of CUSTOM_FIELD_NAMES) {
         const value = getField(fieldName)
-        // Handle 'selected' field specially (convert to boolean)
-        if (fieldName === "selected") {
+        // Handle boolean fields specially (BibTeX stores everything as strings)
+        if (fieldName === "selected" || fieldName === "draft") {
           publication[fieldName] = value === "true" || value === true
         } else {
           publication[fieldName] = value

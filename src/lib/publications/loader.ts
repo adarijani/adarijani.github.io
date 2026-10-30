@@ -20,7 +20,7 @@ import bibContent from "/src/content/publications/main.bib?raw"
  */
 export async function loadAllPublications() {
   try {
-    const allPublications = parseBibTeX(bibContent)
+    const allPublications = parseBibTeX(bibContent).filter((pub) => !pub.draft)
     const sorted = sortPublications(allPublications, PUB_CONFIG)
 
     const processedPublicationsByYear: Record<string, any[]> = {}
@@ -90,7 +90,7 @@ export async function loadAllPublications() {
  */
 export async function loadSelectedPublications() {
   try {
-    const allPublications = parseBibTeX(bibContent)
+    const allPublications = parseBibTeX(bibContent).filter((pub) => !pub.draft)
     const selectedPublications = getSelectedPublications(allPublications)
     const sortedPublications = sortPublications(
       selectedPublications,

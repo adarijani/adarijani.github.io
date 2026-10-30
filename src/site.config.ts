@@ -7,11 +7,10 @@ import type {
 } from "@/types"
 
 export const SITE: SiteConfig = {
-  title: "My Scholar",
-  description:
-    "Research in computational social science, open methods, and responsible computing.",
-  href: "https://myscholar.pages.dev",
-  author: "Alex Morgan",
+  title: "Ali Darijani",
+  description: "Computational Mathematics, Applied Mathematics",
+  href: "https://adarijani.github.io",
+  author: "Ali Darijani",
   dir: "ltr",
   defaultPageImage: "/img/social-preview.png",
   defaultPostImage: "/img/social-preview.png",
@@ -53,23 +52,24 @@ export const SITE: SiteConfig = {
 
 export const PROFILE: ProfileConfig = {
   name: SITE.title,
-  tagline: "Computational social scientist and open-methods",
-  email: "hi@mychiffonn.com",
-  location: "Example City",
-  pronouns: "they/them",
+  tagline: "Computational Mathematics, Applied Mathematics",
+  email: "ali.darijani@rwth-aachen.de",
+  location: "Germany",
+  pronouns: "",
   links: {
-    github: "https://github.com/mychiffonn",
-    website: "https://mychiffonn.com/",
+    github: "https://github.com/adarijani",
+    website: "https://adarijani.github.io/",
   },
   highlightLinks: ["github"],
   linksPlacement: {
     header: ["email", "github", "website"],
-    about: false,
+    about: true,
     footer: false,
   },
 }
 
 export const NAV_LINKS: LinkConfig[] = [
+  { href: "/supervision", label: "Opportunities" },
   { href: "/projects", label: "Projects" },
   { href: "/publications", label: "Publications" },
   { href: "/teaching", label: "Teaching" },
@@ -85,9 +85,9 @@ export const PUB_CONFIG: PublicationConfig = {
   maxFirstAuthors: 6,
   maxLastAuthors: 1,
   highlightAuthor: {
-    firstName: "Alex",
-    lastName: "Morgan",
-    aliases: ["A. Morgan"],
+    firstName: "Ali",
+    lastName: "Darijani",
+    aliases: ["A. Darijani"],
   },
   equalSymbols: {
     first: "*",
@@ -99,9 +99,9 @@ export const PUB_CONFIG: PublicationConfig = {
 
 export const FOOTER: FooterConfig = {
   credits: true,
-  sourceCode: "https://github.com/mychiffonn/myscholar",
-  sourceContent:
-    "https://github.com/mychiffonn/myscholar/tree/main/src/content",
+  sourceCode: "https://github.com/adarijani",
+  // sourceContent:
+  // "https://github.com/adarijani/",
   footerLinks: [],
 }
 
