@@ -1,0 +1,50 @@
+---
+import type { RenderedUpdate } from "@/lib/updates"
+import FormattedDate from "@/components/base/FormattedDate.astro"
+import TimelineDate from "@/components/timeline/TimelineDate.astro"
+
+interface Props {
+  renderedUpdates: RenderedUpdate[]
+  class?: string
+  itemClass?: string
+}
+
+const { renderedUpdates, class: className, itemClass } = Astro.props
+---
+
+<div class:list={["updates-inline", className]}>
+  {renderedUpdates.map((item) => (
+      <article class="update-item">
+        <TimelineDate>
+          <FormattedDate date={item.date} />
+        </TimelineDate>
+        <prose-content class={itemClass}>
+          <item.Content />
+        </prose-content>
+      </article>
+    ))}
+</div>
+
+<style>
+  .updates-inline {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xs);
+  }
+
+  article {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3xs);
+
+    @media (width >= 40rem) {
+      flex-direction: row;
+      align-items: baseline;
+      gap: var(--space-xs);
+    }
+  }
+
+  .update-content {
+    min-inline-size: 0;
+  }
+</style>

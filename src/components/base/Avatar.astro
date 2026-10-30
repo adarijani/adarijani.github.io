@@ -1,0 +1,81 @@
+---
+import {
+  Image,
+  type LocalImageProps,
+  type RemoteImageProps,
+} from "astro:assets"
+
+type AstroImageProps = LocalImageProps | RemoteImageProps
+
+export interface Props extends Omit<AstroImageProps, "class"> {
+  fallback?: string
+  "data-slot"?: string
+  class?: string
+}
+
+const {
+  fallback = Astro.props.alt?.charAt(0) || "?",
+  "data-slot": dataSlot = "avatar-image",
+  class: className,
+  ...imageProps
+} = Astro.props
+
+/** Fallback edge for images Astro can't measure; avatars render far smaller. */
+const DEFAULT_AVATAR_SIZE = 512
+
+const isRemoteImage =
+  typeof imageProps.src === "string" && imageProps.src.startsWith("http")
+// A /public path is passed through unprocessed, so Astro cannot read its
+// dimensions off disk and refuses to render without them.
+const isPublicPath =
+  typeof imageProps.src === "string" && imageProps.src.startsWith("/")
+
+const squareDimension =
+  imageProps.width ||
+  imageProps.height ||
+  (isPublicPath ? DEFAULT_AVATAR_SIZE : undefined)
+const finalImageProps = {
+  ...imageProps,
+  ...(squareDimension && { width: squareDimension, height: squareDimension }),
+}
+const shouldInferSize =
+  isRemoteImage &&
+  !imageProps.width &&
+  !imageProps.height &&
+  !("inferSize" in imageProps)
+---
+
+<span data-avatar class={className}>
+  {finalImageProps.src ? (
+      <Image
+        {...(finalImageProps as any)}
+        {...(shouldInferSize && { inferSize: true })}
+        data-slot={dataSlot}
+      />
+    ) : (
+      <span data-avatar-fallback>
+        <slot name="fallback">{fallback}</slot>
+      </span>
+    )}
+</span>
+
+<style>
+  [data-avatar] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
+    border-radius: var(--radius-full);
+    background: var(--muted);
+    color: var(--foreground);
+    font-weight: var(--font-weight-medium);
+    text-transform: uppercase;
+  }
+
+  [data-avatar] :global(img) {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+</style>

@@ -1,0 +1,30 @@
+---
+import type { RenderedUpdate } from "@/lib/updates"
+import FormattedDate from "@/components/base/FormattedDate.astro"
+import Timeline from "@/components/timeline/Timeline.astro"
+import TimelineDate from "@/components/timeline/TimelineDate.astro"
+import TimelineItem from "@/components/timeline/TimelineItem.astro"
+
+import "@/styles/callout.css"
+
+interface Props {
+  renderedUpdates: RenderedUpdate[]
+  class?: string
+  itemClass?: string
+}
+
+const { renderedUpdates, class: className, itemClass } = Astro.props
+---
+
+<Timeline class={className}>
+  {renderedUpdates.map((item) => (
+    <TimelineItem>
+      <TimelineDate slot="date">
+        <FormattedDate date={item.date} />
+      </TimelineDate>
+      <prose-content class:list={["prose-sm", itemClass]}>
+        <item.Content />
+      </prose-content>
+    </TimelineItem>
+  ))}
+</Timeline>

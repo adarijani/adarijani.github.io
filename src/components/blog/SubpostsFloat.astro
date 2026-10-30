@@ -1,0 +1,120 @@
+---
+import type { PostNavItem } from "@/lib/blog/types"
+
+interface Props {
+  postNavItems: PostNavItem[]
+  activePostNavItem?: PostNavItem
+  class?: string
+}
+
+const { postNavItems, activePostNavItem, class: className } = Astro.props
+
+// Combine active post and subposts for the summary
+const allItems = [
+  ...(activePostNavItem
+    ? [
+        {
+          ...activePostNavItem,
+          type: "parent" as const,
+          isSubpost: false,
+        },
+      ]
+    : []),
+  ...postNavItems,
+]
+---
+
+<aside class:list={["subposts-float", className]}>
+  {allItems.map((item) => {
+      return (
+        <span
+          data-subpost={item.isSubpost ? "true" : "false"}
+          data-active={item.isActive ? "true" : undefined}
+          data-post-id={item.id}
+        />
+      )
+    })}
+</aside>
+
+<style>
+  .subposts-float {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3xs);
+  }
+
+  span {
+    block-size: 0.125rem;
+    inline-size: 1rem;
+    background: color-mix(in oklab, var(--muted-foreground) 50%, transparent);
+    transition: background-color var(--motion-duration) var(--motion-ease);
+  }
+
+  span[data-subpost="true"] {
+    inline-size: 0.75rem;
+  }
+
+  span[data-active="true"] {
+    background: var(--primary);
+  }
+</style>
+
+<script>
+  class SubpostsFloatController {
+    private static instance: SubpostsFloatController | null = null
+
+    static getInstance(): SubpostsFloatController {
+      return (this.instance ??= new SubpostsFloatController())
+    }
+
+    static resetInstance(): void {
+      this.instance = null
+    }
+
+    init() {
+      // Update indicators based on current URL
+      this.updateActiveIndicators()
+
+      // Listen for navigation changes
+      document.addEventListener("astro:page-load", () => {
+        this.updateActiveIndicators()
+      })
+    }
+
+    private updateActiveIndicators() {
+      const currentPath = window.location.pathname
+      const indicators =
+        document.querySelectorAll<HTMLElement>("[data-post-id]")
+
+      let longestMatchId = ""
+      indicators.forEach((indicator) => {
+        const postId = indicator.dataset.postId
+        if (postId && currentPath.endsWith(postId)) {
+          if (postId.length > longestMatchId.length) {
+            longestMatchId = postId
+          }
+        }
+      })
+
+      indicators.forEach((indicator) => {
+        const postId = indicator.dataset.postId
+        const isActive = postId === longestMatchId
+
+        if (isActive) {
+          indicator.dataset.active = "true"
+        } else {
+          delete indicator.dataset.active
+        }
+      })
+    }
+  }
+
+  // Initialize controller
+  const controller = SubpostsFloatController.getInstance()
+
+  document.addEventListener("astro:page-load", () => controller.init())
+  document.addEventListener("astro:after-swap", () => {
+    SubpostsFloatController.resetInstance()
+    SubpostsFloatController.getInstance().init()
+  })
+</script>

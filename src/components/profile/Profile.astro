@@ -1,0 +1,189 @@
+---
+import type { ProfileConfig } from "@/types"
+
+import Avatar from "@/components/base/Avatar.astro"
+import Badge from "@/components/base/Badge.astro"
+import Icon from "@/components/base/Icon.astro"
+import avatar from "@/assets/avatar.png"
+
+import EmailLink from "./EmailLink.astro"
+import Pronunciation from "./Pronunciation.astro"
+import ProfileLinks from "./ProfileLinks.astro"
+import { getProfileLinkPlacement } from "./helper"
+import { Content as AboutContent } from "@/content/about.md"
+
+import "@/styles/callout.css"
+
+interface Props {
+  profile: ProfileConfig
+}
+
+const { profile } = Astro.props
+
+const aboutLinks = getProfileLinkPlacement("about")
+---
+
+<article id="profile">
+  <header class="profile-header">
+    <Avatar
+      src={avatar}
+      alt={profile.name}
+      fallback={profile.name.charAt(0)}
+      data-slot="profile-avatar"
+      width={180}
+      height={180}
+      loading="eager"
+      fetchpriority="high"
+      class="profile-avatar"
+    />
+
+    <div class="profile-content">
+      <div class="profile-heading">
+        <h1>
+          {profile.name}
+          {profile.pronouns && (
+              <Badge variant="outline" class="profile-pronouns">
+                {profile.pronouns}
+              </Badge>
+            )}
+        </h1>
+        {profile.othernames && <p class="profile-othernames">{profile.othernames}</p>}
+        <p class="profile-tagline">{profile.tagline}</p>
+      </div>
+
+      <div class="profile-meta">
+        <EmailLink email={profile.email} />
+
+        {profile.phone && (
+            <span class="profile-contact-item">
+              <Icon name="mingcute:phone-line" />
+              <span>{profile.phone}</span>
+            </span>
+          )}
+
+        {profile.pronunciation && (
+            <Pronunciation
+              name={profile.name}
+              text={profile.pronunciation}
+              audio={profile.pronunciationAudioPath}
+            />
+          )}
+      </div>
+    </div>
+  </header>
+</article>
+
+<prose-content>
+  <AboutContent />
+</prose-content>
+
+{aboutLinks.length > 0 && (
+    <footer class="profile-footer">
+      <ProfileLinks keys={aboutLinks} />
+    </footer>
+  )}
+
+<style>
+  .profile-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-s);
+  }
+
+  #profile {
+    margin-block-start: var(--space-s);
+  }
+
+  .profile-avatar {
+    inline-size: 7rem;
+    block-size: 7rem;
+    align-self: center;
+  }
+
+  .profile-content {
+    flex: 1;
+    display: grid;
+    gap: var(--space-xs);
+  }
+
+  /* Contact details and the pronunciation trigger share one wrapping row.
+     The guide is a tooltip now rather than an inline panel, so nothing in
+     this row changes height when it opens and the items can sit centred. */
+  .profile-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2xs) var(--space-s);
+    color: var(--muted-foreground);
+    font-size: var(--step--1);
+  }
+
+  .profile-heading {
+    display: grid;
+    gap: var(--space-2xs);
+  }
+
+  .profile-heading h1 {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2xs);
+    margin: 0;
+    font-size: var(--step-3);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-tight);
+  }
+
+  .profile-pronouns {
+    font-size: var(--step--1);
+  }
+
+  .profile-othernames {
+    color: var(--muted-foreground);
+    font-size: var(--step--1);
+  }
+
+  .profile-tagline {
+    color: var(--foreground);
+  }
+
+  .profile-footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2xs) var(--space-s);
+    padding-block-start: var(--space-s);
+    padding-inline: var(--space-s);
+    color: var(--muted-foreground);
+  }
+
+  .profile-contact-item {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    min-block-size: var(--control-size-compact);
+  }
+
+  .profile-contact-item :global(svg) {
+    inline-size: 1rem;
+    block-size: 1rem;
+  }
+
+  @media (width >= 40rem) {
+    .profile-header {
+      flex-direction: row;
+      align-items: flex-start;
+    }
+
+    .profile-avatar {
+      inline-size: 12.5rem;
+      block-size: 12.5rem;
+      align-self: flex-start;
+    }
+
+    .profile-heading h1 {
+      font-size: var(--step-3);
+    }
+  }
+</style>

@@ -1,0 +1,293 @@
+---
+import "@/styles/callout.css"
+import "@/styles/sidenote.css"
+
+import { Image } from "astro:assets"
+import { render } from "astro:content"
+
+import { SITE } from "@site-config"
+import { PostManager } from "@/lib/blog"
+import { getStageVariant } from "@/lib/blog/stage"
+import { buildMarkdownDocument } from "@/lib/markdown-document"
+import Layout from "@/layouts/Layout.astro"
+import Badge from "@/components/base/Badge.astro"
+import Icon from "@/components/base/Icon.astro"
+import TaxonomyChip from "@/components/base/TaxonomyChip.astro"
+import AboutAuthors from "@/components/blog/AboutAuthors.astro"
+import PostMetadata from "@/components/blog/PostMetadata.astro"
+import PostNav from "@/components/blog/PostNavigation.astro"
+import ShareActions from "@/components/blog/ShareActions.astro"
+import SubpostsFloat from "@/components/blog/SubpostsFloat.astro"
+import SubpostsHeader from "@/components/blog/SubpostsHeader.astro"
+import SubpostsSidebar from "@/components/blog/SubpostsSidebar.astro"
+import SlideOut from "@/components/layout/SlideOut.astro"
+import TOCFloat from "@/components/toc/TOCFloat.astro"
+import TOCHeader from "@/components/toc/TOCHeader.astro"
+import TOCSidebar from "@/components/toc/TOCSidebar.astro"
+
+export async function getStaticPaths() {
+  const posts = await PostManager.getInstance().getAllPostsAndSubposts()
+  return posts.map((post) => ({
+    params: { id: post.id },
+    props: post,
+  }))
+}
+
+const post = Astro.props
+if (!post) {
+  throw new Error(`Blog post not found: ${post}`)
+}
+
+const postManager = PostManager.getInstance()
+const currentPostId = post.id
+
+// Render first, then pass headings to context to avoid double render() in TOC generation
+const { Content, headings: rawHeadings } = await render(post)
+const context = await postManager.getPostContext(
+  currentPostId,
+  SITE.tocMaxDepth,
+  rawHeadings,
+)
+
+const {
+  metadata,
+  navigation,
+  tocSections,
+  headings,
+  parentPost,
+  isSubpost,
+  hasSubposts,
+  postNavItems,
+  activePostNavItem,
+} = context
+
+const rawMarkdown = post.body
+  ? buildMarkdownDocument(post.body, {
+      title: post.data.title,
+      description: post.data.description,
+      path: `/blog/${currentPostId}`,
+      date: post.data.updatedAt ?? post.data.createdAt,
+    })
+  : null
+const socialImage =
+  typeof post.data.image === "string" ? post.data.image : post.data.image?.src
+const generatedSocialImage = `/og/blog/${post.id}.png`
+---
+
+<Layout
+  title={post.data.title}
+  description={post.data.description}
+  image={socialImage ?? generatedSocialImage}
+  type="article"
+  publishedTime={post.data.createdAt}
+  modifiedTime={post.data.updatedAt}
+  author={metadata.authors[0]?.name}
+  tags={post.data.tags}
+  section="Blog"
+  breadcrumbs={[
+    { href: "/blog", label: "Blog", icon: "blog" },
+    ...(isSubpost && parentPost
+      ? [
+          {
+            href: `/blog/${parentPost.id}`,
+            label: parentPost.title,
+            icon: "parent-post",
+          },
+          {
+            href: `/blog/${currentPostId}`,
+            label: post.data.title,
+            icon: "subpost",
+          },
+        ]
+      : [
+          {
+            href: `/blog/${currentPostId}`,
+            label: post.data.title,
+            icon: "post-active",
+          },
+        ]),
+  ]}
+>
+  {(hasSubposts || isSubpost) && activePostNavItem && (
+      <SubpostsHeader
+        slot="subposts-navigation-header"
+        currentPost={post}
+        parentPost={navigation.parent}
+        postNavItems={postNavItems}
+        isSubpost={isSubpost}
+        activePostNavItem={activePostNavItem}
+      />
+    )}
+  {headings.length > 1 && <TOCHeader slot="toc-header" headings={headings} />}
+  {post.data.image && (
+      <Image
+        src={post.data.image}
+        alt={post.data.title}
+        width={1200}
+        height={630}
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
+        class="post-hero-image"
+        loading="lazy"
+      />
+    )}
+
+  <header class="post-header">
+    <h1 id="post-title">
+      {post.data.title}
+    </h1>
+
+    <PostMetadata {...metadata} variant="full" />
+
+    {(post.data.stage || post.data.tags?.length > 0) && (
+        <ul class="post-tags" aria-label="Post tags">
+          {post.data.stage && (
+            <li>
+              <Badge
+                href={`/blog/stages/${post.data.stage}`}
+                variant={getStageVariant(post.data.stage)}
+              >
+                <Icon name={post.data.stage} size="0.75rem" />
+                {post.data.stage}
+              </Badge>
+            </li>
+          )}
+          {post.data.tags.map((tag: string) => (
+            <li>
+              <TaxonomyChip href={`/blog/tags/${tag}`} label={tag} countNoun="post" />
+            </li>
+          ))}
+        </ul>
+      )}
+  </header>
+
+  <PostNav
+    prevPost={navigation.newer}
+    nextPost={navigation.older}
+    parentPost={navigation.parent}
+  />
+
+  {post.data.audience && (
+      <aside class="post-audience">
+        <span>Assumed audience:</span> {post.data.audience}
+      </aside>
+    )}
+
+  <SlideOut position="left">
+    {tocSections.length > 0 && (
+        <TOCSidebar slot="main" sections={tocSections} currentPostId={currentPostId} />
+      )}
+    {headings.length > 0 && <TOCFloat slot="summary" headings={headings} />}
+  </SlideOut>
+
+  {(hasSubposts || isSubpost) && activePostNavItem && (
+      <SlideOut position="right">
+        <SubpostsSidebar
+          slot="main"
+          postNavItems={postNavItems}
+          activePostNavItem={activePostNavItem}
+        />
+        <SubpostsFloat
+          slot="summary"
+          postNavItems={postNavItems}
+          activePostNavItem={activePostNavItem}
+        />
+      </SlideOut>
+    )}
+
+  <article>
+    <prose-content>
+      <Content />
+    </prose-content>
+  </article>
+
+  <footer class="post-footer">
+    {metadata.authors.length > 0 && <AboutAuthors authors={metadata.authors} />}
+
+    <ShareActions
+      title={post.data.title}
+      url={`${SITE.href}/blog/${currentPostId}`}
+      authors={metadata.authors}
+      markdown={rawMarkdown}
+      class="post-share-actions"
+    />
+  </footer>
+
+  <PostNav
+    prevPost={navigation.newer}
+    nextPost={navigation.older}
+    parentPost={navigation.parent}
+  />
+</Layout>
+
+<style>
+  .post-hero-image {
+    inline-size: 100%;
+    margin-inline: auto;
+    object-fit: cover;
+  }
+
+  .post-header,
+  .post-footer {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .post-header {
+    gap: var(--space-s);
+    text-align: center;
+  }
+
+  #post-title {
+    scroll-margin-top: var(--header-height);
+    font-size: var(--step-3);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-tight);
+  }
+
+  .post-tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-2xs);
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .post-audience {
+    padding: var(--space-2xs) var(--space-s);
+    border-inline-start: 4px solid
+      color-mix(in oklab, var(--primary) 40%, transparent);
+    border-start-end-radius: var(--radius-lg);
+    border-end-end-radius: var(--radius-lg);
+    background: color-mix(in oklab, var(--muted) 30%, transparent);
+    font-size: var(--step--1);
+  }
+
+  .post-audience span {
+    font-weight: var(--font-weight-medium);
+  }
+
+  .post-footer {
+    gap: var(--space-l);
+  }
+
+  .post-share-actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  /* Stepped rather than jumping straight to the display size: on a phone the
+     title competes with the post body for the whole first screen. */
+  @media (width >= 40rem) {
+    #post-title {
+      font-size: var(--step-4);
+    }
+  }
+
+  @media (width >= 64rem) {
+    #post-title {
+      font-size: var(--step-5);
+    }
+  }
+</style>

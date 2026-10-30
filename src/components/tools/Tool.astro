@@ -1,0 +1,94 @@
+---
+import Badge from "@/components/base/Badge.astro"
+import Icon from "@/components/base/Icon.astro"
+import Card from "@/components/base/card/Card.astro"
+import CardContent from "@/components/base/card/CardContent.astro"
+import CardDescription from "@/components/base/card/CardDescription.astro"
+import CardHeader from "@/components/base/card/CardHeader.astro"
+import CardMedia from "@/components/base/card/CardMedia.astro"
+import CardTitle from "@/components/base/card/CardTitle.astro"
+
+import { getTagVariant, ToolTag } from "./tags"
+
+export interface Props {
+  name: string
+  description: string
+  href: string
+  icon: string
+  tags?: ToolTag[]
+}
+
+const { name, description, href, icon, tags } = Astro.props
+
+const getSafeIcon = (icon: string): string => {
+  return icon && icon.trim() !== "" ? icon : "mingcute:box-line"
+}
+
+const safeIcon = getSafeIcon(icon)
+---
+
+<Card
+  href={href}
+  external
+  label={`${name}: ${description}`}
+  orientation="inline"
+  padding="compact"
+  class="tool-card"
+>
+  <CardMedia class="tool-icon">
+    <Icon name={safeIcon} size="2rem" aria-hidden="true" />
+  </CardMedia>
+  <CardContent class="tool-body">
+    <CardHeader class="tool-heading">
+      <CardTitle>{name}</CardTitle>
+      {tags?.map((tag: ToolTag) => (
+          <Badge variant={getTagVariant(tag)} class="tool-tag">
+            {tag}
+          </Badge>
+        ))}
+    </CardHeader>
+    <CardDescription>{description}</CardDescription>
+  </CardContent>
+</Card>
+
+<style>
+  .tool-card {
+    font-size: var(--step--1);
+  }
+
+  .tool-icon {
+    display: grid;
+    flex-shrink: 0;
+    place-items: center;
+    inline-size: 2.75rem;
+    block-size: 2.75rem;
+    outline: none;
+  }
+
+  .tool-body {
+    min-inline-size: 0;
+    flex: 1;
+  }
+
+  .tool-heading {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2xs);
+    margin-block-end: 0.25rem;
+  }
+
+  .tool-heading :global([data-slot="card-title"]) {
+    font-size: var(--step--1);
+    font-weight: var(--font-weight-medium);
+  }
+
+  .tool-tag {
+    font-size: var(--step--1);
+  }
+
+  .tool-card :global([data-slot="card-description"]) {
+    font-size: var(--step--1);
+  }
+</style>

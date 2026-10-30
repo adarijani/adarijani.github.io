@@ -1,0 +1,96 @@
+---
+import { NAV_LINKS } from "@site-config"
+import Button from "@/components/base/Button.astro"
+import Dropdown from "@/components/base/Dropdown.astro"
+import Icon from "@/components/base/Icon.astro"
+
+import ThemeOptions from "./ThemeOptions.astro"
+---
+
+<Dropdown align="end" class="mobile-menu-content">
+  <Button
+    slot="trigger"
+    variant="ghost"
+    size="square"
+    class="mobile-menu-trigger"
+    title="Menu"
+    data-dropdown-trigger
+  >
+    <Icon name="menu" size="1.5rem" />
+    <span class="sr-only">Toggle menu</span>
+  </Button>
+
+  <div>
+    {NAV_LINKS.map((item) => (
+        <a href={item.href} data-dropdown-item data-nav-link={item.href}>
+          {item.label}
+        </a>
+      ))}
+    <hr class="mobile-menu-separator">
+    <ThemeOptions />
+  </div>
+</Dropdown>
+
+<script>
+  let navLinks: NodeListOf<Element> | null = null
+  let currentPath = ""
+
+  function updateActiveStates() {
+    const newPath = window.location.pathname
+    if (newPath === currentPath) return
+    currentPath = newPath
+    navLinks ??= document.querySelectorAll("[data-nav-link]")
+
+    requestAnimationFrame(() => {
+      navLinks?.forEach((link) => {
+        const href = link.getAttribute("data-nav-link")
+        if (!href) return
+        const isActive =
+          currentPath === href || (href !== "/" && currentPath.startsWith(href))
+        link.toggleAttribute("aria-current", isActive)
+      })
+    })
+  }
+
+  function closeDropdown() {
+    const dropdown = document.querySelector("[data-dropdown-root]")
+    if (dropdown?.getAttribute("data-state") === "open") {
+      dropdown.dispatchEvent(new CustomEvent("dropdown-close"))
+    }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", updateActiveStates, {
+      once: true,
+    })
+  } else {
+    updateActiveStates()
+  }
+
+  document.addEventListener("astro:after-swap", () => {
+    navLinks = null
+    currentPath = ""
+    updateActiveStates()
+  })
+  document.addEventListener("astro:before-swap", closeDropdown)
+</script>
+
+<style>
+  .mobile-menu-trigger {
+    @media (width >= 40rem) {
+      display: none;
+    }
+  }
+
+  .mobile-menu-separator {
+    margin: 0;
+    border: 0;
+    border-block-start: 1px solid var(--border);
+  }
+
+  :global(.mobile-menu-content) {
+    @media (width >= 40rem) {
+      display: none;
+    }
+  }
+</style>

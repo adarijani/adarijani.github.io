@@ -1,0 +1,136 @@
+---
+import type { Project } from "@/lib/projects"
+import Button from "@/components/base/Button.astro"
+import Icon from "@/components/base/Icon.astro"
+
+interface Props {
+  prev?: Project | null
+  next?: Project | null
+}
+
+const { prev, next } = Astro.props
+---
+
+<nav class="project-navigation">
+  <Button
+    href={prev ? `/projects/${prev.id}` : undefined}
+    variant="outline"
+    aria-disabled={!prev}
+  >
+    <project-navigation-content data-direction="previous">
+      <project-navigation-icon
+        ><Icon name="arrow-left" /></project-navigation-icon
+      >
+      <project-navigation-label>
+        <span>Previous Project</span>
+        <strong>
+          {prev?.data.title || "You're at the first project!"}
+        </strong>
+      </project-navigation-label>
+    </project-navigation-content>
+  </Button>
+
+  <Button
+    href={next ? `/projects/${next.id}` : undefined}
+    variant="outline"
+    aria-disabled={!next}
+  >
+    <project-navigation-content data-direction="next">
+      <project-navigation-label>
+        <span>Next Project</span>
+        <strong>
+          {next?.data.title || "You're at the last project!"}
+        </strong>
+      </project-navigation-label>
+      <project-navigation-icon
+        ><Icon name="arrow-right" /></project-navigation-icon
+      >
+    </project-navigation-content>
+  </Button>
+</nav>
+
+<style>
+  .project-navigation {
+    --button-border-radius: var(--radius-lg);
+    --button-inline-size: 100%;
+    --button-min-block-size: 4rem;
+
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-s);
+
+    @media (width >= 40rem) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  project-navigation-content {
+    display: flex;
+    inline-size: 100%;
+    align-items: center;
+    gap: var(--space-2xs);
+  }
+
+  project-navigation-content[data-direction="previous"] {
+    justify-content: flex-start;
+  }
+
+  project-navigation-content[data-direction="next"] {
+    justify-content: flex-end;
+  }
+
+  project-navigation-label {
+    display: flex;
+    min-inline-size: 0;
+    flex-direction: column;
+    overflow: hidden;
+    text-wrap: pretty;
+  }
+
+  project-navigation-content[data-direction="previous"]
+    project-navigation-label {
+    align-items: flex-start;
+    text-align: start;
+  }
+
+  project-navigation-content[data-direction="next"] project-navigation-label {
+    align-items: flex-end;
+    text-align: end;
+  }
+
+  project-navigation-label span {
+    color: var(--muted-foreground);
+    font-size: var(--step--1);
+  }
+
+  project-navigation-label strong {
+    display: -webkit-box;
+    inline-size: 100%;
+    overflow: hidden;
+    color: var(--foreground);
+    font-size: var(--step--1);
+    font-weight: var(--font-weight-medium);
+    text-overflow: ellipsis;
+    text-wrap: balance;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  project-navigation-icon {
+    display: inline-flex;
+    flex-shrink: 0;
+    transition: transform var(--motion-duration) var(--motion-ease);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    project-navigation-content[data-direction="previous"]:hover
+      project-navigation-icon {
+      transform: translateX(-0.25rem);
+    }
+
+    project-navigation-content[data-direction="next"]:hover
+      project-navigation-icon {
+      transform: translateX(0.25rem);
+    }
+  }
+</style>

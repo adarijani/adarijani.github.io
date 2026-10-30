@@ -1,0 +1,172 @@
+---
+import Button from "@/components/base/Button.astro"
+import Icon from "@/components/base/Icon.astro"
+
+interface Props {
+  currentPage: number
+  totalPages: number
+  baseUrl: string
+  class?: string
+}
+
+const { currentPage, totalPages, baseUrl, class: className } = Astro.props
+
+const getPageUrl = (page: number) => {
+  if (page === 1) return baseUrl
+  return `${baseUrl}/${page}`
+}
+
+/** @function Generate page numbers with ellipsis logic */
+const generatePages = () => {
+  const pages: (number | "ellipsis")[] = []
+
+  if (totalPages <= 7) {
+    // Show all pages if 7 or fewer
+    for (let i = 1; i <= totalPages; i++) {
+      pages.push(i)
+    }
+  } else {
+    // Always show first page
+    pages.push(1)
+
+    if (currentPage <= 4) {
+      // Current page is near the beginning
+      for (let i = 2; i <= 5; i++) {
+        pages.push(i)
+      }
+      pages.push("ellipsis")
+      pages.push(totalPages)
+    } else if (currentPage >= totalPages - 3) {
+      // Current page is near the end
+      pages.push("ellipsis")
+      for (let i = totalPages - 4; i <= totalPages; i++) {
+        pages.push(i)
+      }
+    } else {
+      // Current page is in the middle
+      pages.push("ellipsis")
+      for (let i = currentPage - 1; i <= currentPage + 1; i++) {
+        pages.push(i)
+      }
+      pages.push("ellipsis")
+      pages.push(totalPages)
+    }
+  }
+
+  return pages
+}
+
+const pages = generatePages()
+---
+
+<nav
+  role="navigation"
+  aria-label="pagination"
+  data-slot="pagination"
+  class:list={["pagination", className]}
+>
+  <ul data-slot="pagination-content">
+    <li data-slot="pagination-item">
+      <Button
+        href={currentPage > 1 ? getPageUrl(currentPage - 1) : undefined}
+        variant="ghost"
+        size="default"
+        class="pagination-step"
+        aria-label="Go to previous page"
+        aria-disabled={currentPage === 1}
+      >
+        <Icon name="left" />
+        <span data-label>Previous</span>
+      </Button>
+    </li>
+
+    {pages.map((page) => (
+        <li data-slot="pagination-item">
+          {page === "ellipsis" ? (
+            <span
+              aria-hidden="true"
+              data-slot="pagination-ellipsis"
+            >
+              <Icon name="more-horizontal" />
+              <span class="sr-only">More pages</span>
+            </span>
+          ) : (
+            <Button
+              href={getPageUrl(page)}
+              variant={page === currentPage ? "outline" : "ghost"}
+              size="default"
+              class="pagination-page"
+              aria-current={page === currentPage ? "page" : undefined}
+              data-active={page === currentPage}
+            >
+              {page}
+            </Button>
+          )}
+        </li>
+      ))}
+
+    <li data-slot="pagination-item">
+      <Button
+        href={currentPage < totalPages ? getPageUrl(currentPage + 1) : undefined}
+        variant="ghost"
+        size="default"
+        class="pagination-step"
+        aria-label="Go to next page"
+        aria-disabled={currentPage === totalPages}
+      >
+        <span data-label>Next</span>
+        <Icon name="right" />
+      </Button>
+    </li>
+  </ul>
+</nav>
+
+<style>
+  .pagination {
+    display: flex;
+    inline-size: 100%;
+    justify-content: center;
+    margin-inline: auto;
+  }
+
+  [data-slot="pagination-content"] {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-3xs);
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  [data-slot="pagination-ellipsis"] {
+    display: inline-flex;
+    inline-size: 2.25rem;
+    block-size: 2.25rem;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted-foreground);
+  }
+
+  :global(.pagination-step) {
+    gap: var(--space-2xs);
+    padding-inline: var(--space-xs);
+  }
+
+  :global(.pagination-page) {
+    inline-size: var(--control-size);
+    padding-inline: 0;
+  }
+
+  :global(.pagination-step[aria-disabled="true"]) {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  @media (width < 40rem) {
+    :global(.pagination-step [data-label]) {
+      display: none;
+    }
+  }
+</style>

@@ -1,0 +1,68 @@
+---
+import type { AuthorData } from "@/lib/blog/types"
+import AuthorCard from "@/components/people/AuthorCard.astro"
+
+interface Props {
+  authors: AuthorData[]
+}
+
+const { authors } = Astro.props
+if (authors.length === 0) return
+const heading = authors.length === 1 ? "About the Author" : "About the Authors"
+---
+
+<section class="about-authors">
+  <h2 id="about-authors">
+    {heading}
+  </h2>
+  <div class="authors-list">
+    {authors.map((author) => <AuthorCard author={author} variant="compact" />)}
+  </div>
+</section>
+
+<style>
+  .about-authors {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3xs);
+    margin-block-start: var(--space-2xs);
+  }
+
+  h2 {
+    position: relative;
+    width: fit-content;
+    margin-block: var(--space-s) var(--space-2xs);
+    padding-block-end: 0.125rem;
+    color: var(--foreground);
+    font-size: var(--step-2);
+    font-weight: var(--font-weight-medium);
+  }
+
+  h2::after {
+    content: "";
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline-start: 0;
+    inline-size: 2rem;
+    block-size: 2px;
+    border-radius: var(--radius-full);
+    background: var(--primary);
+    opacity: 0.7;
+    transform: scaleX(0.67);
+    transform-origin: left center;
+    transition:
+      opacity var(--motion-duration) var(--motion-ease),
+      transform var(--motion-duration-slow) var(--motion-ease-emphasized);
+  }
+
+  section:hover h2::after {
+    opacity: 0.9;
+    transform: scaleX(1);
+  }
+
+  .authors-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xs);
+  }
+</style>

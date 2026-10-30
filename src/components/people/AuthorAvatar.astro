@@ -1,0 +1,46 @@
+---
+import type { AuthorData } from "@/lib/blog/types"
+import Avatar from "@/components/base/Avatar.astro"
+
+interface Props {
+  author: AuthorData
+  class?: string
+  "data-slot"?: string
+  fallbackStyle?: "first-initial" | "all-initials"
+  [key: string]: any
+}
+
+const {
+  author,
+  class: className,
+  "data-slot": dataSlot = "author-avatar",
+  fallbackStyle = "first-initial",
+  ...imageProps
+} = Astro.props
+
+const authorName = author?.name || author?.id || "Unknown"
+const authorAvatar = author?.avatar || ""
+
+// Generate fallback text based on style
+const getFallback = (name: string, style: "first-initial" | "all-initials") => {
+  if (style === "all-initials") {
+    let initials = ""
+    for (const word of name.split(" ")) {
+      const match = word.match(/[A-Za-z]/) // find first letter in word
+      if (match) initials += match[0]
+    }
+    return initials
+  }
+  const match = name.match(/[A-Za-z]/)
+  return match ? match[0] : ""
+}
+---
+
+<Avatar
+  src={authorAvatar}
+  alt={authorName}
+  fallback={getFallback(authorName, fallbackStyle)}
+  class={className}
+  aria-label={`${authorName}'s Avatar`}
+  {...imageProps}
+/>

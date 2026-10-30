@@ -1,0 +1,110 @@
+---
+import { FOOTER, PROFILE, SITE } from "@site-config"
+import Icon from "@/components/base/Icon.astro"
+import Link from "@/components/base/Link.astro"
+import ProfileLinks from "@/components/profile/ProfileLinks.astro"
+import { getProfileLinkPlacement } from "@/components/profile/helper"
+
+const footerLinks = getProfileLinkPlacement("footer")
+
+const sourceLinks = [
+  FOOTER.sourceCode ? { href: FOOTER.sourceCode, label: "Source Code" } : null,
+  FOOTER.sourceContent
+    ? { href: FOOTER.sourceContent, label: "Source Content" }
+    : null,
+  ...FOOTER.footerLinks,
+].filter(Boolean) as { href: string; label: string }[]
+---
+
+<footer>
+  <div class="footer-inner">
+    <ProfileLinks links={PROFILE.links} keys={footerLinks} />
+
+    <p>
+      &copy; <span id="current-year"></span>
+      {PROFILE.name}.
+      {SITE.license ? (
+          <>
+            {` Unless otherwise stated, all content is licensed under `}
+            <Link class="footer-link" href={SITE.license.href} external>
+              {SITE.license.label}.
+            </Link>
+          </>
+        ) : (
+          ` All rights reserved.`
+        )}
+    </p>
+
+    {PROFILE.location && (
+        <p class="footer-location">
+          <Icon name="mingcute:location-line" />
+          <span>{PROFILE.location}</span>
+        </p>
+      )}
+
+    {sourceLinks.length > 0 && (
+        <p class="footer-small">
+          {sourceLinks.map((link, index) => [
+            <Link href={link.href} class="footer-muted-link" external underline>
+              {link.label}
+            </Link>,
+            index < sourceLinks.length - 1 && " / ",
+          ])}
+        </p>
+      )}
+
+    {FOOTER.credits && (
+        <p>
+          Built with{" "}
+          <Link href="https://astro.build/" class="footer-link" external>
+            Astro.
+          </Link>
+          View
+          <Link href="/palette" class="footer-link">
+            Color Palette.
+          </Link>
+        </p>
+      )}
+  </div>
+</footer>
+
+<script>
+  const yearElement = document.getElementById("current-year")
+  if (yearElement) yearElement.textContent = new Date().getFullYear().toString()
+</script>
+
+<style>
+  footer {
+    position: relative;
+    margin-block-start: var(--space-l);
+    padding-block: var(--space-s);
+    border-block-start: 1px solid
+      color-mix(in oklab, var(--foreground) 20%, transparent);
+  }
+
+  .footer-inner {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xs);
+    color: var(--muted-foreground);
+    font-size: var(--step--1);
+  }
+
+  .footer-small {
+    font-size: var(--step--1);
+  }
+
+  .footer-location {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3xs);
+  }
+
+  .footer-link {
+    color: var(--foreground);
+  }
+
+  .footer-muted-link {
+    color: var(--muted-foreground);
+  }
+</style>

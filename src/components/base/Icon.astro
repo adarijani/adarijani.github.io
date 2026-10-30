@@ -1,0 +1,85 @@
+---
+import type { HTMLAttributes } from "astro/types"
+
+import type { SemanticIconName } from "@icon-config"
+import { resolveIcon } from "@/lib/icons"
+
+interface Props extends HTMLAttributes<"svg"> {
+  /** The name of the icon to include - can be semantic name or direct icon name */
+  name: SemanticIconName | string
+  /** Shorthand for including a <title> element in the SVG */
+  title?: string
+  /** Shorthand for including a <desc> element in the SVG */
+  desc?: string
+  /** Shorthand for setting both width and height */
+  size?: number | string
+  /** Sets the width of the icon */
+  width?: number | string
+  /** Sets the height of the icon */
+  height?: number | string
+  /** CSS class names */
+  class?: string
+  /** Any other HTML attributes (forwarded to the <svg> element) */
+  [key: string]: unknown
+}
+
+const {
+  name,
+  title,
+  desc,
+  size,
+  width,
+  height,
+  class: className,
+  ...props
+} = Astro.props
+
+const formatSize = (value: number | string | undefined) =>
+  value === undefined ? undefined : String(value)
+
+const { attributes, body } = resolveIcon(name)
+const {
+  width: intrinsicWidth,
+  height: intrinsicHeight,
+  ...svgAttributes
+} = attributes
+const computedWidth = formatSize(width ?? size) ?? intrinsicWidth ?? "1em"
+const computedHeight = formatSize(height ?? size) ?? intrinsicHeight ?? "1em"
+
+// Derive accessibility attributes from props
+const accessibility: Record<string, string> = {}
+
+if (!title && !desc) {
+  // If neither title nor desc, make it decorative
+  accessibility.role = "presentation"
+  accessibility["aria-hidden"] = "true"
+}
+
+const escapeHTML = (value: string) =>
+  value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+
+const titleElement = title ? `<title>${escapeHTML(title)}</title>` : ""
+const descElement = desc ? `<desc>${escapeHTML(desc)}</desc>` : ""
+const iconBody = `${titleElement}${descElement}${body}`
+---
+
+<svg
+  {...svgAttributes}
+  {...props}
+  width={computedWidth}
+  height={computedHeight}
+  class={className}
+  {...accessibility}
+>
+  <Fragment set:html={iconBody} />
+</svg>
+
+<style>
+  svg[hidden] {
+    display: none;
+  }
+</style>

@@ -1,0 +1,380 @@
+---
+import type { ProcessedPublication } from "@/types"
+
+import { slugify } from "@/lib/string-manipulation"
+import Button from "@/components/base/Button.astro"
+import CopyButton from "@/components/base/CopyButton.astro"
+import Icon from "@/components/base/Icon.astro"
+import Link from "@/components/base/Link.astro"
+import TaxonomyChip from "@/components/base/TaxonomyChip.astro"
+import Card from "@/components/base/card/Card.astro"
+import CardContent from "@/components/base/card/CardContent.astro"
+import CardFooter from "@/components/base/card/CardFooter.astro"
+import CardHeader from "@/components/base/card/CardHeader.astro"
+import CardTitle from "@/components/base/card/CardTitle.astro"
+
+interface Props {
+  pub: ProcessedPublication
+  filterableTags?: boolean
+}
+
+const { pub, filterableTags = true } = Astro.props
+const hiddenAuthorsId = `publication-${slugify(pub.title)}-${pub.year ?? "unknown"}-authors`
+---
+
+<Card
+  selected={pub.selected}
+  class="publication-card"
+  data-pub-year={pub.year ?? ""}
+  data-pub-selected={pub.selected ? "true" : "false"}
+  data-pub-author-position={pub.authorPosition ?? Infinity}
+  data-pub-keywords={pub.expandedKeywords?.map((k) => slugify(k)).join(",") ?? ""}
+  data-has-image={pub.image ? "true" : undefined}
+>
+  {pub.image && (
+      <div class="publication-media">
+        <img
+          src={pub.image}
+          alt={pub.imageAlt ?? `Visual summary for “${pub.title}”`}
+          width="1200"
+          height="720"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+    )}
+
+  <div class="publication-body">
+    <CardHeader>
+      {pub.award && <span class="publication-award">🏆 {pub.award}</span>}
+      {pub.mainUrl ? (
+          <CardTitle>
+            <Link href={pub.mainUrl} external underline>{pub.title}</Link>
+          </CardTitle>
+        ) : (
+          <CardTitle>{pub.title}</CardTitle>
+        )}
+    </CardHeader>
+
+    <CardContent>
+      <div class="bibliography-authors">
+        <span set:html={pub.authorData.displayFirstAuthors} />
+        {pub.authorData.hasMore && (
+            <>
+              <button
+                class="author-toggle"
+                data-show-label={`...and ${pub.authorData.hiddenCount} more authors...`}
+                data-hide-label={`...hide ${pub.authorData.hiddenCount} authors...`}
+                aria-expanded="false"
+                aria-controls={hiddenAuthorsId}
+                aria-label={`Show ${pub.authorData.hiddenCount} hidden authors`}
+              >
+                ...and {pub.authorData.hiddenCount} more authors...
+              </button>
+              <span
+                id={hiddenAuthorsId}
+                class="hidden-authors"
+                hidden
+                set:html={` ${pub.authorData.hiddenAuthors}`}
+              />
+            </>
+          )}
+        {pub.authorData.displayLastAuthors && pub.authorData.hasMore && (
+            <span>
+              ,
+              <span set:html={pub.authorData.displayLastAuthors} />
+            </span>
+          )}
+      </div>
+
+      {(pub.publisher || pub.year) && (
+          <div class="bibliography-details">
+            {pub.publisher && (
+              <span class="publication-publisher">{pub.publisher}</span>
+            )}
+            {pub.publisher && pub.year && <span> • </span>}
+            {pub.year && <span>{pub.year}</span>}
+          </div>
+        )}
+    </CardContent>
+
+    <CardFooter class="publication-actions">
+      {pub.abstract && (
+          <details
+            class="publication-abstract"
+            data-disclosure
+            data-disclosure-rotation="quarter"
+          >
+            <Button as="summary" variant="accent-outline" class="abstract-summary">
+              <span data-disclosure-chevron>
+                <Icon name="right" aria-hidden="true" />
+              </span>
+              <span>Abstract</span>
+            </Button>
+            <div class="abstract-reveal">
+              <div class="abstract-content">{pub.abstract}</div>
+            </div>
+          </details>
+        )}
+
+      <CopyButton
+        text={pub.bibtex}
+        label="BibTeX"
+        title={`Copy BibTeX for “${pub.title}”`}
+        variant="accent-outline"
+      />
+
+      {pub.links.map(({ href, icon, label }) => (
+          <Button href={href} external variant="accent-outline">
+            <Icon name={icon} />
+            <span>{label}</span>
+          </Button>
+        ))}
+    </CardFooter>
+
+    {pub.keywords && pub.keywords.length > 0 && (
+        <CardFooter class="publication-tags">
+          {pub.keywords.map((keyword: string) =>
+            filterableTags ? (
+              <TaxonomyChip
+                label={keyword}
+                data-pub-tag={slugify(keyword)}
+                aria-pressed="false"
+                aria-label={`Filter publications by ${keyword}`}
+              />
+            ) : (
+              <TaxonomyChip label={keyword} static />
+            ),
+          )}
+        </CardFooter>
+      )}
+  </div>
+</Card>
+
+<style>
+  /* Card height comes from the stacked blocks, not the prose: trim the block
+     gaps and the vertical padding, and leave every line-height alone so the
+     wrapped author list keeps its 1.5 leading. Inline padding stays at
+     --space-s so the card doesn't tighten sideways too.
+
+     Astro's scope attribute lands on the Card root too, so this compiles to
+     .publication-card[data-astro-cid-…] and outranks the base [data-slot=card]
+     rule on specificity — no :global or stylesheet-order luck needed. */
+  .publication-card {
+    --card-padding: var(--space-xs) var(--space-s);
+    --card-gap: var(--space-2xs);
+  }
+
+  .publication-body {
+    display: flex;
+    min-inline-size: 0;
+    flex: 1;
+    flex-direction: column;
+    gap: var(--card-gap);
+  }
+
+  /* Authors and the venue • year line are one citation block; pulling them
+     closer separates them from the actions below more clearly than the
+     uniform gap did. */
+  .publication-body [data-slot="card-content"] {
+    gap: var(--space-3xs);
+  }
+
+  .publication-media {
+    position: relative;
+    flex: none;
+    aspect-ratio: 5 / 3;
+    border-radius: var(--radius-lg);
+    background:
+      radial-gradient(
+        circle at 25% 20%,
+        color-mix(in oklab, var(--primary) 22%, transparent),
+        transparent 42%
+      ),
+      var(--muted);
+    overflow: hidden;
+  }
+
+  .publication-media img {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+    transition: transform var(--motion-duration-slow) var(--motion-ease);
+  }
+
+  @media (width >= 52rem) {
+    .publication-card[data-has-image="true"] {
+      display: grid;
+      grid-template-columns: minmax(10rem, 12rem) minmax(0, 1fr);
+      align-items: start;
+    }
+
+    .publication-media {
+      aspect-ratio: 5 / 4;
+    }
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .publication-card[data-has-image="true"]:hover .publication-media img {
+      transform: scale(1.025);
+    }
+  }
+
+  .publication-award {
+    display: inline-flex;
+    align-items: center;
+    color: var(--primary);
+    font-size: var(--step--1);
+    font-weight: var(--font-weight-bold);
+  }
+
+  /* The animated background underline can resolve an inline heading link's
+     width against the whole line box. Use the native decoration here so the
+     hover stroke follows the title text instead of stretching across the
+     card. Keep the selected-card emphasis on the link itself, since it no
+     longer inherits the heading color reliably across browsers. */
+  .publication-card [data-slot="card-title"] a {
+    --underline-wipe: none;
+    background-image: none;
+    color: var(--foreground);
+    text-decoration-color: transparent;
+  }
+
+  .publication-card[data-pub-selected="true"] [data-slot="card-title"] a {
+    color: var(--primary);
+  }
+
+  .publication-card [data-slot="card-title"] a:is(:hover, :focus-visible) {
+    color: var(--accent);
+    text-decoration-color: currentColor;
+  }
+
+  .bibliography-authors,
+  .bibliography-details {
+    color: var(--muted-foreground);
+    font-size: var(--step--1);
+  }
+
+  .publication-publisher {
+    font-weight: var(--font-weight-bold);
+  }
+
+  .abstract-summary {
+    cursor: pointer;
+  }
+
+  .abstract-reveal {
+    display: grid;
+    transform-origin: top;
+  }
+
+  .publication-abstract[open] .abstract-reveal {
+    animation: abstract-reveal var(--motion-duration-slow) var(--motion-ease);
+  }
+
+  @keyframes abstract-reveal {
+    from {
+      opacity: 0;
+      transform: translateY(-0.35rem) scaleY(0.96);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0) scaleY(1);
+    }
+  }
+
+  .author-toggle {
+    display: inline;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    color: var(--accent);
+    font: inherit;
+    cursor: pointer;
+    line-height: inherit;
+    text-decoration-line: underline;
+    text-decoration-color: transparent;
+    text-decoration-style: dotted;
+    text-underline-offset: 0.12em;
+    transition:
+      color var(--motion-duration-fast) var(--motion-ease),
+      text-decoration-color var(--motion-duration) var(--motion-ease),
+      text-underline-offset var(--motion-duration) var(--motion-ease);
+  }
+
+  .author-toggle:hover,
+  .author-toggle:focus-visible {
+    text-decoration-color: currentColor;
+    text-underline-offset: 0.18em;
+  }
+
+  .hidden-authors[hidden] {
+    display: none;
+  }
+
+  .abstract-content {
+    margin-block-start: var(--space-2xs);
+    font-size: var(--step--2);
+  }
+
+  /* The only :global that has to stay: .author-highlight is injected through
+     set:html at runtime, so it never receives a scope attribute. */
+  .bibliography-authors :global(.author-highlight) {
+    color: var(--primary);
+    font-weight: 700;
+    text-decoration: underline;
+    text-decoration-color: var(--primary);
+  }
+
+  .publication-abstract .abstract-summary [data-disclosure-chevron] {
+    color: inherit;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .publication-media img,
+    .publication-abstract[open] .abstract-reveal {
+      animation-duration: 0.01ms;
+      transition-duration: 0.01ms;
+    }
+  }
+</style>
+<script>
+  function initializeAuthorToggles() {
+    const authorToggles = document.querySelectorAll(".author-toggle")
+
+    authorToggles.forEach((toggle) => {
+      const button = toggle as HTMLButtonElement
+
+      // Skip if already initialized
+      if (button.dataset.initialized === "true") return
+      button.dataset.initialized = "true"
+
+      button.addEventListener("click", (e) => {
+        e.preventDefault()
+        const hiddenAuthors = button.nextElementSibling as HTMLElement | null
+        if (!hiddenAuthors) return
+
+        const isExpanded = button.getAttribute("aria-expanded") === "true"
+        const nextExpanded = !isExpanded
+
+        hiddenAuthors.hidden = !nextExpanded
+        button.setAttribute("aria-expanded", String(nextExpanded))
+        button.setAttribute(
+          "aria-label",
+          nextExpanded
+            ? button.dataset.hideLabel || "Hide authors"
+            : button.dataset.showLabel || "Show authors",
+        )
+        button.textContent = nextExpanded
+          ? button.dataset.hideLabel || "Hide authors"
+          : button.dataset.showLabel || "Show authors"
+      })
+    })
+  }
+
+  // Re-initialize on Astro page navigation
+  document.addEventListener("astro:page-load", initializeAuthorToggles)
+  document.addEventListener("astro:after-swap", initializeAuthorToggles)
+</script>

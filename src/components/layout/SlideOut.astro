@@ -1,0 +1,101 @@
+---
+interface Props {
+  position: "left" | "right"
+  class?: string
+}
+
+const { position, class: className } = Astro.props
+---
+
+<aside class:list={["slide-out", className]} data-position={position}>
+  <div class="slide-out-panel">
+    <div class="slide-out-main">
+      <slot name="main" />
+    </div>
+    <div class="slide-out-summary">
+      <slot name="summary" />
+    </div>
+  </div>
+</aside>
+
+<style>
+  .slide-out {
+    position: fixed;
+    z-index: 40;
+    inset-block: var(--header-height, 5rem) 0;
+    display: none;
+    inline-size: 2rem;
+    transition: inline-size 200ms ease;
+
+    @media (width >= 80rem) {
+      display: block;
+    }
+  }
+
+  /* focus-within alongside hover: the panel holds the only table of contents
+     at this width, so gating it on hover alone left it unreachable by
+     keyboard while its links stayed in the tab order. */
+  .slide-out:hover,
+  .slide-out:focus-within {
+    inline-size: 20rem;
+  }
+
+  .slide-out[data-position="left"] {
+    left: 0;
+  }
+
+  .slide-out[data-position="right"] {
+    right: 0;
+  }
+
+  .slide-out-panel {
+    block-size: 100%;
+    border-color: var(--border);
+    background: color-mix(in oklab, var(--background) 95%, transparent);
+    box-shadow: 0 1rem 2rem oklch(from var(--foreground) l c h / 0.1);
+    backdrop-filter: blur(8px);
+  }
+
+  .slide-out[data-position="left"] .slide-out-panel {
+    border-inline-end: 1px solid var(--border);
+  }
+
+  .slide-out[data-position="right"] .slide-out-panel {
+    border-inline-start: 1px solid var(--border);
+  }
+
+  .slide-out-main {
+    display: flex;
+    block-size: 100%;
+    flex-direction: column;
+    padding: var(--space-xs);
+    opacity: 0;
+    transition: opacity 200ms ease;
+  }
+
+  .slide-out:hover .slide-out-main,
+  .slide-out:focus-within .slide-out-main {
+    opacity: 1;
+  }
+
+  .slide-out-summary {
+    position: absolute;
+    top: 50%;
+    opacity: 1;
+    transform: translateY(-50%);
+    transition: opacity 200ms ease;
+  }
+
+  .slide-out[data-position="left"] .slide-out-summary {
+    left: var(--space-2xs);
+  }
+
+  .slide-out[data-position="right"] .slide-out-summary {
+    right: var(--space-2xs);
+  }
+
+  .slide-out:hover .slide-out-summary,
+  .slide-out:focus-within .slide-out-summary {
+    opacity: 0;
+  }
+</style>

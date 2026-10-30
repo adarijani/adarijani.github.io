@@ -1,0 +1,224 @@
+---
+import CommonLayout from "@/layouts/CommonLayout.astro"
+import CopyButton from "@/components/base/CopyButton.astro"
+
+const colorGroups = [
+  {
+    label: "Core",
+    tokens: ["background", "foreground"],
+  },
+  {
+    label: "Brand",
+    tokens: ["primary", "primary-foreground", "accent", "accent-foreground"],
+  },
+  {
+    label: "UI",
+    tokens: ["muted", "muted-foreground", "border", "ring", "destructive"],
+  },
+]
+---
+
+<CommonLayout
+  title="Colors Palette"
+  description="Palette with live previews, computed by theme."
+  breadcrumbs={[{ label: "Palette", icon: "mingcute:palette-line" }]}
+  prose={false}
+>
+  {colorGroups.map((group) => (
+      <section class="palette-section">
+        <h2>{group.label}</h2>
+        <div class="palette-grid">
+          {group.tokens.map((token) => (
+            <div class="palette-card" data-palette-card={token}>
+              <div class="palette-swatch" style={`background-color:var(--${token})`}>
+                <div class="palette-overlay">
+                  <span data-overlay={token}>
+                    {token}
+                  </span>
+                </div>
+              </div>
+              <div class="palette-card-body">
+                <p>{token}</p>
+                <div class="palette-value-row">
+                  <code class="oklch-value" data-value={token}>
+                    …
+                  </code>
+                  <CopyButton
+                    selector=".oklch-value"
+                    title={`Copy ${token} OKLCH value`}
+                    size="1rem"
+                    class="palette-copy"
+                  />
+                </div>
+                <div class="palette-value-row">
+                  <code class="hex-value" data-hex={token}>
+                    …
+                  </code>
+                  <CopyButton
+                    selector=".hex-value"
+                    title={`Copy ${token} hex value`}
+                    size="1rem"
+                    class="palette-copy"
+                  />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    ))}
+</CommonLayout>
+
+<style>
+  .palette-section {
+    margin-block-end: var(--space-xl);
+  }
+
+  .palette-section h2 {
+    margin-block: 0 var(--space-xs);
+    color: var(--foreground);
+    font-size: var(--step-2);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .palette-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-s);
+  }
+
+  .palette-card {
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+  }
+
+  .palette-swatch {
+    position: relative;
+    block-size: 8rem;
+  }
+
+  .palette-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity var(--motion-duration) var(--motion-ease);
+  }
+
+  .palette-card:hover .palette-overlay {
+    opacity: 1;
+  }
+
+  .palette-overlay span {
+    padding: var(--space-2xs) var(--space-xs);
+    border-radius: var(--radius-md);
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+  }
+
+  .palette-card-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3xs);
+    padding: var(--space-2xs);
+  }
+
+  .palette-card-body p {
+    margin-block: 0 var(--space-3xs);
+    color: var(--foreground);
+    font-size: var(--step--1);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .palette-value-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3xs);
+  }
+
+  .palette-value-row code {
+    color: var(--muted-foreground);
+    font-size: var(--step--1);
+  }
+
+  :global(.palette-copy) {
+    flex-shrink: 0;
+    color: var(--muted-foreground);
+    transition: color var(--motion-duration-fast) var(--motion-ease);
+  }
+
+  :global(.palette-copy:hover) {
+    color: var(--foreground);
+  }
+</style>
+
+<script is:inline data-astro-rerun>
+  ;(function () {
+    var colorCanvas = document.createElement("canvas")
+    colorCanvas.width = 1
+    colorCanvas.height = 1
+    var colorCtx = colorCanvas.getContext("2d", { willReadFrequently: true })
+
+    function colorToRgba(color) {
+      if (!color || !colorCtx) return null
+      colorCtx.clearRect(0, 0, 1, 1)
+      colorCtx.fillStyle = color
+      colorCtx.fillRect(0, 0, 1, 1)
+      return colorCtx.getImageData(0, 0, 1, 1).data
+    }
+
+    function colorToHex(color) {
+      var rgba = colorToRgba(color)
+      if (!rgba) return ""
+      var channels = [rgba[0], rgba[1], rgba[2]]
+      if (rgba[3] < 255) channels.push(rgba[3])
+      return (
+        "#" +
+        channels
+          .map(function (channel) {
+            return channel.toString(16).padStart(2, "0")
+          })
+          .join("")
+      )
+    }
+
+    function isLight(color) {
+      var rgba = colorToRgba(color)
+      if (!rgba) return false
+      return rgba[0] * 0.299 + rgba[1] * 0.587 + rgba[2] * 0.114 > 150
+    }
+
+    function updateColorValues() {
+      document.querySelectorAll("[data-palette-card]").forEach(function (card) {
+        var swatchEl = card.querySelector(".palette-swatch")
+        if (!swatchEl) return
+        var color = getComputedStyle(swatchEl).backgroundColor.trim()
+        var oklchEl = card.querySelector("[data-value]")
+        var hexEl = card.querySelector("[data-hex]")
+        var pill = card.querySelector("[data-overlay]")
+
+        if (oklchEl) oklchEl.textContent = color || "–"
+        if (hexEl) hexEl.textContent = color ? colorToHex(color) : "–"
+        if (!pill) return
+
+        var light = isLight(color)
+        pill.style.backgroundColor = light
+          ? "rgba(0,0,0,0.75)"
+          : "rgba(255,255,255,0.85)"
+        pill.style.color = light ? "#fff" : "#000"
+      })
+    }
+
+    updateColorValues()
+    document.addEventListener("astro:after-swap", updateColorValues)
+
+    new MutationObserver(updateColorValues).observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-theme"],
+    })
+  })()
+</script>

@@ -1,0 +1,134 @@
+---
+import { Image } from "astro:assets"
+
+import { getStageVariant } from "@/lib/blog/stage"
+import type { PostMeta } from "@/lib/blog/types"
+import Badge from "@/components/base/Badge.astro"
+import Icon from "@/components/base/Icon.astro"
+import TaxonomyChip from "@/components/base/TaxonomyChip.astro"
+import Card from "@/components/base/card/Card.astro"
+import CardContent from "@/components/base/card/CardContent.astro"
+import CardDescription from "@/components/base/card/CardDescription.astro"
+import CardFooter from "@/components/base/card/CardFooter.astro"
+import CardMeta from "@/components/base/card/CardMeta.astro"
+import CardTitle from "@/components/base/card/CardTitle.astro"
+import PostMetadata from "@/components/blog/PostMetadata.astro"
+
+interface Props {
+  metadata: PostMeta
+}
+
+const { metadata } = Astro.props
+const tags = metadata.tags
+const hasBadges = metadata.stage || (tags && tags.length > 0)
+---
+
+<Card
+  href={`/blog/${metadata.id}`}
+  label={`Post: ${metadata.title}`}
+  class="preview-card"
+  data-has-image={metadata.image ? "true" : "false"}
+>
+  {metadata.image && (
+      <Image
+        src={metadata.image}
+        alt={metadata.title}
+        width={1200}
+        height={630}
+        sizes="(max-width: 768px) 100vw, 60vw"
+        class="cover-image"
+        loading="lazy"
+      />
+    )}
+
+  <CardContent class="preview-card-content">
+    <CardTitle>{metadata.title}</CardTitle>
+    <CardDescription>{metadata.description}</CardDescription>
+    <CardMeta>
+      <PostMetadata {...metadata} variant="card" />
+    </CardMeta>
+    {hasBadges && (
+        <CardFooter class="preview-card-badges">
+          {metadata.stage && (
+              <Badge variant={getStageVariant(metadata.stage)}>
+                <Icon name={metadata.stage} />
+                {metadata.stage}
+              </Badge>
+          )}
+          {tags && tags.map((tag: string) => (
+              <TaxonomyChip label={tag} static />
+            ))}
+        </CardFooter>
+      )}
+  </CardContent>
+</Card>
+
+<style>
+  .preview-card:hover {
+    background-color: oklch(from var(--muted) l c h / 0.5);
+  }
+
+  .preview-card {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .preview-card-content {
+    position: relative;
+    z-index: 1;
+    transition: color var(--motion-duration-fast) var(--motion-ease);
+  }
+
+  .preview-card[data-has-image="true"] .preview-card-content {
+    @media (width >= 48rem) {
+      max-inline-size: 80%;
+    }
+
+    @media (width < 48rem) {
+      padding-block-start: 6rem;
+    }
+  }
+
+  .preview-card :global([data-slot="card-title"]) {
+    transition: color var(--motion-duration) var(--motion-ease);
+  }
+
+  .preview-card:hover :global([data-slot="card-title"]) {
+    color: var(--primary);
+  }
+
+  .preview-card-badges {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .preview-card-badges::-webkit-scrollbar {
+    display: none;
+  }
+
+  .cover-image {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-end: 0;
+    z-index: 0;
+    inline-size: 60%;
+    block-size: 100%;
+    object-fit: cover;
+    opacity: 0.3;
+    mask: linear-gradient(to right, transparent 0%, black 100%);
+    transition: opacity var(--motion-duration-slow) var(--motion-ease);
+  }
+
+  .preview-card:hover .cover-image {
+    opacity: 0.5;
+  }
+
+  @media (width < 48rem) {
+    .cover-image {
+      inline-size: 100%;
+      block-size: 66%;
+      mask: linear-gradient(to top, transparent 0%, black 100%);
+    }
+  }
+</style>

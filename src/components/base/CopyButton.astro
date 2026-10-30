@@ -1,0 +1,134 @@
+---
+import { cn } from "@/lib/utils"
+
+import Icon from "./Icon.astro"
+
+interface Props {
+  /** Static text to copy */
+  text?: string
+  /** CSS selector resolved relative to parentElement to get text at click time */
+  selector?: string
+  /** Visible label next to icon (swaps to "Copied!" on success) */
+  label?: string
+  /** Icon size */
+  size?: string
+  /** Button title / tooltip */
+  title?: string
+  /** Optional presentation for use alongside action buttons */
+  variant?: "plain" | "accent-outline"
+  class?: string
+}
+
+const {
+  text,
+  selector,
+  label,
+  size = "0.875rem",
+  title,
+  variant = "plain",
+  class: className,
+} = Astro.props
+---
+
+<button
+  type="button"
+  data-copy-btn
+  data-copy-text={text}
+  data-copy-selector={selector}
+  data-copy-variant={variant}
+  class={cn("copy-button", className)}
+  title={title}
+>
+  <Icon name="copy" size={size} class="copy-icon" />
+  <Icon name="check" size={size} class="check-icon" hidden />
+  {label && <span class="copy-label">{label}</span>}
+</button>
+
+<script is:inline data-astro-rerun>
+  ;(function () {
+    function initCopyButtons() {
+      document.querySelectorAll("[data-copy-btn]").forEach(function (btn) {
+        if (btn.hasAttribute("data-copy-bound")) return
+        btn.setAttribute("data-copy-bound", "")
+
+        btn.addEventListener("click", function (e) {
+          e.stopPropagation()
+          var text
+          var sel = btn.getAttribute("data-copy-selector")
+          if (sel) {
+            var parent = btn.parentElement
+            var target = parent && parent.querySelector(sel)
+            text = target ? target.textContent.trim() : ""
+          }
+          if (!text) {
+            text = btn.getAttribute("data-copy-text") || ""
+          }
+          if (!text) return
+
+          navigator.clipboard.writeText(text).then(function () {
+            var copyIcon = btn.querySelector(".copy-icon")
+            var checkIcon = btn.querySelector(".check-icon")
+            var label = btn.querySelector(".copy-label")
+            var origLabel = label ? label.textContent : ""
+
+            if (copyIcon) copyIcon.setAttribute("hidden", "")
+            if (checkIcon) checkIcon.removeAttribute("hidden")
+            if (label) label.textContent = "Copied!"
+
+            setTimeout(function () {
+              if (copyIcon) copyIcon.removeAttribute("hidden")
+              if (checkIcon) checkIcon.setAttribute("hidden", "")
+              if (label) label.textContent = origLabel
+            }, 1500)
+          })
+        })
+      })
+    }
+
+    initCopyButtons()
+    document.addEventListener("astro:after-swap", initCopyButtons)
+  })()
+</script>
+
+<style>
+  .copy-button {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3xs);
+    border: 0;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  .copy-button[data-copy-variant="accent-outline"] {
+    min-block-size: var(--control-size);
+    padding: var(--space-2xs) var(--space-xs);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-md);
+    background: transparent;
+    color: var(--foreground);
+    font-size: var(--step--1);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.2;
+    touch-action: manipulation;
+    user-select: none;
+    transition:
+      background-color var(--motion-duration) var(--motion-ease),
+      border-color var(--motion-duration) var(--motion-ease),
+      color var(--motion-duration-fast) var(--motion-ease),
+      transform var(--motion-duration-fast) var(--motion-ease);
+  }
+
+  .copy-button[data-copy-variant="accent-outline"]:active {
+    transform: scale(0.96);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .copy-button[data-copy-variant="accent-outline"]:hover {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: var(--accent-foreground);
+    }
+  }
+</style>

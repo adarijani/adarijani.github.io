@@ -1,0 +1,81 @@
+---
+import type { MarkdownHeading } from "astro"
+
+import { getHeadingWidth } from "@/lib/toc"
+
+interface Props {
+  headings: MarkdownHeading[]
+  class?: string
+}
+
+/*
+ * Purely a position indicator: the navigable table of contents is the panel
+ * this rail expands into, so these marks are deliberately not links. Keeping
+ * them interactive would mean one nameless link per heading at 2px tall,
+ * which neither a pointer nor a screen reader can reasonably use.
+ */
+const { headings, class: className } = Astro.props
+---
+
+<toc-float class:list={["toc-summary-container", className]} aria-hidden="true">
+  {headings.map((heading) => {
+      const width = getHeadingWidth(heading.depth).replace("w-", "")
+
+      return (
+        <span
+          data-heading-link={heading.slug}
+          style={`--width:${width}`}
+        />
+      )
+    })}
+</toc-float>
+
+<style>
+  toc-float {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3xs);
+  }
+
+  span {
+    block-size: 0.125rem;
+    inline-size: calc(var(--width, 2) * 0.25rem);
+    background: color-mix(in oklab, var(--muted-foreground) 50%, transparent);
+    transition: background-color var(--motion-duration) var(--motion-ease);
+  }
+
+  span[data-active] {
+    background: var(--accent);
+  }
+</style>
+
+<script>
+  import { UnifiedTOCController } from "@/lib/toc"
+
+  let controller: UnifiedTOCController | null = null
+
+  function initController() {
+    // astro:after-swap can run before the new content is fully ready.
+    // A small delay ensures the container is present.
+    requestAnimationFrame(() => {
+      if (controller) {
+        controller.cleanup()
+      }
+
+      controller = new UnifiedTOCController(
+        ".toc-summary-container",
+        "[data-heading-link]",
+      )
+      controller.init()
+    })
+  }
+
+  function cleanupController() {
+    controller?.cleanup()
+    controller = null
+  }
+
+  document.addEventListener("astro:page-load", initController)
+  document.addEventListener("astro:after-swap", initController)
+  document.addEventListener("astro:before-swap", cleanupController)
+</script>

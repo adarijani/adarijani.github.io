@@ -1,0 +1,56 @@
+[
+  {
+    "id": "digital-society-2025",
+    "category": "research",
+    "title": "Research Fellow",
+    "org": "Center for Digital Society, Example University",
+    "orgUrl": "https://example.edu/research/digital-society",
+    "startDate": "2025-09",
+    "location": "Example City",
+    "description": "Studies how automated systems shape access to public information, with an emphasis on transparent evaluation and reproducible research."
+  },
+  {
+    "id": "open-methods-2024",
+    "category": "research",
+    "title": "Graduate Research Assistant",
+    "org": "Open Methods Lab, Example University",
+    "orgUrl": "https://example.edu/research/open-methods",
+    "startDate": "2024-01",
+    "endDate": "2025-08",
+    "location": "Example City",
+    "description": "Built documented data pipelines and evaluation tools for collaborative computational social science projects."
+  },
+  {
+    "id": "civic-data-2023",
+    "category": "research",
+    "title": "Data Science Research Intern",
+    "org": "Civic Data Collaborative",
+    "orgUrl": "https://research.example.org/civic-data",
+    "startDate": "2023-06",
+    "endDate": "2023-09",
+    "location": "Remote",
+    "description": "Developed quality checks for public datasets and contributed reproducible notebooks to an open research toolkit."
+  },
+  {
+    "id": "responsible-computing-2024",
+    "category": "teaching",
+    "title": "Teaching Assistant, Responsible Computing",
+    "org": "Example University",
+    "orgUrl": "https://example.edu",
+    "startDate": "2024-09",
+    "endDate": "2025-05",
+    "location": "Example City",
+    "description": "Led discussion sections on data ethics, algorithmic accountability, and communicating uncertainty."
+  },
+  {
+    "id": "example-university-2024",
+    "category": "education",
+    "title": "M.S. in Computational Social Science",
+    "org": "Example University",
+    "orgUrl": "https://example.edu",
+    "startDate": "2022-09",
+    "endDate": "2024-05",
+    "location": "Example City",
+    "description": "Coursework included statistical modeling, machine learning, research design, and data visualization."
+  }
+]

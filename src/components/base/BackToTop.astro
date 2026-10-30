@@ -1,0 +1,79 @@
+---
+import Button from "@/components/base/Button.astro"
+import Icon from "@/components/base/Icon.astro"
+---
+
+<back-to-top>
+  <Button
+    variant="outline"
+    size="square"
+    hidden
+    title="Back to top"
+    aria-label="Back to top"
+  >
+    <back-to-top-icon><Icon name="to-top" size="1.25rem" /></back-to-top-icon>
+  </Button>
+</back-to-top>
+
+<script>
+  class BackToTop extends HTMLElement {
+    private button: HTMLButtonElement | null = null
+
+    private readonly updateVisibility = () => {
+      this.button?.toggleAttribute("hidden", window.scrollY <= 300)
+    }
+
+    private readonly scrollToTop = () => {
+      const reduceMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches
+      window.scrollTo({
+        top: 0,
+        behavior: reduceMotion ? "instant" : "smooth",
+      })
+    }
+
+    connectedCallback(): void {
+      this.button = this.querySelector("button")
+      if (!this.button) return
+      this.button.addEventListener("click", this.scrollToTop)
+      window.addEventListener("scroll", this.updateVisibility, {
+        passive: true,
+      })
+      this.updateVisibility()
+    }
+
+    disconnectedCallback(): void {
+      this.button?.removeEventListener("click", this.scrollToTop)
+      window.removeEventListener("scroll", this.updateVisibility)
+    }
+  }
+
+  if (!customElements.get("back-to-top")) {
+    customElements.define("back-to-top", BackToTop)
+  }
+</script>
+
+<style>
+  back-to-top {
+    --button-background: var(--background);
+    --button-box-shadow: 0 0.5rem 1.5rem -0.75rem
+      color-mix(in oklab, var(--foreground) 28%, transparent);
+
+    position: fixed;
+    z-index: 50;
+    inset-inline-end: max(var(--space-xs), env(safe-area-inset-right));
+    inset-block-end: max(var(--space-xl), env(safe-area-inset-bottom));
+  }
+
+  back-to-top-icon {
+    display: inline-flex;
+    transition: transform var(--motion-duration) var(--motion-ease);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    back-to-top:hover back-to-top-icon {
+      transform: translateY(-0.2rem);
+    }
+  }
+</style>

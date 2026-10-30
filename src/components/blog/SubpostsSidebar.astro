@@ -1,0 +1,107 @@
+---
+import type { PostNavItem as PostNavItemType } from "@/lib/blog/types"
+import PostNavItem from "@/components/blog/PostNavItem.astro"
+import ScrollArea from "@/components/toc/ScrollArea.astro"
+import SubpostsList from "@/components/blog/SubpostsList.astro"
+
+interface Props {
+  postNavItems: PostNavItemType[]
+  activePostNavItem: PostNavItemType | null
+  class?: string
+}
+
+const { postNavItems = [], activePostNavItem, class: className } = Astro.props
+
+// Only render if there's meaningful content
+const shouldRender = postNavItems.length > 0 || !!activePostNavItem
+---
+
+{shouldRender && activePostNavItem && (
+    <aside
+      id="subposts-sidebar-container"
+      class:list={["subposts-sidebar", className]}
+      role="complementary"
+      aria-label="Subposts navigation"
+    >
+      <header>
+        <h2 id="subposts-heading">
+          Post Navigation
+        </h2>
+      </header>
+      <ScrollArea data-scroll-area data-scroll-container>
+        <nav aria-label="Post and subposts">
+          <PostNavItem {...activePostNavItem} />
+          <h3 id="subposts-list-heading">
+            Subposts
+          </h3>
+          <SubpostsList items={postNavItems} />
+        </nav>
+      </ScrollArea>
+    </aside>
+  )}
+
+<style>
+  .subposts-sidebar {
+    --scroll-area-display: flex;
+    --scroll-area-flex-direction: column;
+    --scroll-area-max-block-size: calc(100dvh - var(--header-height, 4rem));
+  }
+
+  .subposts-sidebar header {
+    position: sticky;
+    top: 0;
+    margin-block-end: var(--space-2xs);
+    padding-block-end: var(--space-3xs);
+    border-block-end: 1px solid var(--border);
+  }
+
+  h2 {
+    color: color-mix(in oklab, var(--foreground) 80%, transparent);
+    font-size: var(--step--1);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  nav {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3xs);
+    padding: var(--space-2xs);
+  }
+
+  h3 {
+    margin-block: var(--space-3xs);
+    color: var(--muted-foreground);
+    font-size: var(--step--1);
+    font-weight: var(--font-weight-semibold);
+    text-transform: uppercase;
+  }
+</style>
+
+<script>
+  function initSidebar() {
+    const container = document.getElementById("subposts-sidebar-container")
+    if (!container) return
+
+    const scrollArea =
+      container.querySelector<HTMLElement>("[data-scroll-area]")
+    if (!scrollArea) return
+
+    const activeItem = scrollArea.querySelector<HTMLElement>(
+      "[aria-current='page']",
+    )
+    if (!activeItem) return
+
+    // Scroll active item into view
+    const areaRect = scrollArea.getBoundingClientRect()
+    const itemRect = activeItem.getBoundingClientRect()
+    const itemTop = itemRect.top - areaRect.top + scrollArea.scrollTop
+    const targetScroll = Math.max(
+      0,
+      itemTop - (areaRect.height - itemRect.height) / 2,
+    )
+    scrollArea.scrollTop = targetScroll
+  }
+
+  document.addEventListener("astro:page-load", initSidebar)
+  document.addEventListener("astro:after-swap", initSidebar)
+</script>

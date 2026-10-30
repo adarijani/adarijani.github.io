@@ -1,0 +1,36 @@
+---
+import { PostManager } from "@/lib/blog"
+import { getSortedTags } from "@/lib/blog/tag"
+import Layout from "@/layouts/Layout.astro"
+import TaxonomyChip from "@/components/base/TaxonomyChip.astro"
+
+const postManager = PostManager.getInstance()
+const sortedTags = await getSortedTags(() => postManager.getMainPosts())
+---
+
+<Layout
+  title="Tags"
+  breadcrumbs={[
+    { label: "Blog", icon: "blog", href: "/blog" },
+    { label: "Tags", icon: "tags", href: "/blog/tags" },
+  ]}
+>
+  <nav class="tag-cloud" aria-label="All blog tags">
+    {sortedTags.map(({ tag, count }) => (
+          <TaxonomyChip
+            href={`/blog/tags/${tag}`}
+            label={tag}
+            count={count}
+            countNoun="post"
+          />
+        ))}
+  </nav>
+</Layout>
+
+<style>
+  .tag-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs);
+  }
+</style>

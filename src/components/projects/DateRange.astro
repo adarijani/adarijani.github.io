@@ -1,0 +1,50 @@
+---
+/**
+ * Handle a date range presentation for both humans, machines, and screen readers.
+ * Each endpoint gets its own <time>, and - is read as "to" to screen reader users.
+ */
+import { formatDateRange, getDateRangeSeparator } from "@/lib/date-utils"
+import Icon from "@/components/base/Icon.astro"
+
+interface Props {
+  /** Start date of the project */
+  fromDate?: Date
+  /** End date of the project (optional, defaults to "Present") */
+  toDate?: Date
+  /** Additional CSS classes for the container */
+  class?: string
+  /** Show calendar icon */
+  showIcon?: boolean
+}
+
+const { fromDate, toDate, class: className, showIcon = false } = Astro.props
+
+const segments = formatDateRange(fromDate, toDate)
+if (!segments) return null
+
+// Only a start date means the range is still running.
+const isOngoing = Boolean(fromDate && !toDate)
+---
+
+<span class={className}>
+  {showIcon && <Icon name="calendar" size="0.75rem" />}
+  {segments.map(({ text, dateTime, isSeparator }) =>
+      dateTime ? (
+        <time datetime={dateTime}>{text}</time>
+      ) : isSeparator ? (
+        <>
+          <span aria-hidden="true">{text}</span>
+          <span class="sr-only"> to </span>
+        </>
+      ) : (
+        <span>{text}</span>
+      ),
+    )}
+  {isOngoing && (
+      <>
+        <span aria-hidden="true">{getDateRangeSeparator().trimStart()}</span>
+        <span class="sr-only"> to </span>
+        <span>Present</span>
+      </>
+    )}
+</span>

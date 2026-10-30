@@ -1,0 +1,111 @@
+---
+import Link from "./Link.astro"
+
+export type BadgeVariant =
+  | "default"
+  | "accent"
+  | "destructive"
+  | "outline"
+  | "muted"
+  | "success"
+  | "warning"
+  | "danger"
+  | "info"
+  | "tag"
+
+export interface Props extends astroHTML.JSX.HTMLAttributes {
+  variant?: BadgeVariant
+  href?: string
+}
+
+const { variant = "default", href, class: className, ...rest } = Astro.props
+---
+
+{href ? (
+    <Link href={href} data-badge data-variant={variant} class={className ?? undefined} {...rest}>
+      <slot />
+    </Link>
+  ) : (
+    <span data-badge data-variant={variant} class={className ?? undefined} {...rest}>
+      <slot />
+    </span>
+  )}
+
+<style>
+  [data-badge] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    inline-size: fit-content;
+    max-inline-size: 100%;
+    flex-shrink: 0;
+    padding: 0.125rem 0.5rem;
+    border: 1px solid transparent;
+    border-radius: var(--radius-md);
+    font-size: var(--step--1);
+    line-height: 1.25;
+    font-weight: var(--font-weight-medium);
+    text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition:
+      background-color var(--motion-duration) var(--motion-ease),
+      border-color var(--motion-duration) var(--motion-ease),
+      color var(--motion-duration-fast) var(--motion-ease);
+  }
+
+  [data-badge] :global(svg) {
+    inline-size: 1em;
+    block-size: 1em;
+    flex-shrink: 0;
+  }
+
+  [data-badge][data-variant="default"] {
+    background: var(--primary);
+    color: var(--primary-foreground);
+  }
+
+  [data-badge][data-variant="accent"] {
+    background: var(--accent);
+    color: var(--accent-foreground);
+  }
+
+  [data-badge][data-variant="destructive"],
+  [data-badge][data-variant="danger"] {
+    border-color: color-mix(in oklab, var(--destructive) 45%, transparent);
+    color: var(--destructive);
+  }
+
+  [data-badge][data-variant="outline"],
+  [data-badge][data-variant="tag"] {
+    border-color: var(--border);
+    color: var(--muted-foreground);
+  }
+
+  [data-badge][data-variant="muted"] {
+    background: color-mix(in oklab, var(--muted) 70%, transparent);
+    color: var(--muted-foreground);
+  }
+
+  [data-badge][data-variant="success"] {
+    border-color: color-mix(in oklab, var(--primary) 45%, transparent);
+    color: var(--primary);
+  }
+
+  [data-badge][data-variant="warning"] {
+    border-color: color-mix(in oklab, orange 45%, transparent);
+    color: color-mix(in oklab, orange 80%, var(--foreground));
+  }
+
+  [data-badge][data-variant="info"] {
+    border-color: color-mix(in oklab, var(--accent) 45%, transparent);
+    color: var(--accent);
+  }
+
+  a[data-badge]:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+</style>

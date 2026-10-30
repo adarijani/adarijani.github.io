@@ -1,0 +1,85 @@
+---
+import Layout from "@/layouts/Layout.astro"
+import CopyMarkdown from "@/components/base/CopyMarkdown.astro"
+import FormattedDate from "@/components/base/FormattedDate.astro"
+import type { BreadcrumbItem } from "@/components/layout/Breadcrumbs.astro"
+
+interface Props {
+  title?: string
+  description?: string
+  modifiedTime?: Date
+  prose?: boolean
+  markdown?: string
+  breadcrumbs?: BreadcrumbItem[]
+  [key: string]: any // Allow any additional props to pass through to Layout
+}
+
+const {
+  title,
+  description,
+  modifiedTime,
+  prose = true,
+  markdown,
+  breadcrumbs,
+  frontmatter,
+  ...layoutProps
+} = Astro.props
+
+const pageTitle = title ?? frontmatter?.title ?? ""
+const pageDescription = description ?? frontmatter?.description
+const pageModifiedTime = modifiedTime ?? frontmatter?.modifiedTime
+const resolvedBreadcrumbs = breadcrumbs ?? frontmatter?.breadcrumbs
+---
+
+<Layout
+  title={pageTitle}
+  description={pageDescription}
+  breadcrumbs={resolvedBreadcrumbs}
+  {...layoutProps}
+>
+  <section class="page-heading">
+    <h1>{pageTitle}</h1>
+    {pageDescription && <p class="page-description">{pageDescription}</p>}
+    {pageModifiedTime && (
+      <FormattedDate date={pageModifiedTime} class="page-modified" />
+    )}
+  </section>
+  {prose && markdown && (
+      <CopyMarkdown markdown={markdown} class="common-copy-markdown" />
+    )}
+  {prose ? (
+      <prose-content>
+        <slot />
+      </prose-content>
+    ) : (
+      <slot />
+    )}
+</Layout>
+
+<style>
+  .page-heading {
+    margin-block: var(--space-s);
+
+    h1 {
+      font-size: var(--step-2);
+      line-height: calc(var(--leading-offset) + 1em);
+      font-weight: var(--font-weight-medium);
+      margin-block-end: var(--space-2xs);
+    }
+  }
+
+  .page-description,
+  :global(.page-modified) {
+    color: var(--muted-foreground);
+  }
+
+  :global(.page-modified) {
+    font-size: var(--step--1);
+  }
+
+  :global(.common-copy-markdown) {
+    display: flex;
+    justify-content: flex-end;
+    margin-block: var(--space-s);
+  }
+</style>

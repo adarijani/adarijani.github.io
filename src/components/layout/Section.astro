@@ -1,0 +1,139 @@
+---
+import Link from "@/components/base/Link.astro"
+
+interface Props {
+  title: string
+  class?: string
+  spacing?: "default" | "none"
+  moreLink?: string
+  moreText?: string
+}
+
+const {
+  class: className,
+  title,
+  spacing = "default",
+  moreLink,
+  moreText = "see all →",
+} = Astro.props
+---
+
+<section class:list={["section-block", className]} data-spacing={spacing}>
+  <section-heading>
+    <h2 id={title.toLowerCase()}>{title}</h2>
+    {moreLink && (
+        <Link href={moreLink} underline class="section-more">
+          {moreText}
+        </Link>
+      )}
+  </section-heading>
+  <slot />
+</section>
+
+<style>
+  .section-block {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-s);
+    margin-block-start: var(--space-l);
+  }
+
+  .section-block[data-spacing="none"] {
+    margin-block-start: 0;
+  }
+
+  section-heading {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-s);
+    min-width: 0;
+  }
+
+  h2 {
+    position: relative;
+    width: fit-content;
+    margin: 0;
+    padding-block-end: 0.125rem;
+    color: var(--foreground);
+    font-size: var(--step-2);
+    line-height: 1.333;
+    font-weight: var(--font-weight-medium);
+  }
+
+  h2::before {
+    content: "";
+    position: absolute;
+    inset-block-start: 0.15em;
+    inset-inline-end: -1.05rem;
+    inline-size: 0.7rem;
+    block-size: 0.7rem;
+    background: var(--celestial-star);
+    clip-path: polygon(
+      50% 0,
+      58% 40%,
+      100% 50%,
+      58% 60%,
+      50% 100%,
+      42% 60%,
+      0 50%,
+      42% 40%
+    );
+    opacity: 0.62;
+    transform: scale(0.82);
+    transition:
+      opacity var(--motion-duration) var(--motion-ease),
+      transform var(--motion-duration) var(--motion-ease);
+  }
+
+  h2::after {
+    content: "";
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline-start: 0;
+    inline-size: 2rem;
+    block-size: 2px;
+    border-radius: 1px;
+    background: var(--primary);
+    opacity: 0.7;
+    transition: inline-size 300ms ease-in-out;
+  }
+
+  .section-block:hover h2::after,
+  section-heading:focus-within h2::after {
+    inline-size: 3rem;
+  }
+
+  .section-block:hover h2::before,
+  section-heading:focus-within h2::before {
+    opacity: 1;
+    transform: scale(1) rotate(10deg);
+  }
+
+  .section-more {
+    flex-shrink: 0;
+    color: var(--muted-foreground);
+    font-size: var(--step-0);
+    line-height: 1.5;
+  }
+
+  @media (width < 40rem) {
+    .section-block {
+      margin-block-start: var(--space-m);
+    }
+
+    section-heading {
+      gap: var(--space-xs);
+    }
+
+    .section-more {
+      font-size: var(--step--1);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    h2::before,
+    h2::after {
+      transition-duration: 0.01ms;
+    }
+  }
+</style>

@@ -1,0 +1,63 @@
+---
+import Icon from "@/components/base/Icon.astro"
+
+interface Props {
+  title: string
+  class?: string
+  defaultOpen?: boolean
+  variant?: "default" | "muted"
+}
+
+const {
+  title,
+  variant = "default",
+  defaultOpen = false,
+  class: className,
+  ...rest
+} = Astro.props
+---
+
+<details
+  data-collapse
+  data-disclosure
+  data-disclosure-rotation="quarter"
+  data-variant={variant}
+  class={className}
+  {...rest}
+  open={defaultOpen}
+>
+  <summary>
+    <span data-disclosure-chevron>
+      <Icon name="right" aria-hidden="true" />
+    </span>
+    <span>{title}</span>
+  </summary>
+  <div data-collapse-content>
+    <slot />
+  </div>
+</details>
+
+<style>
+  [data-collapse] {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+  }
+
+  [data-collapse][data-variant="muted"] {
+    background: color-mix(in oklab, var(--muted) 35%, transparent);
+  }
+
+  summary {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    padding: var(--space-xs);
+    cursor: pointer;
+    font-weight: var(--font-weight-medium);
+    list-style: none;
+  }
+
+  [data-collapse-content] {
+    padding: 0 var(--space-xs) var(--space-xs);
+  }
+</style>

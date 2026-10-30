@@ -1,0 +1,81 @@
+---
+import Button from "@/components/base/Button.astro"
+import Dropdown from "@/components/base/Dropdown.astro"
+import Icon from "@/components/base/Icon.astro"
+
+import ThemeOptions from "./ThemeOptions.astro"
+---
+
+<Dropdown align="end" id="theme-dropdown">
+  <Button
+    slot="trigger"
+    variant="ghost"
+    size="square"
+    title="Theme"
+    data-dropdown-trigger
+  >
+    <div class="theme-icon-stack" aria-hidden="true">
+      <Icon name="mingcute:sun-line" size="1.5rem" class="theme-icon-light" />
+      <Icon name="mingcute:moon-line" size="1.5rem" class="theme-icon-dark" />
+    </div>
+    <span class="sr-only">Toggle theme</span>
+  </Button>
+
+  <div class="theme-menu">
+    <ThemeOptions />
+  </div>
+</Dropdown>
+
+<style>
+  /* Stack both icons in the same grid cell so they size the button identically to a single icon */
+  .theme-icon-stack {
+    display: grid;
+    place-items: center;
+  }
+  .theme-icon-light,
+  .theme-icon-dark {
+    grid-area: 1 / 1;
+    transition:
+      transform var(--motion-duration) var(--motion-ease),
+      opacity var(--motion-duration) var(--motion-ease);
+  }
+  .theme-icon-dark {
+    opacity: 0;
+    transform: scale(0.6) rotate(-45deg);
+  }
+  :global([data-theme="dark"]) .theme-icon-light {
+    opacity: 0;
+    transform: scale(0.6) rotate(-45deg);
+  }
+  :global([data-theme="dark"]) .theme-icon-dark {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+
+  :global(.theme-no-transition *),
+  :global(.theme-no-transition *::before),
+  :global(.theme-no-transition *::after) {
+    transition: none !important;
+  }
+</style>
+
+<script is:inline data-astro-rerun>
+  ;(() => {
+    const stored = localStorage?.getItem("theme") ?? "auto"
+    const preference = ["light", "dark", "auto"].includes(stored)
+      ? stored
+      : "auto"
+    const resolved =
+      preference === "auto"
+        ? window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : "light"
+        : preference
+
+    document.documentElement.setAttribute("data-theme", resolved)
+    document.documentElement.classList.add(
+      resolved === "dark" ? "scheme-dark" : "scheme-light",
+    )
+    localStorage.setItem("theme", preference)
+  })()
+</script>

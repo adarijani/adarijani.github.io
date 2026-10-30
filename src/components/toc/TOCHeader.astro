@@ -1,0 +1,205 @@
+---
+import type { MarkdownHeading } from "astro"
+
+import Icon from "@/components/base/Icon.astro"
+import ScrollArea from "@/components/toc/ScrollArea.astro"
+import TOCHeadingLink from "@/components/toc/TOCHeadingLink.astro"
+
+interface Props {
+  headings: MarkdownHeading[]
+}
+
+const { headings } = Astro.props
+const hasHeadings = headings && headings.length > 0
+---
+
+{hasHeadings && (
+    <nav id="mobile-toc-container" class="mobile-toc" aria-label="Table of contents">
+      <details data-disclosure>
+        <summary>
+          <toc-progress
+            role="progressbar"
+            aria-label="Reading progress"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            aria-valuenow="0"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle
+                class="toc-progress-track"
+                cx="12"
+                cy="12"
+                r="10"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              />
+              <circle
+                id="mobile-toc-progress-circle"
+                class="toc-progress-value"
+                cx="12"
+                cy="12"
+                r="10"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-dasharray="62.83"
+                stroke-dashoffset="62.83"
+                transform="rotate(-90 12 12)"
+              />
+            </svg>
+          </toc-progress>
+          <toc-current id="mobile-toc-current-section">
+            Overview
+          </toc-current>
+          <span data-disclosure-chevron class="mobile-toc-chevron">
+            <Icon name="mingcute:down-line" aria-hidden="true" />
+          </span>
+        </summary>
+
+        <toc-panel data-scroll-container>
+          <ScrollArea data-scroll-area>
+            <ul id="mobile-toc">
+              {headings.map((heading) => (
+                <TOCHeadingLink heading={heading} class="toc-heading-link" />
+              ))}
+            </ul>
+          </ScrollArea>
+        </toc-panel>
+      </details>
+    </nav>
+  )}
+
+<style>
+  .mobile-toc {
+    --scroll-area-display: flex;
+    --scroll-area-flex-direction: column;
+    --scroll-area-max-block-size: 30dvh;
+
+    inline-size: 100%;
+
+    @media (width >= 80rem) {
+      display: none;
+    }
+  }
+
+  details {
+    overflow-x: hidden;
+  }
+
+  summary {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-s);
+    inline-size: 100%;
+    padding: var(--space-s);
+    cursor: pointer;
+    list-style: none;
+  }
+
+  summary:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: -2px;
+  }
+
+  toc-progress {
+    position: relative;
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+  }
+
+  toc-progress svg {
+    inline-size: 1.25rem;
+    block-size: 1.25rem;
+  }
+
+  toc-progress circle {
+    fill: none;
+    stroke-width: 2;
+  }
+
+  .toc-progress-track {
+    color: color-mix(in oklab, var(--primary) 20%, transparent);
+    stroke: currentColor;
+  }
+
+  .toc-progress-value {
+    color: var(--primary);
+    stroke: currentColor;
+  }
+
+  toc-current {
+    min-inline-size: 0;
+    flex: 1;
+    overflow: hidden;
+    color: var(--foreground);
+    font-size: var(--step--1);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-tight);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .mobile-toc-chevron {
+    margin-inline-start: auto;
+  }
+
+  toc-panel {
+    display: block;
+    border-block-start: 1px solid
+      color-mix(in oklab, var(--border) 50%, transparent);
+  }
+
+  ul {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3xs);
+    padding: var(--space-2xs) var(--space-s);
+    margin: 0;
+    list-style: none;
+  }
+</style>
+
+<script>
+  import { SITE } from "@site-config"
+  import { UnifiedTOCController } from "@/lib/toc"
+
+  let controller: UnifiedTOCController | null = null
+
+  function closeHeader() {
+    const detailsElement = document.querySelector<HTMLDetailsElement>(
+      "#mobile-toc-container details",
+    )
+    if (detailsElement) detailsElement.open = false
+  }
+
+  function initController() {
+    const container = document.getElementById("mobile-toc-container")
+    container?.querySelectorAll("a").forEach((link) => {
+      if ((link as HTMLElement).dataset.closeBound === "true") return
+      ;(link as HTMLElement).dataset.closeBound = "true"
+      link.addEventListener("click", closeHeader)
+    })
+
+    controller?.cleanup()
+    controller = new UnifiedTOCController(
+      "#mobile-toc-container",
+      "#mobile-toc-container [data-heading-link]",
+      { isMobile: true, tocMaxDepth: SITE.tocMaxDepth },
+    )
+    controller.init()
+  }
+
+  function cleanupController() {
+    controller?.cleanup()
+    controller = null
+  }
+
+  document.addEventListener("astro:page-load", initController)
+  document.addEventListener("astro:after-swap", initController)
+  document.addEventListener("astro:before-swap", cleanupController)
+  document.addEventListener("astro:before-preparation", closeHeader)
+  document.addEventListener("astro:before-swap", closeHeader)
+</script>

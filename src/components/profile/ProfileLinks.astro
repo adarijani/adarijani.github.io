@@ -1,0 +1,119 @@
+---
+import Button from "@/components/base/Button.astro"
+import Icon from "@/components/base/Icon.astro"
+
+import { getProcessedProfileLinks, type ProfileLinkConfig } from "./helper"
+
+interface Props {
+  links?: ProfileLinkConfig | Record<string, string>
+  class?: string
+  /** Which links to render: true for all, false for none, or an ordered list */
+  keys?: boolean | string[]
+  /** "button" gives each link button chrome; "icon" renders a bare icon link */
+  as?: "button" | "icon"
+}
+
+const { links, class: className = "", keys = true, as = "button" } = Astro.props
+
+/* rel="me" asserts "this profile is also me", which only holds for identity
+   profiles — not for documents like a CV or a feed. */
+const NON_IDENTITY_KEYS = new Set(["cv", "resume", "rss", "email", "calendar"])
+
+const processedLinks = getProcessedProfileLinks(links, keys)
+---
+
+{processedLinks.length > 0 && (
+    <ul class:list={["profile-links", `profile-links-${as}`, className]}>
+      {processedLinks.map(({ key, href, isExternal, label, iconName }) => {
+        const rel = NON_IDENTITY_KEYS.has(key) ? undefined : "me"
+        return (
+          <li>
+            <Button
+              href={href}
+              external={isExternal}
+              variant={as === "icon" ? "ghost" : "outline"}
+              size="square"
+              title={label}
+              rel={rel}
+              class={as === "icon" ? "profile-link-icon" : "profile-link"}
+            >
+              <Icon name={iconName} size={as === "icon" ? "1.5rem" : undefined} />
+              <span class="sr-only" set:html={label} />
+            </Button>
+          </li>
+        )
+      })}
+    </ul>
+  )}
+
+<style>
+  .profile-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 0.5rem;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  /* Header variant: ghost squares matching the other header controls, so the
+     tap target tracks --control-size and grows on coarse pointers. */
+  .profile-links-icon {
+    flex-wrap: nowrap;
+    gap: 0;
+  }
+
+  /* Secondary to the nav and home links, but hover/active/focus stay the
+     shared ghost treatment from Button. */
+  .profile-link-icon {
+    color: var(--muted-foreground);
+  }
+
+  /* The hover fill is the element's own background so it always sits flush
+     against the border, whatever the border width or radius becomes. */
+  .profile-link {
+    color: var(--muted-foreground);
+    transition:
+      background-color var(--motion-duration) var(--motion-ease),
+      border-color var(--motion-duration) var(--motion-ease),
+      box-shadow var(--motion-duration) var(--motion-ease),
+      color var(--motion-duration-fast) var(--motion-ease);
+  }
+
+  .profile-link :global(svg) {
+    inline-size: 1.125rem;
+    block-size: 1.125rem;
+    transition: transform var(--motion-duration) var(--motion-ease);
+  }
+
+  @media (pointer: coarse), (pointer: none), (any-pointer: coarse) {
+    .profile-link :global(svg) {
+      inline-size: 1.375rem;
+      block-size: 1.375rem;
+    }
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .profile-link:hover,
+    .profile-link[data-link]:hover {
+      background-color: var(--accent);
+      border-color: color-mix(in oklab, var(--accent) 55%, var(--border));
+      color: var(--accent-foreground);
+      box-shadow: 0 0.35rem 1rem
+        color-mix(in oklab, var(--accent) 16%, transparent);
+    }
+  }
+
+  @media (hover: hover) and (pointer: fine) and (
+      prefers-reduced-motion: no-preference
+    ) {
+    .profile-link:hover :global(svg) {
+      transform: scale(1.08);
+    }
+  }
+
+  .profile-link:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+</style>

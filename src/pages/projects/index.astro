@@ -1,0 +1,307 @@
+---
+import { FOOTER, PROFILE } from "@site-config"
+import techStack from "@/content/tech-stack.json"
+import { formatCount } from "@/lib/plural"
+import { getProjectSkillCounts, getProjects } from "@/lib/projects"
+import CommonLayout from "@/layouts/CommonLayout.astro"
+import Icon from "@/components/base/Icon.astro"
+import TaxonomyChip from "@/components/base/TaxonomyChip.astro"
+import Section from "@/components/layout/Section.astro"
+import GithubActivity from "@/components/projects/GithubActivity.astro"
+import GithubCard from "@/components/projects/GithubCard.astro"
+import ProjectRow from "@/components/projects/ProjectRow.astro"
+import TechStack from "@/components/projects/TechStack.astro"
+
+import "@/styles/chip-filter.css"
+
+const allProjects = await getProjects()
+const skillCounts = getProjectSkillCounts(allProjects, 1)
+const recurringSkillCounts = skillCounts.filter(({ count }) => count > 1)
+const uniqueSkillCounts = skillCounts.filter(({ count }) => count === 1)
+
+const githubRepo = FOOTER.sourceCode
+const githubProfile =
+  typeof PROFILE.links.github === "object"
+    ? PROFILE.links.github?.href
+    : PROFILE.links.github
+const githubUsername = githubProfile?.replace(/\/$/, "").split("/").pop()
+---
+
+<CommonLayout
+  title="Projects"
+  description="A collection of projects I've worked on, ranging from academic research to personal explorations. If you think it would be useful or interesting to collaborate on a project, please contact me to discuss."
+  prose={false}
+  breadcrumbs={[{ label: "Projects", icon: "folder-open" }]}
+  celestial
+>
+  <div class="projects-page">
+    <div class="projects-list-wrapper">
+      {skillCounts.length > 0 && (
+          <div
+            class="project-filters"
+            role="group"
+            aria-labelledby="project-skill-filter-label"
+          >
+            <span class="project-filter-label" id="project-skill-filter-label">
+              Skill
+            </span>
+            <div class="project-skill-controls">
+              <div class="chip-filter-bar">
+                {recurringSkillCounts.map(({ slug, label, count }) => (
+                  <TaxonomyChip
+                    label={label}
+                    count={count}
+                    countNoun="project"
+                    data-project-skill-filter={slug}
+                    aria-pressed="false"
+                    aria-label={`Filter projects by skill ${label}; ${formatCount(count, "project")}`}
+                  />
+                ))}
+                <span class="chip-active-filter" data-active-filter hidden>
+                  <TaxonomyChip
+                    label="Clear filter"
+                    prefix="×"
+                    tone="destructive"
+                    data-clear-project-filters
+                    aria-label="Clear project filter"
+                  />
+                </span>
+              </div>
+              {uniqueSkillCounts.length > 0 && (
+                <details class="project-skill-more" data-disclosure>
+                  <summary>
+                    <span data-skill-more-show>
+                      Show {formatCount(uniqueSkillCounts.length, "more skill")}
+                    </span>
+                    <span data-skill-more-hide>Hide additional skills</span>
+                    <span data-disclosure-chevron>
+                      <Icon name="chevron-down" />
+                    </span>
+                  </summary>
+                  <div class="chip-filter-bar project-skill-more-chips">
+                    {uniqueSkillCounts.map(({ slug, label, count }) => (
+                      <TaxonomyChip
+                        label={label}
+                        count={count}
+                        countNoun="project"
+                        data-project-skill-filter={slug}
+                        aria-pressed="false"
+                        aria-label={`Filter projects by skill ${label}; ${formatCount(count, "project")}`}
+                      />
+                    ))}
+                  </div>
+                </details>
+              )}
+            </div>
+            <span
+              class="sr-only"
+              aria-live="polite"
+              aria-atomic="true"
+              data-project-filter-status
+            />
+          </div>
+        )}
+
+      <div class="project-filter-empty" data-project-filter-empty hidden>
+        <h2>No matching projects</h2>
+        <p>Try clearing the skill filter.</p>
+      </div>
+
+      <div class="project-list">
+        {allProjects.map((project) => <ProjectRow {project} />)}
+      </div>
+    </div>
+
+    <Section title="Tech Stack" class="tech-stack-section">
+      <TechStack {...techStack} />
+    </Section>
+    {githubRepo && (
+        <Section title="On GitHub" class="github-showcase">
+          <GithubCard repo={githubRepo} contributor={githubUsername} />
+        </Section>
+      )}
+    {githubProfile && <GithubActivity githubUrl={githubProfile} />}
+  </div>
+</CommonLayout>
+
+<script>
+  import { initFacetedChipFilter } from "@/lib/chip-filter"
+
+  function initProjectControls() {
+    // astro:page-load and astro:after-swap both fire per navigation; skip the
+    // second call so we don't double-bind listeners on this DOM instance.
+    // Anchor the flag to a swapped-in element (not document.body, which
+    // persists across navigations) so it resets on the next real navigation.
+    const anchor = document.querySelector<HTMLElement>(".projects-page")
+    if (!anchor || anchor.dataset.controlsInitialized === "true") return
+    anchor.dataset.controlsInitialized = "true"
+
+    initFacetedChipFilter({
+      itemSelector: "[data-project-skills]",
+      facets: [
+        {
+          key: "skill",
+          itemAttr: "projectSkills",
+          filterButtonSelector: "[data-project-skill-filter]",
+          filterButtonAttr: "projectSkillFilter",
+        },
+      ],
+      clearButtonSelector: "[data-clear-project-filters]",
+      activeIndicatorSelector: "[data-active-filter]",
+      statusSelector: "[data-project-filter-status]",
+      emptyStateSelector: "[data-project-filter-empty]",
+      resultNoun: "project",
+    })
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initProjectControls, {
+      once: true,
+    })
+  } else {
+    initProjectControls()
+  }
+  document.addEventListener("astro:page-load", initProjectControls)
+  document.addEventListener("astro:after-swap", initProjectControls)
+</script>
+
+<style>
+  .projects-page {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
+  }
+
+  .projects-list-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-s);
+  }
+
+  .project-filters {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-xs);
+  }
+
+  .project-filter-label {
+    display: flex;
+    align-items: center;
+    min-inline-size: 2.75rem;
+    min-block-size: calc(var(--control-size-compact) + 2 * var(--space-3xs));
+    color: var(--muted-foreground);
+    font-size: var(--step--1);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.2;
+  }
+
+  .project-filters .chip-filter-bar {
+    gap: var(--space-3xs);
+  }
+
+  .project-skill-controls {
+    min-inline-size: 0;
+  }
+
+  .project-skill-more {
+    margin-block-start: var(--space-3xs);
+  }
+
+  .project-skill-more summary {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3xs);
+    min-block-size: var(--control-size-compact);
+    padding-inline: var(--space-2xs);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    color: var(--muted-foreground);
+    font-size: var(--step--1);
+    cursor: pointer;
+    list-style: none;
+    transition:
+      border-color var(--motion-duration) var(--motion-ease),
+      color var(--motion-duration-fast) var(--motion-ease);
+  }
+
+  [data-skill-more-hide] {
+    display: none;
+  }
+
+  .project-skill-more[open] [data-skill-more-show] {
+    display: none;
+  }
+
+  .project-skill-more[open] [data-skill-more-hide] {
+    display: inline;
+  }
+
+  .project-skill-more-chips {
+    margin-block-start: var(--space-3xs);
+  }
+
+  .chip-active-filter[hidden] {
+    display: none;
+  }
+
+  .project-filter-empty {
+    padding: var(--space-l);
+    border-radius: var(--radius-lg);
+    background: color-mix(in oklab, var(--muted) 34%, transparent);
+    text-align: center;
+  }
+
+  .project-filter-empty[hidden] {
+    display: none;
+  }
+
+  .project-filter-empty h2,
+  .project-filter-empty p {
+    margin: 0;
+  }
+
+  .project-filter-empty h2 {
+    font-size: var(--step-1);
+  }
+
+  .project-filter-empty p {
+    margin-block-start: var(--space-3xs);
+    color: var(--muted-foreground);
+    font-size: var(--step--1);
+  }
+
+  /* Rows carry their own block padding; the gap only separates them further
+     without drawing rules, so the list stays a single quiet column. */
+  .project-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xs);
+
+    /* Holds the featured star outside the text edge. Kept at every width so
+       the column's left edge stays put whichever rows are filtered in. */
+    padding-inline-start: 1rem;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .project-skill-more summary:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+  }
+
+  @media (width < 40rem) {
+    .project-filters {
+      flex-direction: column;
+      gap: var(--space-3xs);
+    }
+
+    .project-filter-label {
+      min-inline-size: 0;
+      min-block-size: 0;
+    }
+
+    .project-skill-controls {
+      inline-size: 100%;
+    }
+  }
+</style>

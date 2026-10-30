@@ -1,0 +1,107 @@
+---
+import type { TOCHeadingItem } from "@/lib/toc"
+import Icon from "@/components/base/Icon.astro"
+import TOCHeadingLink from "@/components/toc/TOCHeadingLink.astro"
+
+interface Props {
+  id: string
+  title: string
+  isActive: boolean
+  headings: TOCHeadingItem[]
+}
+
+const { id, title, isActive, headings } = Astro.props
+---
+
+<details class="toc-section" data-disclosure open={isActive}>
+  <summary data-heading-link={isActive ? "top" : `${id}-top`}>
+    <span>
+      {title}
+    </span>
+    {headings.length > 0 && (
+        <span data-disclosure-chevron>
+          <Icon name="mingcute:down-line" aria-hidden="true" />
+        </span>
+      )}
+  </summary>
+  {headings.length > 0 && (
+      <toc-section-list>
+        <ul>
+          {headings.map((heading) => (
+            <TOCHeadingLink
+              heading={heading}
+              class="toc-heading-link"
+              data-heading-link={heading.slug}
+            />
+          ))}
+        </ul>
+      </toc-section-list>
+    )}
+</details>
+
+<style>
+  .toc-section {
+    padding-block: var(--space-3xs);
+    border-block: 1px solid color-mix(in oklab, var(--border) 20%, transparent);
+  }
+
+  summary {
+    display: flex;
+    /* flex-start rather than center: the title can wrap to multiple lines
+       (post/project titles aren't length-limited), and centering the chevron
+       against the full wrapped height made it land in a different spot
+       depending on whether the section was open or closed. Anchoring both
+       states to the first line keeps the chevron's position identical
+       either way. */
+    align-items: flex-start;
+    gap: var(--space-2xs);
+    padding: 0.375rem var(--space-3xs);
+    border-radius: var(--radius-md);
+    color: color-mix(in oklab, var(--foreground) 70%, transparent);
+    font-size: var(--step--1);
+    font-weight: var(--font-weight-medium);
+    list-style: none;
+    cursor: pointer;
+    transition:
+      background-color var(--motion-duration) var(--motion-ease),
+      color var(--motion-duration-fast) var(--motion-ease);
+  }
+
+  summary:hover {
+    background: color-mix(in oklab, var(--accent) 50%, transparent);
+    color: var(--accent-foreground);
+  }
+
+  summary:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  summary > span {
+    min-inline-size: 0;
+    flex: 1;
+  }
+
+  [data-disclosure-chevron] {
+    /* Nudge down to the vertical center of the first text line, matching
+       flex-start above. */
+    margin-block-start: 0.1875rem;
+  }
+
+  toc-section-list {
+    display: block;
+    margin-block-start: var(--space-3xs);
+    padding-inline-start: var(--space-2xs);
+    border-inline-start: 2px solid
+      color-mix(in oklab, var(--border) 50%, transparent);
+  }
+
+  ul {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+</style>

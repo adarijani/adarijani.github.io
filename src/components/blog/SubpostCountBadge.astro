@@ -1,0 +1,57 @@
+---
+import { formatCount, pluralize } from "@/lib/plural"
+import Badge from "@/components/base/Badge.astro"
+import Icon from "@/components/base/Icon.astro"
+
+interface Props {
+  count: number
+  variant?: "compact" | "full"
+  class?: string
+}
+
+const { count, variant = "compact", class: className } = Astro.props
+
+const countLabel = formatCount(count, "subpost")
+---
+
+<Badge
+  variant="info"
+  class:list={["subpost-count-badge", className]}
+  aria-label={countLabel}
+>
+  <Icon name="subposts" />
+  {variant === "full" ? (
+      <>
+        <span class="subpost-count-full" aria-hidden="true">
+          {count}&nbsp;{pluralize(count, "subpost")}
+        </span>
+        <span class="subpost-count-compact" aria-hidden="true">{count}</span>
+      </>
+    ) : (
+      <span aria-hidden="true">{count}</span>
+    )}
+</Badge>
+
+<style>
+  :global(.subpost-count-badge) {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: var(--step--1);
+  }
+
+  .subpost-count-full {
+    display: none;
+  }
+
+  @media (width >= 40rem) {
+    .subpost-count-full {
+      display: inline;
+    }
+
+    .subpost-count-compact {
+      display: none;
+    }
+  }
+</style>

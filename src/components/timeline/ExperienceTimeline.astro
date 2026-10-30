@@ -1,0 +1,75 @@
+---
+import type { CollectionEntry } from "astro:content"
+
+import Link from "@/components/base/Link.astro"
+import DateRange from "@/components/projects/DateRange.astro"
+
+import Timeline from "./Timeline.astro"
+import TimelineDate from "./TimelineDate.astro"
+import TimelineItem from "./TimelineItem.astro"
+
+interface Props {
+  entries: CollectionEntry<"experience">[]
+  limit?: number
+  /** Extra class on each description, for callers that want to clamp it. */
+  itemClass?: string
+}
+
+const { entries, limit, itemClass } = Astro.props
+
+const sorted = [...entries].sort((a, b) => {
+  const endA = a.data.endDate?.getTime() ?? Infinity
+  const endB = b.data.endDate?.getTime() ?? Infinity
+  if (endB !== endA) return endB - endA
+  return b.data.startDate.getTime() - a.data.startDate.getTime()
+})
+
+const displayed = typeof limit === "number" ? sorted.slice(0, limit) : sorted
+---
+
+<Timeline>
+  {displayed.map((entry) => (
+    <TimelineItem>
+      <TimelineDate slot="date">
+        <DateRange fromDate={entry.data.startDate} toDate={entry.data.endDate} />
+      </TimelineDate>
+      <p class="experience-title">
+        <span>{entry.data.title}</span>
+        {" @ "}
+        {entry.data.orgUrl ? (
+          <Link href={entry.data.orgUrl} external underline>
+            {entry.data.org}
+          </Link>
+        ) : (
+          <span>{entry.data.org}</span>
+        )}
+        {entry.data.location && <span class="experience-location"> · {entry.data.location}</span>}
+      </p>
+      {entry.data.description && (
+        <p class:list={["experience-description", itemClass]}>{entry.data.description}</p>
+      )}
+    </TimelineItem>
+  ))}
+</Timeline>
+
+<style>
+  .experience-title {
+    font-size: var(--step--1);
+    line-height: calc(var(--leading-offset) + 1em);
+  }
+
+  .experience-title > span:first-child {
+    font-weight: var(--font-weight-medium);
+  }
+
+  .experience-location,
+  .experience-description {
+    color: var(--muted-foreground);
+  }
+
+  .experience-description {
+    margin-block-start: var(--space-3xs);
+    font-size: var(--step--1);
+    line-height: calc(var(--leading-offset) + 1em);
+  }
+</style>

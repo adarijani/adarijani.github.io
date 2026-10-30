@@ -1,0 +1,262 @@
+---
+import { ClientRouter } from "astro:transitions"
+
+import { PROFILE, SITE } from "@site-config"
+
+interface Props {
+  title?: string
+  description?: string
+  image?: string | URL
+  noindex?: boolean
+  type?: "website" | "article" | "profile"
+  publishedTime?: Date
+  modifiedTime?: Date
+  author?: string
+  tags?: string[]
+  section?: string
+}
+
+const {
+  title,
+  description = SITE.description,
+  image,
+  noindex = false,
+  type = "website",
+  publishedTime,
+  modifiedTime,
+  author,
+  tags = [],
+  section,
+} = Astro.props
+
+// SEO title optimization
+const fullTitle = title
+  ? title === SITE.title
+    ? SITE.title // Don't duplicate if title is already site title
+    : `${title} - ${SITE.title} - ${PROFILE.tagline}`
+  : `${SITE.title} - ${PROFILE.tagline}`
+
+// Trim title to approximately 60 characters for SEO
+const seoTitle =
+  fullTitle.length > 60 ? fullTitle.substring(0, 57) + "..." : fullTitle
+
+const socialImage = (() => {
+  // 1. If no image, use configured page/post preview image
+  if (!image) {
+    return new URL(
+      type === "article" ? SITE.defaultPostImage : SITE.defaultPageImage,
+      Astro.site,
+    )
+  }
+  // 2. If image is already a URL object, use it directly
+  if (image instanceof URL) {
+    return image
+  }
+  // 3. If image is a string
+  if (typeof image === "string") {
+    // Check if it's a remote link (starts with http:// or https://)
+    if (image.startsWith("http")) {
+      return image
+    }
+    // For other strings, prepend Astro.site
+    return new URL(image, Astro.site)
+  }
+})()
+
+// Canonical URL optimization
+const canonicalURL = Astro.site?.toString() || SITE.href
+
+// JSON-LD structured data for better SEO
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": type === "article" ? "BlogPosting" : "WebSite",
+  name: seoTitle,
+  description: description,
+  url: canonicalURL,
+  image: socialImage?.toString(),
+  author: author
+    ? {
+        "@type": "Person",
+        name: author,
+        ...(PROFILE.email && { email: PROFILE.email }),
+      }
+    : {
+        "@type": "Person",
+        name: SITE.author || SITE.title,
+        ...(PROFILE.email && { email: PROFILE.email }),
+      },
+  publisher: {
+    "@type": "Person",
+    name: SITE.title,
+    logo: {
+      "@type": "ImageObject",
+      url: new URL("/web-app-manifest-512x512.png", Astro.site).toString(),
+    },
+  },
+  ...(publishedTime && { datePublished: publishedTime.toISOString() }),
+  ...(modifiedTime && { dateModified: modifiedTime.toISOString() }),
+  ...(type === "article" && section && { articleSection: section }),
+  ...(tags.length > 0 && { keywords: tags.join(", ") }),
+}
+---
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, user-scalable=yes"
+  >
+  <meta name="generator" content={Astro.generator}>
+
+  <title>{seoTitle}</title>
+  <meta name="description" content={description}>
+  <link rel="canonical" href={canonicalURL}>
+  {noindex && <meta name="robots" content="noindex, nofollow" />}
+  {!noindex && <meta name="robots" content="index, follow" />}
+
+  {author && <meta name="author" content={author} />}
+  {publishedTime && <meta name="article:published_time" content={publishedTime.toISOString()} />}
+  {modifiedTime && <meta name="article:modified_time" content={modifiedTime.toISOString()} />}
+  {section && <meta name="article:section" content={section} />}
+  {tags.length > 0 && <meta name="keywords" content={tags.join(", ")} />}
+  <meta property="og:type" content={type}>
+  <meta property="og:site_name" content={SITE.title}>
+  <meta property="og:title" content={seoTitle}>
+  <meta property="og:description" content={description}>
+  <meta property="og:image" content={socialImage}>
+  <meta property="og:image:alt" content={title || SITE.title}>
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:url" content={canonicalURL}>
+  <meta property="og:locale" content={SITE.locale.lang}>
+  {publishedTime && (
+      <meta property="article:published_time" content={publishedTime.toISOString()} />
+    )}
+  {modifiedTime && <meta property="article:modified_time" content={modifiedTime.toISOString()} />}
+  {author && <meta property="article:author" content={author} />}
+  {section && <meta property="article:section" content={section} />}
+  {tags.map((tag) => <meta property="article:tag" content={tag} />)}
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content={title || SITE.title}>
+  <meta name="twitter:description" content={description}>
+  <meta name="twitter:image" content={socialImage}>
+  <meta name="twitter:image:alt" content={title || SITE.title}>
+
+  <meta
+    name="theme-color"
+    content="#15151f"
+    media="(prefers-color-scheme: dark)"
+  >
+  <meta
+    name="theme-color"
+    content="#eff1f5"
+    media="(prefers-color-scheme: light)"
+  >
+  <meta name="color-scheme" content="light dark">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content={SITE.title}>
+  <meta
+    name="format-detection"
+    content="telephone=no,date=no,address=no,email=no,url=no"
+  >
+
+  <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+  <link rel="shortcut icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="sitemap" href="/sitemap-index.xml">
+  <link
+    rel="alternate"
+    type="application/rss+xml"
+    title={SITE.title}
+    href={`${SITE.href}rss.xml`}
+  >
+
+  <ClientRouter />
+  <script is:inline define:vars={{ siteLocale: SITE.locale.lang }}>
+    window.__SITE_LOCALE__ = siteLocale
+
+    function loadZoomAssets() {
+      if (!document.querySelector("link[data-medium-zoom-styles]")) {
+        const styles = document.createElement("link")
+        styles.rel = "stylesheet"
+        styles.href = "/styles/zoom.css"
+        styles.dataset.mediumZoomStyles = "true"
+        document.head.append(styles)
+      }
+
+      if (window.mediumZoom) return Promise.resolve()
+      if (window.__mediumZoomPromise) return window.__mediumZoomPromise
+
+      /* A rejected promise left in place would be awaited by every later
+         attempt, so one offline moment would disable zoom for the rest of the
+         session even after the network recovers. Clear it, and drop the dead
+         script tag, so the next navigation can retry. */
+      window.__mediumZoomPromise = new Promise((resolve, reject) => {
+        const script = document.createElement("script")
+        script.src =
+          "https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js"
+        script.async = true
+        script.addEventListener("load", resolve, { once: true })
+        script.addEventListener(
+          "error",
+          () => {
+            script.remove()
+            reject(new Error("medium-zoom failed to load"))
+          },
+          { once: true },
+        )
+        document.head.append(script)
+      }).catch((error) => {
+        window.__mediumZoomPromise = null
+        throw error
+      })
+
+      return window.__mediumZoomPromise
+    }
+
+    /* Kept identical to the cursor rule in /styles/zoom.css. Card.astro sets
+       data-clickable whenever it renders its .card-overlay link, and that
+       overlay takes the click, so images beneath one can never be zoomed. */
+    const ZOOMABLE_IMAGES = "main img:not(a img):not([data-clickable] img)"
+
+    async function initializeImageZoom() {
+      const images = document.querySelectorAll(ZOOMABLE_IMAGES)
+      if (!images.length) return
+
+      try {
+        await loadZoomAssets()
+        window.__mediumZoomInstance?.detach()
+        window.__mediumZoomInstance = window.mediumZoom(images, {
+          margin: 24,
+          scrollOffset: 40,
+        })
+      } catch {
+        // Images remain fully usable if the optional enhancement cannot load.
+      }
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initializeImageZoom, {
+        once: true,
+      })
+    } else {
+      initializeImageZoom()
+    }
+    document.addEventListener("astro:after-swap", initializeImageZoom)
+  </script>
+
+  <slot />
+
+  <script
+    is:inline
+    type="application/ld+json"
+    set:html={JSON.stringify(structuredData)}
+  />
+</head>

@@ -1,0 +1,150 @@
+---
+import type { AuthorData } from "@/lib/blog/types"
+import Card from "@/components/base/card/Card.astro"
+import CardContent from "@/components/base/card/CardContent.astro"
+import CardDescription from "@/components/base/card/CardDescription.astro"
+import CardFooter from "@/components/base/card/CardFooter.astro"
+import CardHeader from "@/components/base/card/CardHeader.astro"
+import CardTitle from "@/components/base/card/CardTitle.astro"
+import ProfileLinks from "@/components/profile/ProfileLinks.astro"
+
+import AuthorAvatar from "./AuthorAvatar.astro"
+
+interface Props {
+  author: AuthorData
+  variant?: "full" | "compact"
+}
+
+const { author, variant = "full" } = Astro.props
+const { id, name, bio, pronouns, links } = author
+const isAuthorPage = Astro.url.pathname === `/people/${id}`
+const isCompact = variant === "compact"
+const isClickable = !isCompact && !isAuthorPage
+---
+
+<Card
+  href={isClickable ? `/people/${id}` : undefined}
+  label={isClickable ? `View profile for ${name}` : undefined}
+  orientation="inline"
+  padding={isCompact ? "compact" : "default"}
+  class:list={[
+    "author-card",
+    { "author-card-compact": isCompact }
+  ]}
+>
+  <AuthorAvatar
+    author={author}
+    fallbackStyle="all-initials"
+    class:list={["author-card-avatar", { "author-card-avatar-compact": isCompact }]}
+  />
+
+  <CardContent class="author-card-body">
+    <CardHeader>
+      <div class="author-card-heading">
+        {isCompact ? (
+            <CardTitle>
+              <a href={`/people/${id}`} class="author-card-name-link">
+                {name}
+              </a>
+            </CardTitle>
+          ) : (
+            <CardTitle>{name}</CardTitle>
+          )}
+        {pronouns && <span class="author-card-pronouns">({pronouns})</span>}
+      </div>
+      {bio && (
+        <CardDescription class:list={["author-card-bio", { "author-card-bio-compact": isCompact }]}>
+          {bio}
+        </CardDescription>
+      )}
+    </CardHeader>
+
+    {!isCompact && (
+      <CardFooter>
+        <ProfileLinks links={links} class="author-card-profile-links" />
+      </CardFooter>
+    )}
+  </CardContent>
+</Card>
+
+<style>
+  .author-card {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-s);
+    padding-block: var(--space-s);
+  }
+
+  .author-card-compact {
+    align-items: flex-start;
+    gap: var(--space-2xs);
+    padding-block: var(--space-2xs);
+  }
+
+  :global(.author-card-avatar) {
+    position: relative;
+    z-index: 10;
+    flex-shrink: 0;
+    inline-size: 10rem;
+    block-size: 10rem;
+  }
+
+  :global(.author-card-avatar-compact) {
+    inline-size: 3rem;
+    block-size: 3rem;
+  }
+
+  .author-card-body {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex: 1 1 16rem;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: var(--space-s);
+  }
+
+  .author-card-compact .author-card-body {
+    gap: var(--space-3xs);
+  }
+
+  .author-card-heading {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: var(--space-2xs);
+  }
+
+  .author-card-heading :global([data-slot="card-title"]) {
+    font-size: var(--step-1);
+    font-weight: var(--font-weight-medium);
+  }
+
+  .author-card-name-link {
+    font-size: var(--step--1);
+    font-weight: var(--font-weight-medium);
+  }
+
+  .author-card-pronouns,
+  .author-card :global(.author-card-bio) {
+    color: var(--muted-foreground);
+    font-size: var(--step--1);
+  }
+
+  .author-card :global(.author-card-bio) {
+    margin: 0;
+  }
+
+  .author-card :global(.author-card-bio-compact) {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  :global(.author-card-profile-links) {
+    position: relative;
+    z-index: 30;
+  }
+</style>

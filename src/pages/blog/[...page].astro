@@ -1,0 +1,242 @@
+---
+import type { PaginateFunction } from "astro"
+
+import { SITE } from "@site-config"
+import { PostManager } from "@/lib/blog"
+import { getStageVariant, STAGES } from "@/lib/blog/stage"
+import { getSortedTags } from "@/lib/blog/tag"
+import { formatCount } from "@/lib/plural"
+import Layout from "@/layouts/Layout.astro"
+import Badge from "@/components/base/Badge.astro"
+import Icon from "@/components/base/Icon.astro"
+import Pagination from "@/components/base/Pagination.astro"
+import TaxonomyChip from "@/components/base/TaxonomyChip.astro"
+import PreviewCard from "@/components/blog/PreviewCard.astro"
+
+export async function getStaticPaths({
+  paginate,
+}: {
+  paginate: PaginateFunction
+}) {
+  const allPosts = await PostManager.getInstance().getMainPosts()
+  return paginate(allPosts, { pageSize: SITE.blog.postsPerPage })
+}
+
+const { page } = Astro.props
+const postManager = PostManager.getInstance()
+
+// Get posts grouped by year for current page
+const currentPagePosts = page.data
+const hasNoPosts = currentPagePosts.length === 0
+
+let postsMetadata: Awaited<ReturnType<typeof postManager.getMetadata>>[] = []
+let postsByYear: { year: number; posts: typeof postsMetadata }[] = []
+let sortedTags: Awaited<ReturnType<typeof getSortedTags>> = []
+let displayTags: typeof sortedTags = []
+let numTags = 0
+let moreTagsButton = false
+let stageCounts: { name: string; count: number }[] = []
+
+if (!hasNoPosts) {
+  // Get metadata for all posts in parallel
+  postsMetadata = await Promise.all(
+    currentPagePosts.map((post) => postManager.getMetadata(post.id)),
+  )
+
+  // Group metadata by year
+  const postsByYearMap = postsMetadata.reduce(
+    (acc: Record<number, typeof postsMetadata>, metadata) => {
+      const year = metadata.createdAt.getFullYear()
+      ;(acc[year] ??= []).push(metadata)
+      return acc
+    },
+    {},
+  )
+
+  postsByYear = Object.entries(postsByYearMap)
+    .map(([year, posts]) => ({ year: parseInt(year), posts }))
+    .sort((a, b) => b.year - a.year)
+
+  sortedTags = await getSortedTags(() => postManager.getMainPosts())
+  displayTags = sortedTags.slice(0, 15)
+  numTags = sortedTags.length
+  moreTagsButton = numTags > 15
+
+  const allMainPosts = await postManager.getMainPosts()
+  stageCounts = STAGES.map((s) => ({
+    name: s.name,
+    count: allMainPosts.filter((p) => p.data.stage === s.name).length,
+  })).filter((s) => s.count > 0)
+}
+---
+
+<Layout
+  title="Blog"
+  breadcrumbs={[
+    { label: "Blog", href: "/blog", icon: "blog" },
+    { label: `Page ${page.currentPage}`, icon: "copy" },
+  ]}
+>
+  {(stageCounts.length > 0 || numTags > 0) && (
+      <nav class="blog-filters" aria-label="Browse posts">
+        {stageCounts.length > 0 && (
+          <filter-group>
+            <h2>
+              Browse by Stages
+            </h2>
+            <filter-chips>
+              {stageCounts.map(({ name, count }) => (
+                <Badge
+                  href={`/blog/stages/${name}`}
+                  variant={getStageVariant(name)}
+                  aria-label={`${name}, ${formatCount(count, "post")}`}
+                >
+                  <Icon name={name} size="0.75rem" />
+                  {name}
+                  <span class="count" aria-hidden="true">({count})</span>
+                </Badge>
+              ))}
+            </filter-chips>
+          </filter-group>
+        )}
+        {numTags > 0 && (
+          <filter-group>
+            <h2>
+              Browse by Tags
+            </h2>
+            <filter-chips>
+              {displayTags.map(({ tag, count }) => (
+                <TaxonomyChip
+                  href={`/blog/tags/${tag}`}
+                  label={tag}
+                  count={count}
+                  countNoun="post"
+                />
+              ))}
+              {moreTagsButton && (
+                <Badge href="/blog/tags" variant="outline">
+                  all {formatCount(numTags, "tag")}
+                  <Icon name="arrow-right" size="0.75rem" />
+                </Badge>
+              )}
+            </filter-chips>
+          </filter-group>
+        )}
+      </nav>
+    )}
+  <blog-index>
+    {hasNoPosts ? (
+        <section class="empty-state">
+          <h2>No posts yet</h2>
+          <p>Check back later for new content!</p>
+        </section>
+      ) : (
+        <>
+          <p class="post-count">
+            Showing {page.start + 1}–{page.end + 1} of {formatCount(page.total, "post")}
+          </p>
+          {postsByYear.map(({ year, posts }) => (
+            <section class="post-year">
+              <h2>{year}</h2>
+              <ul>
+                {posts.map((metadata) => (
+                  <li>
+                    <PreviewCard metadata={metadata} />
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ))}
+        </>
+      )}
+  </blog-index>
+
+  <Pagination
+    currentPage={page.currentPage}
+    totalPages={page.lastPage}
+    baseUrl="/blog"
+  />
+</Layout>
+
+<style>
+  .blog-filters,
+  filter-group,
+  blog-index,
+  .post-year,
+  .post-year ul {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .blog-filters {
+    gap: var(--space-s);
+    margin-block-end: var(--space-l);
+  }
+
+  filter-group {
+    gap: var(--space-2xs);
+  }
+
+  .blog-filters h2 {
+    color: var(--muted-foreground);
+    font-size: var(--step--1);
+    font-weight: var(--font-weight-medium);
+    text-transform: uppercase;
+  }
+
+  filter-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2xs);
+  }
+
+  .count {
+    margin-inline-start: 0.25rem;
+    opacity: 0.7;
+  }
+
+  blog-index {
+    min-block-size: calc(100dvh - 18rem);
+    gap: var(--space-xl);
+  }
+
+  .empty-state {
+    display: flex;
+    min-block-size: 14rem;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-s);
+    text-align: center;
+  }
+
+  .empty-state h2 {
+    font-size: var(--step-2);
+    font-weight: var(--font-weight-medium);
+  }
+
+  .empty-state p,
+  .post-count {
+    color: var(--muted-foreground);
+  }
+
+  .post-count {
+    font-size: var(--step--1);
+  }
+
+  .post-year {
+    gap: var(--space-s);
+  }
+
+  .post-year h2 {
+    font-size: var(--step-1);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .post-year ul {
+    gap: var(--space-s);
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+</style>

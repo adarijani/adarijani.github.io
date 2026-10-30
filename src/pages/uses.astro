@@ -1,0 +1,205 @@
+---
+import CommonLayout from "@/layouts/CommonLayout.astro"
+import Link from "@/components/base/Link.astro"
+import ToolSection from "@/components/tools/ToolSection.astro"
+import { ToolTag } from "@/components/tools/tags"
+
+const usesDescription =
+  "A collection of tools that I use on a frequent basis. \
+  Except for the hardware, I use free versions of most tools. \
+  I'm also a big fan of open-source software (OSS)."
+---
+
+<CommonLayout
+  title="Uses"
+  description={usesDescription}
+  modifiedTime={new Date()}
+  breadcrumbs={[{ label: "Uses", icon: "tool" }]}
+  prose={false}
+>
+  <ToolSection
+    title="Workstation (+Operating System)"
+    tools={[
+      {
+        name: "MacBook M1 Pro 14'",
+        description: "MacOS Tahoe 26",
+        href: "https://www.apple.com/mac/",
+        icon: "mingcute:apple-line"
+      },
+      {
+        name: "Linux (Virtual Machine)",
+        description: "Ubuntu 24.04 LTS",
+        href: "https://ubuntu.com/",
+        icon: "ubuntu",
+        tags: [ToolTag.OpenSource]
+      },
+      {
+        name: "Logitech Lift for Mac",
+        description: "Vertical Ergonomic Mouse",
+        href: "https://www.logitech.com/en-us/shop/p/lift-vertical-ergonomic-mouse-mac.910-006471",
+        icon: "logitech"
+      },
+      {
+        name: "Logitech Wave Keys for Mac",
+        description: "Wireless Ergonomic Keyboard",
+        href: "https://www.logitech.com/en-us/shop/p/wave-keys-mac.920-012402",
+        icon: "logitech"
+      },
+      {
+        name: "27' Philips 276E9QDSB",
+        description: "External Monitor",
+        href: "https://www.usa.philips.com/c-p/276E9QDSB_27/lcd-monitor-with-ultra-wide-color",
+        icon: "mingcute:computer-line"
+      },
+      {
+        name: "Sennheiser Momentum 4",
+        description: "Over-Ear Wireless Headphones",
+        href: "https://uk.sennheiser-hearing.com/products/momentum-4-wireless-refurbished",
+        icon: "mingcute:headphone-line"
+      }
+    ]}
+  />
+  <ToolSection
+    title="Development"
+    tools={[
+      {
+        name: "cmux",
+        description: "Terminal Emulator",
+        href: "https://cmux.com/",
+        icon: "cmux",
+        tags: [ToolTag.OpenSource]
+      },
+      {
+        name: "Zed",
+        description: "IDE",
+        href: "https://zed.dev/",
+        icon: "zed",
+        tags: [ToolTag.Free, ToolTag.OpenSource, ToolTag.Favorite]
+      },
+      {
+        name: "OpenAI Codex",
+        description: "Coding Agent",
+        href: "https://openai.com/codex/",
+        icon: "mingcute:openai-line",
+        tags: [ToolTag.Subscription, ToolTag.OpenSource]
+      },
+      {
+        name: "Claude",
+        description: "Coding Agent",
+        href: "https://openai.com/codex/",
+        icon: "claude",
+        tags: [ToolTag.Subscription]
+      }
+    ]}
+  />
+  <ToolSection
+    title="Research & Knowledge Management"
+    tools={[
+      {
+        name: "Linear",
+        description: "Software Development Tracking",
+        href: "https://linear.app/",
+        icon: "mingcute:linear-line",
+        tags: [ToolTag.Free, ToolTag.Favorite]
+      },
+      {
+        name: "Obsidian",
+        description: "Knowledge Management",
+        href: "https://obsidian.md/",
+        icon: "obsidian",
+        tags: [ToolTag.Free, ToolTag.Favorite]
+      },
+      {
+        name: "Overleaf",
+        description: "Online LaTeX Editor",
+        href: "https://www.overleaf.com/",
+        icon: "academicons:overleaf",
+        tags: [ToolTag.Free]
+      },
+
+      {
+        name: "Zotero",
+        description: "Citation Management",
+        href: "https://www.zotero.org/",
+        icon: "academicons:zotero",
+        tags: [ToolTag.Free]
+      },
+      {
+        name: "Logseq",
+        description: "Journaling & Writing",
+        href: "https://reclaim.ai/",
+        icon: "logseq",
+        tags: [ToolTag.OpenSource, ToolTag.Favorite]
+      },
+      {
+        name: "Typst",
+        description: "Typesetting, LaTeX successor",
+        href: "https://typst.app/",
+        icon: "typst",
+        tags: [ToolTag.OpenSource, ToolTag.Free]
+      }
+    ]}
+  />
+  <ToolSection
+    title="Productivity"
+    tools={[
+      {
+        name: "Zen Browser",
+        description: "Browser (Firefox-based)",
+        href: "https://zen-browser.app/",
+        icon: "zen",
+        tags: [ToolTag.OpenSource, ToolTag.Favorite]
+      },
+      {
+        name: "Raycast",
+        description: "Launcher / Spotlight alternative",
+        href: "https://www.raycast.com/",
+        icon: "raycast",
+        tags: [ToolTag.Free]
+      },
+      {
+        name: "Reclaim.ai",
+        description: "AI Calendar",
+        href: "https://reclaim.ai/",
+        icon: "reclaim",
+        tags: [ToolTag.Subscription, ToolTag.Favorite]
+      },
+      {
+        name: "Todoist",
+        description: "Task Management",
+        href: "https://www.todoist.com/",
+        icon: "todoist",
+        tags: [ToolTag.Free]
+      }
+    ]}
+  />
+  <ToolSection
+    title="Language Learning"
+    tools={[
+      {
+        name: "Anki",
+        description: "Spaced Repetition System",
+        href: "https://apps.ankiweb.net/",
+        icon: "anki",
+        tags: [ToolTag.Paid]
+      }
+    ]}
+  />
+  <p class="uses-note">
+    Discover other developers' setups at
+    <Link href="https://uses.tech/" external underline class="uses-note-link"
+      >uses.tech.</Link
+    >
+  </p>
+</CommonLayout>
+
+<style>
+  .uses-note {
+    color: var(--muted-foreground);
+    font-size: var(--step--1);
+  }
+
+  :global(.uses-note-link) {
+    color: var(--foreground);
+  }
+</style>

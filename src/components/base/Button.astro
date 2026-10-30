@@ -1,0 +1,198 @@
+---
+import Link from "./Link.astro"
+
+export interface Props extends astroHTML.JSX.ButtonHTMLAttributes {
+  as?: "button" | "summary"
+  variant?:
+    | "default"
+    | "primary"
+    | "accent"
+    | "destructive"
+    | "outline"
+    | "primary-outline"
+    | "accent-outline"
+    | "destructive-outline"
+    | "ghost"
+  size?: "default" | "square"
+  href?: string
+  external?: boolean
+  rel?: string
+}
+
+const {
+  as = "button",
+  variant = "default",
+  size = "default",
+  class: className,
+  href,
+  external,
+  type = "button",
+  ...rest
+} = Astro.props
+---
+
+{href ? (
+    <Link
+      href={href}
+      external={external}
+      data-button
+      data-variant={variant}
+      data-size={size}
+      class={className ?? undefined}
+      {...rest}
+    >
+      <slot />
+    </Link>
+  ) : as === "summary" ? (
+    <summary
+      data-button
+      data-variant={variant}
+      data-size={size}
+      class={className ?? undefined}
+      {...rest}
+    >
+      <slot />
+    </summary>
+  ) : (
+    <button
+      type={type}
+      data-button
+      data-variant={variant}
+      data-size={size}
+      class={className ?? undefined}
+      {...rest}
+    >
+      <slot />
+    </button>
+  )}
+
+<style>
+  [data-button] {
+    --button-line-width: 0.5px;
+
+    display: inline-flex;
+    inline-size: var(--button-inline-size, auto);
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2xs);
+    min-block-size: var(--button-min-block-size, var(--control-size));
+    padding: var(--space-2xs) var(--space-xs);
+    border: var(--button-line-width) solid transparent;
+    border-radius: var(--button-border-radius, var(--radius-md));
+    box-shadow: var(--button-box-shadow, none);
+    font-size: var(--step--1);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.2;
+    text-decoration: none;
+    touch-action: manipulation;
+    user-select: none;
+    cursor: pointer;
+    transition:
+      background-color var(--motion-duration) var(--motion-ease),
+      border-color var(--motion-duration) var(--motion-ease),
+      color var(--motion-duration-fast) var(--motion-ease),
+      transform var(--motion-duration-fast) var(--motion-ease);
+  }
+
+  [data-button][data-size="square"] {
+    inline-size: var(--control-size);
+    padding: 0;
+  }
+
+  [data-button][data-variant="default"] {
+    background: var(--muted);
+    color: var(--foreground);
+  }
+
+  [data-button][data-variant="primary"],
+  [data-button][data-variant="accent"] {
+    background: var(--primary);
+    color: var(--primary-foreground);
+  }
+
+  [data-button][data-variant="destructive"] {
+    background: var(--destructive);
+    color: var(--primary-foreground);
+  }
+
+  [data-button][data-variant$="outline"],
+  [data-button][data-variant="outline"] {
+    border-color: var(--border);
+    background: var(--button-background, transparent);
+    color: var(--foreground);
+  }
+
+  [data-button][data-variant="ghost"] {
+    background: transparent;
+    color: var(--foreground);
+  }
+
+  [data-button]:active {
+    transform: scale(0.96);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    [data-button][data-variant="default"]:hover {
+      border-color: var(--primary);
+      background: var(--primary);
+      color: var(--primary-foreground);
+    }
+
+    [data-button][data-variant="primary"]:hover {
+      border-color: var(--primary);
+      background: var(--background);
+      color: var(--foreground);
+    }
+
+    [data-button][data-variant="accent"]:hover {
+      border-color: var(--accent);
+      background: var(--background);
+      color: var(--foreground);
+    }
+
+    [data-button][data-variant="destructive"]:hover {
+      border-color: var(--destructive);
+      background: var(--background);
+      color: var(--foreground);
+    }
+
+    [data-button][data-variant="outline"]:hover,
+    [data-button][data-variant="ghost"]:hover {
+      border-color: var(--interactive-border);
+      background: var(--interactive-background);
+      color: var(--interactive-foreground);
+    }
+
+    [data-button][data-variant="accent-outline"]:hover {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: var(--accent-foreground);
+    }
+
+    [data-button][data-variant="primary-outline"]:hover {
+      border-color: var(--primary);
+      background: var(--primary);
+      color: var(--primary-foreground);
+    }
+
+    [data-button][data-variant="destructive-outline"]:hover {
+      border-color: var(--destructive);
+      background: var(--destructive);
+      color: var(--accent-foreground);
+    }
+  }
+
+  [data-button][data-variant="outline"]:focus-visible,
+  [data-button][data-variant="ghost"]:focus-visible {
+    border-color: var(--interactive-border);
+    background: var(--interactive-background);
+    color: var(--interactive-foreground);
+  }
+
+  [data-button][aria-disabled="true"],
+  [data-button]:disabled {
+    opacity: 0.5;
+    pointer-events: none;
+    cursor: not-allowed;
+  }
+</style>

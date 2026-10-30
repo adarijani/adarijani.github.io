@@ -1,0 +1,58 @@
+---
+export interface Props extends astroHTML.JSX.ButtonHTMLAttributes {
+  size?: "default" | "compact"
+}
+
+const {
+  class: className,
+  type = "button",
+  size = "default",
+  ...rest
+} = Astro.props
+---
+
+<button type={type} data-chip data-size={size} class={className} {...rest}>
+  <slot />
+</button>
+
+<style>
+  [data-chip] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    inline-size: fit-content;
+    min-block-size: var(--control-size);
+    padding: 0.125rem 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: transparent;
+    color: var(--muted-foreground);
+    font-size: var(--step--1);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.2;
+    white-space: nowrap;
+    cursor: pointer;
+    touch-action: manipulation;
+    transition:
+      background-color var(--motion-duration) var(--motion-ease),
+      border-color var(--motion-duration) var(--motion-ease),
+      color var(--motion-duration-fast) var(--motion-ease);
+  }
+
+  [data-chip]:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  [data-chip][aria-pressed="true"] {
+    border-color: var(--primary);
+    background: var(--primary);
+    color: var(--primary-foreground);
+  }
+
+  [data-chip][data-size="compact"] {
+    min-block-size: var(--control-size-compact);
+    font-weight: var(--font-weight-normal);
+  }
+</style>

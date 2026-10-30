@@ -1,0 +1,26 @@
+/**
+ * Shared styles for chip-filter bars (publication keywords, project categories).
+ */
+
+.chip-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2xs);
+  padding-block: var(--space-3xs);
+}
+
+.chip-filter-bar:empty {
+  display: none;
+}
+
+.chip-active-filter {
+  display: inline-flex;
+  align-items: center;
+}
+
+@media (width >= 64rem) {
+  .chip-filter-bar {
+    row-gap: 0;
+  }
+}

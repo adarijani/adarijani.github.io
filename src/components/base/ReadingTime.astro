@@ -1,0 +1,52 @@
+---
+interface Props {
+  /** Primary word count to calculate reading time from */
+  wordCount: number
+  /** Optional combined word count (for posts with subposts) */
+  combinedWordCount?: number | null
+  /** Custom suffix to append after time (default: "read") */
+  customSuffix?: string
+  /** Separator between individual and combined reading times (default: " - ") */
+  separator?: string
+  /** Additional CSS classes */
+  class?: string
+}
+
+const {
+  wordCount,
+  combinedWordCount,
+  customSuffix = "read",
+  separator = " - ",
+  class: className,
+} = Astro.props
+
+// Calculate reading time in minutes (220 words per minute)
+const calculateMinutes = (words: number) => Math.max(1, Math.round(words / 220))
+
+const primaryMinutes = calculateMinutes(wordCount)
+const primaryText = customSuffix
+  ? `${primaryMinutes} min ${customSuffix}`
+  : `${primaryMinutes} min`
+
+// Check if we should show combined time
+const shouldShowCombined =
+  combinedWordCount &&
+  combinedWordCount > wordCount &&
+  calculateMinutes(combinedWordCount) > primaryMinutes
+
+const combinedMinutes = shouldShowCombined
+  ? calculateMinutes(combinedWordCount)
+  : 0
+---
+
+{wordCount > 0 && (
+    <span class={className}>
+      <time datetime={`PT${primaryMinutes}M`}>{primaryText}</time>
+      {shouldShowCombined && (
+        <>
+          <span>{separator}</span>
+          <time datetime={`PT${combinedMinutes}M`}>{combinedMinutes} min total</time>
+        </>
+      )}
+    </span>
+  )}

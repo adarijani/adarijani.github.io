@@ -1,0 +1,24 @@
+---
+import {
+  createLocalDate,
+  formatDate,
+  formatDateTimeISO,
+} from "@/lib/date-utils"
+
+interface Props {
+  /** Date to format */
+  date: Date | string
+  /** Additional CSS classes */
+  class?: string
+}
+
+const { date, class: className } = Astro.props
+
+const dateObj = createLocalDate(date)
+const isoDate = formatDateTimeISO(dateObj)
+const displayDate = formatDate(dateObj)
+---
+
+<time datetime={isoDate} class={className}>
+  {displayDate}
+</time>

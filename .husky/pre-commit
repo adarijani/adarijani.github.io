@@ -1,0 +1,1 @@
+pnpm biome format --staged --no-errors-on-unmatched

@@ -1,0 +1,70 @@
+---
+interface Props {
+  class?: string
+}
+
+const { class: className } = Astro.props
+const hasDate = Astro.slots.has("date")
+---
+
+<li class:list={["timeline-item", className]}>
+  <div class="timeline-marker" aria-hidden="true">
+    <div class="timeline-line"></div>
+    <div class="timeline-dot"></div>
+  </div>
+  <div class="timeline-content">
+    {hasDate && (
+      <div class="timeline-date">
+        <slot name="date" />
+      </div>
+    )}
+    <slot />
+  </div>
+</li>
+
+<style>
+  .timeline-item {
+    position: relative;
+    display: flex;
+    gap: var(--space-xs);
+  }
+
+  .timeline-marker {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .timeline-dot {
+    inline-size: 0.5rem;
+    block-size: 0.5rem;
+    margin-block-start: 0.35rem;
+    border: 2px solid var(--primary);
+    border-radius: var(--radius-full);
+    background: var(--background);
+  }
+
+  .timeline-line {
+    position: absolute;
+    inset-block: 0.5rem 0;
+    inset-inline-start: 50%;
+    border-inline-start: 2px dashed var(--muted);
+    transform: translateX(-50%);
+  }
+
+  .timeline-item:last-child .timeline-line {
+    display: none;
+  }
+
+  .timeline-content {
+    flex: 1;
+    min-inline-size: 0;
+    padding-block-end: var(--space-2xs);
+  }
+
+  .timeline-date {
+    margin-block-end: var(--space-3xs);
+  }
+</style>
