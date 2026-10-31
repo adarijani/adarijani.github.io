@@ -1,1 +1,0 @@
-<!-- - Member of the [SFB1574/CRC1574](https://www.sfb1574.kit.edu/english/index.php) -->
