@@ -1,0 +1,1 @@
+Presenting [gmtorch: Computing with Gaussian Mixture Uncertainty in PyTorch](/doc/SDF2026_gmtorch.pdf) at [18th Symposium Sensor Data Fusion: Trends, Solutions and Applications](https://www.fkie.fraunhofer.de/en/events/sdf2026.html)

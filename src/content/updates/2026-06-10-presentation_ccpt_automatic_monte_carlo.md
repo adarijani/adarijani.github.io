@@ -1,0 +1,1 @@
+Presenting [Automatic Gaussian Mixture Sampling for Uncertainty Management in Circular Factories](/doc/ccpt_automatic_monte_carlo.pdf) at [Conference on Circular Production Systems and Technologies (CCPT)](https://www.sfb1574.kit.edu/english/299.php)

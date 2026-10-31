@@ -1,0 +1,1 @@
+Presenting [Stakeholder-Based Deterministic and Probabilistic Quality Control Using Gaussian Mixtures for Circular Factories](/doc/ccpt_probabilistic_quality_control.pdf) at [Conference on Circular Production Systems and Technologies (CCPT)](https://www.sfb1574.kit.edu/english/299.php)

@@ -1,0 +1,1 @@
+Presenting [Closed-Form Gaussian Mixture Representations of d-Dimensional Triangulated Domains](/doc/geometric_gmm_d_manifolds_r_d_arxiv_version.pdf) at [18th Symposium Sensor Data Fusion: Trends, Solutions and Applications](https://www.fkie.fraunhofer.de/en/events/sdf2026.html)

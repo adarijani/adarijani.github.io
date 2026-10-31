@@ -1,0 +1,1 @@
+Presenting [Compositional Boundaries for Density Fusion](/doc/linear_density_fusion_arxiv_paper.pdf) at [The 17th International Conference on Scalable Uncertainty Management (SUM2026)](https://sum2026.math.ntua.gr/)
