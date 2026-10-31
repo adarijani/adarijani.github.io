@@ -153,21 +153,9 @@ const hasHeaderLinks = headerLinks.length > 0
   .nav-active::after {
     content: "";
     position: absolute;
-    inset-block-end: 0;
-    inset-inline-start: 50%;
-    transform: translateX(-50%);
-    inline-size: 4px;
-    block-size: 4px;
-    border-radius: var(--radius-full);
-    background: var(--primary);
-    opacity: 0.9;
-    transition:
-      opacity var(--motion-duration) var(--motion-ease),
-      transform var(--motion-duration) var(--motion-ease);
-  }
-
-  .nav-active:hover::after {
-    opacity: 1;
-    transform: translateX(-50%) scale(1.25);
+    inset-inline: var(--space-2xs);
+    inset-block-end: 0.125rem;
+    block-size: 1px;
+    background: currentColor;
   }
 </style>
