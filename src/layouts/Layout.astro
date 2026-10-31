@@ -13,6 +13,7 @@ import Breadcrumbs, {
 
 interface Props {
   class?: string
+  wide?: boolean
   title?: string
   description?: string
   image?: string | URL
@@ -28,6 +29,7 @@ interface Props {
 
 const {
   class: className,
+  wide = false,
   title,
   description,
   image,
@@ -58,7 +60,7 @@ const {
   >
     <slot name="head" />
   </Head>
-  <body>
+  <body data-layout-width={wide ? "wide" : undefined}>
     <MenuBar>
       <Header />
       {Astro.slots.has("subposts-navigation-header") && (
@@ -132,6 +134,10 @@ const {
     margin-inline: auto;
     padding-inline: var(--grid-gutter);
     font-family: var(--font-sans);
+  }
+
+  body[data-layout-width="wide"] {
+    max-width: min(100%, 100rem);
   }
 
   .breadcrumb-region {
