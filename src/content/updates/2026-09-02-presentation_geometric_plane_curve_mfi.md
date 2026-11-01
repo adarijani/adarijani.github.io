@@ -1,1 +1,1 @@
-Presenting [A Gaussian Mixture Representation of Plane Curves](/doc/geometric_gmm_plane_curve_theory_arxiv_paper.pdf) at [The 2026 IEEE International Conference on Multisensor Fusion and Integration for Intelligent Systems](https://www.mfi2026.org/)
+Presenting [A Gaussian Mixture Representation of Plane Curves](/doc/a_geometric_gaussian_mixture_representation_of_curves_amsart.pdf) at [The 2026 IEEE International Conference on Multisensor Fusion and Integration for Intelligent Systems](https://www.mfi2026.org/)
