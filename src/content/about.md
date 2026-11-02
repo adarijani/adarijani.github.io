@@ -1,1 +1,1 @@
-Currently I focus on developing a Geometric Gaussian Mixture program within the [SFB1574/CRC1574](https://www.sfb1574.kit.edu/english/index.php) project.
+Currently I focus on developing a Geometric Gaussian Mixture program within the [SFB1574/CRC1574](https://www.sfb1574.kit.edu/english/index.php) [project](https://gepris.dfg.de/project/471687386?lang=en). 
