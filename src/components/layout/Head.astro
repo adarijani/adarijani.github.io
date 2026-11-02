@@ -175,7 +175,7 @@ const structuredData = {
     rel="alternate"
     type="application/rss+xml"
     title={SITE.title}
-    href={`${SITE.href}rss.xml`}
+    href={new URL("rss.xml", SITE.href).href}
   >
 
   <ClientRouter />
