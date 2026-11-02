@@ -12,7 +12,18 @@ import {
   sortPublications,
   sortPublicationsByRelevance,
 } from "./utils"
-import bibContent from "/src/content/publications/main.bib?raw"
+// Load every .bib file under src/content/publications/ (not just one), so
+// publications can be split across multiple files, e.g. by venue or topic.
+const bibModules = import.meta.glob("/src/content/publications/*.bib", {
+  query: "?raw",
+  import: "default",
+  eager: true,
+}) as Record<string, string>
+
+const bibContent = Object.keys(bibModules)
+  .sort()
+  .map((path) => bibModules[path])
+  .join("\n")
 
 /**
  * Load and process all publications grouped by year
