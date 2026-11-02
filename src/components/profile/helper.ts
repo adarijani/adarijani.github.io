@@ -17,6 +17,13 @@ export type ProfileLinkLocation = "header" | "about" | "footer"
 /** Icon-only links shown in the header when no explicit set is configured. */
 const DEFAULT_HEADER_LINKS = ["email", "cv", "googleScholar", "x"]
 
+const getPrimaryProfileEmail = (): string | undefined => {
+  if (PROFILE.emails?.length) {
+    return PROFILE.emails[0]
+  }
+  return PROFILE.email
+}
+
 /**
  * Resolve which links a location should render.
  *
@@ -74,10 +81,11 @@ const resolveProfileLink = (
   const value = (links as Record<string, unknown>)[key]
 
   if (value === undefined) {
-    if (key === "email" && PROFILE.email) {
+    const primaryEmail = getPrimaryProfileEmail()
+    if (key === "email" && primaryEmail) {
       return {
         key: "email",
-        href: `mailto:${PROFILE.email}`,
+        href: `mailto:${primaryEmail}`,
         isExternal: true,
         label: iconConfig.label,
         iconName: iconConfig.iconName,

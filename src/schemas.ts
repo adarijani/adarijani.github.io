@@ -164,39 +164,46 @@ export const ProfileLinkPlacementConfigSchema = z
 /**
  * Schema for personal profile configuration including contact info and social links.
  */
-export const ProfileConfigSchema = z.object({
-  /** Full name or display name */
-  name: z.string(),
-  /** (Optional) Your other names, including native, maiden, nicknames. */
-  othernames: z.string().or(z.array(z.string())).optional(),
-  /**
-   * How you want the world to know about you.
-   * Short biography, tagline, or job title and affiliations
-   * Max 50 characters
-   */
-  tagline: z.string().max(50),
-  /** required: Main email address */
-  email: z.email(),
-  /** optional: Geographic location (city, state, country) */
-  location: z.string().max(50).optional(),
-  /** Phone number, accepting international format */
-  phone: z
-    .string()
-    .regex(/^[+]?[\d\s().-]{7,22}$/)
-    .optional(),
-  /** Preferred pronouns (e.g., "she/her", "they/them") */
-  pronouns: z.string().max(20).optional(),
-  /** Written pronunciation guide for your name */
-  pronunciation: z.string().optional(),
-  /** Optional pronunciation recording with a written alternative above. */
-  pronunciationAudioPath: z.string().optional(),
-  /** Social media and professional platform links */
-  links: ProfileLinkConfigSchema,
-  /** Link keys (e.g., "cv", "resume") to highlight with primary color in profile */
-  highlightLinks: z.array(z.string()).optional().default([]),
-  /** Where profile links appear across the site. */
-  linksPlacement: ProfileLinkPlacementConfigSchema,
-})
+export const ProfileConfigSchema = z
+  .object({
+    /** Full name or display name */
+    name: z.string(),
+    /** (Optional) Your other names, including native, maiden, nicknames. */
+    othernames: z.string().or(z.array(z.string())).optional(),
+    /**
+     * How you want the world to know about you.
+     * Short biography, tagline, or job title and affiliations
+     * Max 50 characters
+     */
+    tagline: z.string().max(50),
+    /** Main email address (backward-compatible single value) */
+    email: z.email().optional(),
+    /** Multiple email addresses shown in the homepage profile block */
+    emails: z.array(z.email()).min(1).optional(),
+    /** optional: Geographic location (city, state, country) */
+    location: z.string().max(50).optional(),
+    /** Phone number, accepting international format */
+    phone: z
+      .string()
+      .regex(/^[+]?[\d\s().-]{7,22}$/)
+      .optional(),
+    /** Preferred pronouns (e.g., "she/her", "they/them") */
+    pronouns: z.string().max(20).optional(),
+    /** Written pronunciation guide for your name */
+    pronunciation: z.string().optional(),
+    /** Optional pronunciation recording with a written alternative above. */
+    pronunciationAudioPath: z.string().optional(),
+    /** Social media and professional platform links */
+    links: ProfileLinkConfigSchema,
+    /** Link keys (e.g., "cv", "resume") to highlight with primary color in profile */
+    highlightLinks: z.array(z.string()).optional().default([]),
+    /** Where profile links appear across the site. */
+    linksPlacement: ProfileLinkPlacementConfigSchema,
+  })
+  .refine((profile) => profile.email || profile.emails?.length, {
+    message: "Provide at least one email via `email` or `emails`.",
+    path: ["email"],
+  })
 
 /**
  * Schema for website footer configuration including credits and additional links.

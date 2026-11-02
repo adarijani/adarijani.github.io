@@ -53,7 +53,12 @@ export const SITE: SiteConfig = {
 export const PROFILE: ProfileConfig = {
   name: SITE.title,
   tagline: "Computational Mathematics, Applied Mathematics",
-  email: "ali.darijani@rwth-aachen.de",
+  emails: [
+    "ali.darijani@iosb.fraunhofer.de",
+    "ali.darijani@kit.edu",
+    "ali.darijani@rwth-aachen.de",
+    "ali.darijani@alum.sharif.edu",
+  ],
   location: "Germany",
   pronouns: "",
   links: {

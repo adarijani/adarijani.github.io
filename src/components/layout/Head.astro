@@ -65,6 +65,8 @@ const socialImage = (() => {
 
 // Canonical URL optimization
 const canonicalURL = Astro.site?.toString() || SITE.href
+const profilePrimaryEmail =
+  PROFILE.emails?.find((email) => email.trim().length > 0) || PROFILE.email
 
 // JSON-LD structured data for better SEO
 const structuredData = {
@@ -78,12 +80,12 @@ const structuredData = {
     ? {
         "@type": "Person",
         name: author,
-        ...(PROFILE.email && { email: PROFILE.email }),
+        ...(profilePrimaryEmail && { email: profilePrimaryEmail }),
       }
     : {
         "@type": "Person",
         name: SITE.author || SITE.title,
-        ...(PROFILE.email && { email: PROFILE.email }),
+        ...(profilePrimaryEmail && { email: profilePrimaryEmail }),
       },
   publisher: {
     "@type": "Person",

@@ -21,6 +21,15 @@ interface Props {
 const { profile } = Astro.props
 
 const aboutLinks = getProfileLinkPlacement("about")
+const profileEmails = Array.from(
+  new Set(
+    profile.emails?.length
+      ? profile.emails
+      : profile.email
+        ? [profile.email]
+        : [],
+  ),
+)
 ---
 
 <article id="profile">
@@ -52,7 +61,7 @@ const aboutLinks = getProfileLinkPlacement("about")
       </div>
 
       <div class="profile-meta">
-        <EmailLink email={profile.email} />
+        {profileEmails.map((email) => <EmailLink email={email} />)}
 
         {profile.phone && (
             <span class="profile-contact-item">
