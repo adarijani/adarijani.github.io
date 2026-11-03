@@ -309,6 +309,7 @@ export const ProcessedPublicationSchema = z.object({
   /** Citation.js-formatted BibTeX entry for the copy action */
   bibtex: z.string(),
   year: z.number().or(z.string()).optional(),
+  status: z.string().optional(),
   abstract: z.string().optional(),
   award: z.string().optional(),
   image: z.string().optional(),

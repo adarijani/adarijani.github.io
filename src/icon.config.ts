@@ -158,9 +158,13 @@ export const PUBLICATION_LINK_TYPES = {
   arxiv: { label: "arXiv", iconName: "academicons:arxiv" },
   doi: { label: "DOI", iconName: "academicons:doi" },
   pdf: { label: "PDF", iconName: "mingcute:pdf-line" },
+  url: { label: "URL", iconName: "mingcute:external-link-line" },
   website: { label: "Website", iconName: "mingcute:globe-2-line" },
 
   // Interactive & supplementary materials
+  github: { label: "GitHub", iconName: "mingcute:github-line" },
+  gitlab: { label: "GitLab", iconName: "mingcute:git-lab-line" },
+  latex: { label: "LaTeX Source", iconName: "mingcute:file-code-line" },
   code: { label: "Code", iconName: "mingcute:code-line" },
   data: { label: "Data", iconName: "mingcute:coin-2-line" },
   demo: { label: "Demo", iconName: "mingcute:play-circle-line" },

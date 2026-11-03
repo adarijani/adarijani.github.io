@@ -21,11 +21,11 @@ interface VenuePatternGroups {
  */
 const METADATA_FIELDS = [
   "abstract",
-  "arxiv",
   "award",
   "draft",
   "eprint",
   "selected",
+  "status",
   "equalfirst",
   "equalsecond",
   "equalthird",
@@ -39,15 +39,20 @@ const METADATA_FIELDS = [
  * Fields rendered as link buttons, in the order they appear on a card.
  *
  * A deliberate subset of PUBLICATION_LINK_TYPES: that map also carries entries
- * for `abstract`, `doi`, `arxiv`, `award`, `selected` and `venue`, which are
- * displayed some other way and must not become buttons. `satisfies` keeps a
- * typo or a removed icon entry from silently dropping a link at build time.
+ * for `abstract`, `award`, `selected` and `venue`, which are displayed some
+ * other way and must not become buttons. `satisfies` keeps a typo or a removed
+ * icon entry from silently dropping a link at build time.
  */
 const LINK_FIELDS = [
+  "arxiv",
   "code",
   "data",
   "demo",
+  "doi",
   "draft",
+  "github",
+  "gitlab",
+  "latex",
   "models",
   "pdf",
   "post",
@@ -57,6 +62,7 @@ const LINK_FIELDS = [
   "slides",
   "talk",
   "thread",
+  "url",
   "video",
   "website",
 ] as const satisfies readonly (keyof typeof PUBLICATION_LINK_TYPES)[]

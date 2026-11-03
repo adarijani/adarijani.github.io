@@ -63,6 +63,7 @@ export interface Publication {
   keywords?: string
   abstract?: string
   award?: string
+  status?: string
   image?: string
   imagealt?: string
   arxiv?: string
@@ -442,8 +443,7 @@ function truncateAuthors(
 }
 
 /**
- * Extract publication action links (excluding doi, url, arxiv which go on title)
- * Covers every field in LINK_FIELD_NAMES that the entry actually sets.
+ * Extract publication action links for every configured field the entry sets.
  * @param entry - Publication entry
  * @returns Array of action link objects with proper icon names
  */
@@ -456,8 +456,9 @@ function getPublicationLinks(entry: Publication): PublicationLink[] {
       const linkConfig =
         PUBLICATION_LINK_TYPES[field as keyof typeof PUBLICATION_LINK_TYPES]
       if (linkConfig) {
+        const href = normalizePublicationLink(field, fieldValue)
         links.push({
-          href: fieldValue,
+          href,
           icon: linkConfig.iconName,
           label: linkConfig.label,
           type: field,
@@ -467,6 +468,18 @@ function getPublicationLinks(entry: Publication): PublicationLink[] {
   }
 
   return links
+}
+
+function normalizePublicationLink(field: string, value: string): string {
+  if (field === "arxiv" && !/^https?:\/\//i.test(value)) {
+    return `https://arxiv.org/abs/${value.replace(/^arxiv:/i, "")}`
+  }
+
+  if (field === "doi" && !/^https?:\/\//i.test(value)) {
+    return `https://doi.org/${value.replace(/^doi:/i, "")}`
+  }
+
+  return value
 }
 
 /**
@@ -610,6 +623,7 @@ export function getPublicationData(
     title: publication.title || "",
     bibtex: publication.bibtex,
     year: publication.year,
+    status: normalizePublicationStatus(publication.status),
     abstract: publication.abstract,
     award: publication.award,
     image: publication.image,
@@ -630,4 +644,17 @@ export function getPublicationData(
     authorPosition,
     equalContributionNote,
   }
+}
+
+function normalizePublicationStatus(status?: string): string | undefined {
+  if (!status) return undefined
+
+  const knownStatuses: Record<string, string> = {
+    draft: "Draft",
+    preprint: "Preprint",
+    accepted: "Accepted",
+    published: "Published",
+  }
+
+  return knownStatuses[status.trim().toLowerCase()] ?? status.trim()
 }
