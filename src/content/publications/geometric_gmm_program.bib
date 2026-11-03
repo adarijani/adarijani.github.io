@@ -1,0 +1,162 @@
+
+@ARTICLE{darijani_geometric_gm_curve_ieee_short,
+  title     = "A Geometric Gaussian Mixture Representation of Curves and Trajectories in Euclidean Space",
+  author    = "Benedikt Stratmann and Emadedin Soufian and Jürgen Beyerer and Ali Darijani",
+  abstract  = "Curves and trajectories in Euclidean spaces are fundamental objects in tracking and 
+  sensor data fusion. Gaussian mixture models (GMMs) are widely used as flexible parametric 
+  probability density functions (PDFs) over the object state space. They are typically obtained 
+  by applying expectation-maximization (EM)-based schemes to point samples. However, when the 
+  underlying geometric structure is known deterministically, for example, a road centerline 
+  in map-assisted tracking, a nominal flight path, or a planned robot trajectory, such 
+  iterative fitting is unnecessary, potentially slow, and only indirectly reflects the 
+  underlying curve or trajectory. We propose a purely arithmetic, geometry-driven 
+  construction that directly maps a curve or trajectory in a Euclidean space, 
+  together with user-defined transverse uncertainty, to a GMM in a single pass, 
+  without EM or iterative optimization. Starting from a parametrized curve, we 
+  construct a uniform discretized polygonal representation and assign each segment 
+  a standard deviation in its normal subspace. This results in thin, curve-aligned 
+  Gaussian primitives that encode position, tangent, normal, and length scale, together 
+  with transverse uncertainty. By choosing component weights proportional to segment 
+  lengths, the resulting probability distribution is uniform with respect to arc length. 
+  Consequently, all GMM parameters are obtained directly from the discretized geometry 
+  and the prescribed uncertainty profile. The construction accommodates smooth, 
+  open, closed, non-regular, and self-intersecting curves and trajectories in 
+  arbitrary-dimensional Euclidean spaces. It supports adaptive discretization 
+  and spatially varying uncertainty, yielding differentiable GMMs that directly 
+  encode the underlying geometric structure. We demonstrate the approach using 
+  canonical planar curves and nominal trajectories, and conduct a simulation study 
+  in higher-dimensional Euclidean spaces to compare approximation quality and 
+  computational runtime against EM-based fitting. Potential applications include 
+  map- and road-constrained tracking and sensor data fusion, uncertainty-aware 
+  trajectory planning, probabilistic obstacle and boundary modeling in robotics, 
+  and uncertainty-aware computer-aided design (CAD) and digital twins.",
+  journal   = "2026 IEEE International Conference on Multisensor Fusion and Integration for Intelligent Systems (MFI)",
+  publisher = "IEEE",
+  year      =  2026,
+  language  = "en",
+  keywords  = "postprint,conference,IEEE,Gaussian Mixture, Probability, Geometric",
+  selected  = "false",
+  pdf       = "/doc/geometric_gmm_plane_curve_theory_ieee_paper.pdf",
+  draft     = "false",
+}
+
+
+
+@ARTICLE{darijani_linear_density_fusion_arxiv_long,
+  title         = "Compositional Boundaries for Density Fusion",
+  author        = "Thapa, Ratan Bahadur and Darijani, Ali and Beyerer,
+                   J{\"u}rgen and Staab, Steffen",
+  abstract      = "Distributed uncertainty-management systems often combine
+                   local probabilistic models along aggregation trees chosen by
+                   communication, privacy, or scheduling constraints. The final
+                   density should depend on the weighted sources, not on the
+                   particular order in which intermediate nodes combine them.
+                   We study this requirement as an algebraic compositionality
+                   problem for binary fusion of weighted probability densities.
+                   The central question is when a local fusion rule can be
+                   executed hierarchically while remaining order-invariant. We
+                   establish a compositional boundary for local segment-valued
+                   fusion rules. Within the class of continuous binary rules
+                   with additive output weights and weight-only coefficients,
+                   order-invariant hierarchical execution characterizes
+                   normalized weighted linear pooling; norm-induced segment
+                   balancing realizes the corresponding coefficient. Smooth
+                   endpoint-to-candidate $f$-divergence balancing has a
+                   different local geometry: its quadratic expansion induces
+                   square-root effective weights, showing why pairwise
+                   solvability alone is insufficient for schedule-independent
+                   fusion. We show that this obstruction is local to
+                   endpoint-to-candidate binary balancing, whereas global
+                   divergence barycenters retain additive-weight local limits.
+                   Finally, Gaussian mixtures show how the same issue appears
+                   in finite model classes: exact fusion is compositional,
+                   whereas stepwise compression is compositional only under a
+                   congruence condition on unnormalized component measures.
+                   These results distinguish exact schedule-independent fusion
+                   from global aggregation objectives and local approximation
+                   heuristics.",
+  month         =  jun,
+  year          =  2026,
+  copyright     = "http://creativecommons.org/licenses/by/4.0/",
+  archivePrefix = "arXiv",
+  primaryClass  = "cs.IT",
+  eprint        = "2606.05871",
+  selected      = "false",
+  keywords      = "preprint,Gaussian Mixture, Probability, Geometric",
+  pdf           = "/doc/linear_density_fusion_arxiv_paper.pdf",
+  venue         = "Accepted to 2026 International Conference on Scalable Uncertainty Management (SUM)",
+  draft         = "false",
+}
+
+@ARTICLE{darijani_geometric_gm_curve_arxiv_long,
+  title         = "A Geometric Gaussian Mixture Representation of Plane Curves",
+  author        = "Darijani, Ali and Stratmann, Benedikt and Jürgen Beyerer",
+  abstract      = "We introduce a user defined probabilistic polygonal
+                   representation for plane curves. Given a curve, we select
+                   vertices on the curve and connect consecutive vertices by
+                   line segments to obtain a polygonal approximation. Each
+                   segment is equipped with a user defined uncertainty
+                   parameter in the normal direction. This yields a collection
+                   of thin probabilistic geometric primitives that retain the
+                   geometrz of the underlying curve while extending it beyond
+                   the idealized deterministic one dimensional formulation. For
+                   each segment, we define a Random Variable that is uniform
+                   distributed in the tangent direction of the segment and
+                   Gaussian distributed in the normal direction of the segment.
+                   By matching the first and the second central moments, this
+                   construction induces a Gaussian component whose mean lies at
+                   the segment midpoint and whose covariance encodes both
+                   tangential and normal uncertainty. Combining the segment
+                   wise components with appropriate weights yields a Gaussian
+                   Mixture Model (GMM) representation of the user defined
+                   probabilistic polygonal representation of the plane curve.
+                   The proposed framework provides an analytically tractable
+                   probabilistic model that preserves local geometry, and
+                   uncertainty in the normal direction. It applies to smooth,
+                   closed, open, non regular, and self intersecting plane
+                   curves, allows adaptive discretization and varying
+                   uncertainty in the normal direction, and as a result
+                   supports uncertainty aware geometric modeling. Experiments
+                   on a collection of canonical plane curves show that the
+                   resulting GMM capture local tangent, local normal, and local
+                   arc length; resulting in the global shape of the underlying
+                   curves to be truthfully captured as well. The representation
+                   is particularly relevant for applications in uncertainty
+                   aware CAD and digital twins, probabilistic obstacle modeling
+                   in robotics, and probabilistic trajectory planning.",
+  month         =  may,
+  year          =  2026,
+  copyright     = "http://arxiv.org/licenses/nonexclusive-distrib/1.0/",
+  archivePrefix = "arXiv",
+  primaryClass  = "cs.CG",
+  eprint        = "2606.06505",
+  selected      = "false",
+  keywords      = "preprint,Gaussian Mixture, Probability, Geometric",
+  pdf           = "/doc/a_geometric_gaussian_mixture_representation_of_curves_amsart.pdf",
+  venue         = "Accepted to 2026 IEEE International Conference on Multisensor Fusion and Integration for Intelligent Systems (MFI)",
+  draft         = "false",
+}
+
+@ARTICLE{darijani_geometric_gm_simplicial_complex_ieee_short,
+  title         = "Closed-Form Gaussian Mixture Representations of $d$-Dimensional Triangulated Domains",
+  author        = "Ali Darijani and Benedikt Stratmann and Ratan Bahadur Thapa and Uwe D.~Hanebeck and Jürgen Beyerer and Nehal Afifi",
+  abstract      = "We derive a Gaussian Mixture (GM) representation of a full-dimensional subset of Euclidean space with finite volume from a finite simplicial triangulation in closed form. On each simplex, we replace the uniform probability density function (PDF) with a Gaussian PDF that minimizes the Kullback--Leibler (KL) divergence, arriving at the information projection onto the family of Gaussian PDFs. By exploiting affine isomorphisms between simplices, the joint convexity and bijection invariance properties of the KL divergence, identities for Dirichlet PDFs, and a partition-of-unity argument, we establish a dimension-dependent but geometry-independent sharp upper bound on the global KL divergence between the resulting GM PDF and the uniform PDF on the original domain. Numerical examples illustrate the construction and demonstrate its potential in practical applications.",
+  year          =  2026,
+  selected      = "false",
+  keywords      = "postprint,conference,IEEE,Gaussian Mixture, Probability, Geometric",
+  pdf           = "/doc/geometric_gmm_d_manifolds_r_d_ieee_paper.pdf",
+  venue         = "2026 IEEE Sensor Data Fusion: Trends, Solutions, Applications (SDF)",
+  draft         = "false",
+}
+
+@ARTICLE{darijani_geometric_gm_simplicial_complex_arxiv_long,
+  title         = "Closed-Form Gaussian Mixture Representations of $d$-Dimensional Triangulated Domains",
+  author        = "Ali Darijani and Benedikt Stratmann and Ratan Bahadur Thapa and Uwe D.~Hanebeck and Jürgen Beyerer and Nehal Afifi",
+  abstract      = "We derive a Gaussian Mixture (GM) representation of a full-dimensional subset of Euclidean space with finite volume from a finite simplicial triangulation in closed form. On each simplex, we replace the uniform probability density function (PDF) with a Gaussian PDF that minimizes the Kullback--Leibler (KL) divergence, arriving at the information projection onto the family of Gaussian PDFs. By exploiting affine isomorphisms between simplices, the joint convexity and bijection invariance properties of the KL divergence, identities for Dirichlet PDFs, and a partition-of-unity argument, we establish a dimension-dependent but geometry-independent sharp upper bound on the global KL divergence between the resulting GM PDF and the uniform PDF on the original domain. Numerical examples illustrate the construction and demonstrate its potential in practical applications.",
+  year          =  2026,
+  selected      = "true",
+  keywords      = "preprint,Gaussian Mixture, Probability, Geometric",
+  pdf           = "/doc/closed_form_gaussian_mixture_representations_of_d_dimensional_triangulated_domains_amsart.pdf",
+  venue         = "Accepted to 2026 IEEE Sensor Data Fusion: Trends, Solutions, Applications (SDF)",
+  draft         = "false",
+}

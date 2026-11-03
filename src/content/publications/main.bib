@@ -1,124 +1,3 @@
-@ARTICLE{darijani_geometric_gm_simplicial_complex_arxiv_long,
-  title         = "Closed-Form Gaussian Mixture Representations of $d$-Dimensional Triangulated Domains",
-  author        = "Ali Darijani and Benedikt Stratmann and Ratan Bahadur Thapa and Uwe D.~Hanebeck and Jürgen Beyerer and Nehal Afifi",
-  abstract      = "We derive a Gaussian Mixture (GM) representation of a full-dimensional subset of Euclidean space with finite volume from a finite simplicial triangulation in closed form. On each simplex, we replace the uniform probability density function (PDF) with a Gaussian PDF that minimizes the Kullback--Leibler (KL) divergence, arriving at the information projection onto the family of Gaussian PDFs. By exploiting affine isomorphisms between simplices, the joint convexity and bijection invariance properties of the KL divergence, identities for Dirichlet PDFs, and a partition-of-unity argument, we establish a dimension-dependent but geometry-independent sharp upper bound on the global KL divergence between the resulting GM PDF and the uniform PDF on the original domain. Numerical examples illustrate the construction and demonstrate its potential in practical applications.",
-  year          =  2026,
-  selected      = "true",
-  keywords      = "Gaussian Mixture, Geometry, Probability",
-  pdf           = "/doc/closed_form_gaussian_mixture_representations_of_d_dimensional_triangulated_domains_amsart.pdf",
-  venue         = "Accepted to 2026 IEEE Sensor Data Fusion: Trends, Solutions, Applications (SDF)",
-  draft         = "false",
-}
-
-@ARTICLE{darijani_geometric_gm_simplicial_complex_ieee_short,
-  title         = "Closed-Form Gaussian Mixture Representations of $d$-Dimensional Triangulated Domains",
-  author        = "Ali Darijani and Benedikt Stratmann and Ratan Bahadur Thapa and Uwe D.~Hanebeck and Jürgen Beyerer and Nehal Afifi",
-  abstract      = "We derive a Gaussian Mixture (GM) representation of a full-dimensional subset of Euclidean space with finite volume from a finite simplicial triangulation in closed form. On each simplex, we replace the uniform probability density function (PDF) with a Gaussian PDF that minimizes the Kullback--Leibler (KL) divergence, arriving at the information projection onto the family of Gaussian PDFs. By exploiting affine isomorphisms between simplices, the joint convexity and bijection invariance properties of the KL divergence, identities for Dirichlet PDFs, and a partition-of-unity argument, we establish a dimension-dependent but geometry-independent sharp upper bound on the global KL divergence between the resulting GM PDF and the uniform PDF on the original domain. Numerical examples illustrate the construction and demonstrate its potential in practical applications.",
-  year          =  2026,
-  selected      = "false",
-  keywords      = "Gaussian Mixture, Geometry, Probability",
-  pdf           = "/doc/geometric_gmm_d_manifolds_r_d_ieee_paper.pdf",
-  venue         = "2026 IEEE Sensor Data Fusion: Trends, Solutions, Applications (SDF)",
-  draft         = "false",
-}
-
-
-
-@ARTICLE{darijani_geometric_gm_curve_arxiv_long,
-  title         = "A Geometric Gaussian Mixture Representation of Plane Curves",
-  author        = "Darijani, Ali and Stratmann, Benedikt and Jürgen Beyerer",
-  abstract      = "We introduce a user defined probabilistic polygonal
-                   representation for plane curves. Given a curve, we select
-                   vertices on the curve and connect consecutive vertices by
-                   line segments to obtain a polygonal approximation. Each
-                   segment is equipped with a user defined uncertainty
-                   parameter in the normal direction. This yields a collection
-                   of thin probabilistic geometric primitives that retain the
-                   geometrz of the underlying curve while extending it beyond
-                   the idealized deterministic one dimensional formulation. For
-                   each segment, we define a Random Variable that is uniform
-                   distributed in the tangent direction of the segment and
-                   Gaussian distributed in the normal direction of the segment.
-                   By matching the first and the second central moments, this
-                   construction induces a Gaussian component whose mean lies at
-                   the segment midpoint and whose covariance encodes both
-                   tangential and normal uncertainty. Combining the segment
-                   wise components with appropriate weights yields a Gaussian
-                   Mixture Model (GMM) representation of the user defined
-                   probabilistic polygonal representation of the plane curve.
-                   The proposed framework provides an analytically tractable
-                   probabilistic model that preserves local geometry, and
-                   uncertainty in the normal direction. It applies to smooth,
-                   closed, open, non regular, and self intersecting plane
-                   curves, allows adaptive discretization and varying
-                   uncertainty in the normal direction, and as a result
-                   supports uncertainty aware geometric modeling. Experiments
-                   on a collection of canonical plane curves show that the
-                   resulting GMM capture local tangent, local normal, and local
-                   arc length; resulting in the global shape of the underlying
-                   curves to be truthfully captured as well. The representation
-                   is particularly relevant for applications in uncertainty
-                   aware CAD and digital twins, probabilistic obstacle modeling
-                   in robotics, and probabilistic trajectory planning.",
-  month         =  may,
-  year          =  2026,
-  copyright     = "http://arxiv.org/licenses/nonexclusive-distrib/1.0/",
-  archivePrefix = "arXiv",
-  primaryClass  = "cs.CG",
-  eprint        = "2606.06505",
-  selected      = "false",
-  keywords      = "Gaussian Mixture, Geometry, Probability",
-  pdf           = "/doc/a_geometric_gaussian_mixture_representation_of_curves_amsart.pdf",
-  venue         = "Accepted to 2026 IEEE International Conference on Multisensor Fusion and Integration for Intelligent Systems (MFI)",
-  draft         = "false",
-}
-
-@ARTICLE{darijani_linear_density_fusion_arxiv_long,
-  title         = "Compositional Boundaries for Density Fusion",
-  author        = "Thapa, Ratan Bahadur and Darijani, Ali and Beyerer,
-                   J{\"u}rgen and Staab, Steffen",
-  abstract      = "Distributed uncertainty-management systems often combine
-                   local probabilistic models along aggregation trees chosen by
-                   communication, privacy, or scheduling constraints. The final
-                   density should depend on the weighted sources, not on the
-                   particular order in which intermediate nodes combine them.
-                   We study this requirement as an algebraic compositionality
-                   problem for binary fusion of weighted probability densities.
-                   The central question is when a local fusion rule can be
-                   executed hierarchically while remaining order-invariant. We
-                   establish a compositional boundary for local segment-valued
-                   fusion rules. Within the class of continuous binary rules
-                   with additive output weights and weight-only coefficients,
-                   order-invariant hierarchical execution characterizes
-                   normalized weighted linear pooling; norm-induced segment
-                   balancing realizes the corresponding coefficient. Smooth
-                   endpoint-to-candidate $f$-divergence balancing has a
-                   different local geometry: its quadratic expansion induces
-                   square-root effective weights, showing why pairwise
-                   solvability alone is insufficient for schedule-independent
-                   fusion. We show that this obstruction is local to
-                   endpoint-to-candidate binary balancing, whereas global
-                   divergence barycenters retain additive-weight local limits.
-                   Finally, Gaussian mixtures show how the same issue appears
-                   in finite model classes: exact fusion is compositional,
-                   whereas stepwise compression is compositional only under a
-                   congruence condition on unnormalized component measures.
-                   These results distinguish exact schedule-independent fusion
-                   from global aggregation objectives and local approximation
-                   heuristics.",
-  month         =  jun,
-  year          =  2026,
-  copyright     = "http://creativecommons.org/licenses/by/4.0/",
-  archivePrefix = "arXiv",
-  primaryClass  = "cs.IT",
-  eprint        = "2606.05871",
-  selected      = "false",
-  keywords      = "Gaussian Mixture,Probability",
-  pdf           = "/doc/linear_density_fusion_arxiv_paper.pdf",
-  venue         = "Accepted to 2026 International Conference on Scalable Uncertainty Management (SUM)",
-  draft         = "false",
-}
-
 @ARTICLE{darijani_uncertainty_measurement_arxiv_long,
   title         = "Comprehensive description of uncertainty in measurement for
                    representation and propagation with scalable precision",
@@ -159,7 +38,7 @@
   primaryClass  = "stat.ML",
   eprint        = "2603.20365",
   selected      = "false",
-  keywords      = "Gaussian Mixture, Probability",
+  keywords      = "postprint,journal,Gaussian Mixture, Probability",
   pdf           = "/doc/comprehensive_measurement_gmm.pdf",
   venue         = "Accepted to at - Automatisierungstechnik",
   draft         = "false",
@@ -182,7 +61,7 @@
                      (FUSION)",
   location        = "Trondheim, Norway",
   selected        = "false",
-  keywords        = "Gaussian Mixture, Probability",
+  keywords        = "postprint,conference,IEEE,Gaussian Mixture, Probability",
   draft           = "false",
 }
 
@@ -201,7 +80,7 @@
   conference      = "2026 International Conference on Semantic Computing (ICSC)",
   location        = "Laguna Hills, CA, USA",
   selected        = "false",
-  keywords        = "Gaussian Mixture, Probability",
+  keywords        = "postprint,conference,IEEE,Gaussian Mixture, Probability",
   draft           = "false",
 }
 
@@ -229,7 +108,7 @@
   publisher = "KIT Scientific Publishing",
   year      =  2025,
   selected  = "false",
-  keywords  = "Gaussian Mixture, Probability",
+  keywords  = "postprint,conference,Gaussian Mixture, Probability",
   pdf       = "/doc/uncertainty_quantification_monte_carlo_random_number_generation.pdf",
   draft     = "false",
 }
@@ -250,7 +129,7 @@
   publisher = "KIT Scientific Publishing",
   year      =  2026,
   selected  = "false",
-  keywords  = "Gaussian Mixture, Probability",
+  keywords  = "postprint,conference,Gaussian Mixture, Probability",
   pdf       = "/doc/probabilistic_quality_control_without_tears.pdf",
   draft     = "false",
 }
@@ -282,51 +161,12 @@
   month     =  mar,
   year      =  2025,
   language  = "en",
+  keywords  = "postprint,journal",
   selected  = "false",
   pdf       = "/doc/digital_twin_degruyter_zwf_special_issue.pdf",
   draft     = "false",
 }
 
-
-@ARTICLE{darijani_geometric_gm_curve_ieee_short,
-  title     = "A Geometric Gaussian Mixture Representation of Curves and Trajectories in Euclidean Space",
-  author    = "Benedikt Stratmann and Emadedin Soufian and Jürgen Beyerer and Ali Darijani",
-  abstract  = "Curves and trajectories in Euclidean spaces are fundamental objects in tracking and 
-  sensor data fusion. Gaussian mixture models (GMMs) are widely used as flexible parametric 
-  probability density functions (PDFs) over the object state space. They are typically obtained 
-  by applying expectation-maximization (EM)-based schemes to point samples. However, when the 
-  underlying geometric structure is known deterministically, for example, a road centerline 
-  in map-assisted tracking, a nominal flight path, or a planned robot trajectory, such 
-  iterative fitting is unnecessary, potentially slow, and only indirectly reflects the 
-  underlying curve or trajectory. We propose a purely arithmetic, geometry-driven 
-  construction that directly maps a curve or trajectory in a Euclidean space, 
-  together with user-defined transverse uncertainty, to a GMM in a single pass, 
-  without EM or iterative optimization. Starting from a parametrized curve, we 
-  construct a uniform discretized polygonal representation and assign each segment 
-  a standard deviation in its normal subspace. This results in thin, curve-aligned 
-  Gaussian primitives that encode position, tangent, normal, and length scale, together 
-  with transverse uncertainty. By choosing component weights proportional to segment 
-  lengths, the resulting probability distribution is uniform with respect to arc length. 
-  Consequently, all GMM parameters are obtained directly from the discretized geometry 
-  and the prescribed uncertainty profile. The construction accommodates smooth, 
-  open, closed, non-regular, and self-intersecting curves and trajectories in 
-  arbitrary-dimensional Euclidean spaces. It supports adaptive discretization 
-  and spatially varying uncertainty, yielding differentiable GMMs that directly 
-  encode the underlying geometric structure. We demonstrate the approach using 
-  canonical planar curves and nominal trajectories, and conduct a simulation study 
-  in higher-dimensional Euclidean spaces to compare approximation quality and 
-  computational runtime against EM-based fitting. Potential applications include 
-  map- and road-constrained tracking and sensor data fusion, uncertainty-aware 
-  trajectory planning, probabilistic obstacle and boundary modeling in robotics, 
-  and uncertainty-aware computer-aided design (CAD) and digital twins.",
-  journal   = "2026 IEEE International Conference on Multisensor Fusion and Integration for Intelligent Systems (MFI)",
-  publisher = "IEEE",
-  year      =  2026,
-  language  = "en",
-  selected  = "false",
-  pdf       = "/doc/geometric_gmm_plane_curve_theory_ieee_paper.pdf",
-  draft     = "false",
-}
 
 @ARTICLE{darijani_gmtorch_gm_ieee_short,
   title     = "gmtorch: Computing with Gaussian Mixture Uncertainty in PyTorch",
@@ -357,36 +197,14 @@ established GMM calculus, with exact and approximate steps made explicit.
   publisher = "IEEE",
   year      =  2026,
   language  = "en",
+  keywords  = "postprint,conference,IEEE,Gaussian Mixture, Probability",
   selected  = "false",
   pdf       = "/doc/SDF2026_gmtorch.pdf",
   draft     = "false",
 }
 
-@ARTICLE{darijani_ccpt_gm_probabilistic_qc,
-  title     = "Stakeholder-Based Deterministic and Probabilistic Quality Control Using Gaussian Mixtures for Circular Factories",
-  author    = "Ali Darijani and Gabriel Moser and Kristian Vlajic and Zahra Sadat Hajseyed Nasrollah and Luisa Hoffmann and Mehdi Khabou and Tobias Düser and Albert Albers, Stefan Dietrich, Michael Heizmann, Jürgen Beyerer",
-  abstract  = "Quality Control (QC) in Circular Factorys (CFs) is fundamentally more challenging due to the uncertainty of the incoming products to be reprocessed, compared to linear factories, which have tight tolerances on the input raw materials and parts. One must have an expressive model to manage the multimodality of circular factories. QC and the decision making process that it entails can be understood as a mapping from system requirements and variation space to discrete decisions, which can be formulated either deterministically or probabilistically. Ideally, the model must also be able to handle the deterministic and probabilistic cases seamlessly. Gaussian Mixture Models (GMMs) and their universal approximation property are considered suitable for the circular factory context. GMM can also address deterministic cases by approximating the Dirac delta as a limiting case. We present a stakeholder-oriented QC framework in which stakeholder requirements, product generations, and alternative solutions for new product generations are represented probabilistically over quality-relevant variation spaces. Two complementary decision perspectives are considered. First, stakeholder requirements, exemplified by customer requirements, are modeled as acceptance regions, and the probability that a product generation satisfies individual, joint, or alternative requirements is computed by integrating the corresponding GMM density over these regions. Second, stakeholder requirements and alternative solutions are represented as probability density functions, and distance- and divergence-based metrics are used to quantify their dissimilarity. These metrics support threshold-based acceptance and ranking of alternative solutions under uncertainty. Special attention is given to deterministic limits, threshold design, and the interpretation of distances and divergences when comparing GMMs. The proposed framework provides a basis for stakeholder-based deterministic and probabilistic QC and decision support in circular factories.",
-  journal   = "2026 Conference on Circular Production Systems and Technologies (CCPT)",
-  publisher = "Springer",
-  year      =  2026,
-  language  = "en",
-  selected  = "false",
-  pdf       = "/doc/ccpt_probabilistic_quality_control.pdf",
-  draft     = "false",
-}
 
-@ARTICLE{darijani_ccpt_gm_probabilistic_factory_control,
-  title     = "Instance-Specific Production Control in Circular Manufacturing Using Gaussian Mixture Models",
-  author    = "Finn Bail and Ali Darijani and Luisa Hoffmann and Maurice Engels and Jens Becker and Martin Benfer and  Nicole Stricker and Michael Heizmann and Jürgen Beyerer and Gisela Lanza",
-  abstract  = "Quality Control (QC) in Circular Factorys (CFs) is fundamentally more challenging due to the uncertainty of the incoming products to be reprocessed, compared to linear factories, which have tight tolerances on the input raw materials and parts. One must have an expressive model to manage the multimodality of circular factories. QC and the decision making process that it entails can be understood as a mapping from system requirements and variation space to discrete decisions, which can be formulated either deterministically or probabilistically. Ideally, the model must also be able to handle the deterministic and probabilistic cases seamlessly. Gaussian Mixture Models (GMMs) and their universal approximation property are considered suitable for the circular factory context. GMM can also address deterministic cases by approximating the Dirac delta as a limiting case. We present a stakeholder-oriented QC framework in which stakeholder requirements, product generations, and alternative solutions for new product generations are represented probabilistically over quality-relevant variation spaces. Two complementary decision perspectives are considered. First, stakeholder requirements, exemplified by customer requirements, are modeled as acceptance regions, and the probability that a product generation satisfies individual, joint, or alternative requirements is computed by integrating the corresponding GMM density over these regions. Second, stakeholder requirements and alternative solutions are represented as probability density functions, and distance- and divergence-based metrics are used to quantify their dissimilarity. These metrics support threshold-based acceptance and ranking of alternative solutions under uncertainty. Special attention is given to deterministic limits, threshold design, and the interpretation of distances and divergences when comparing GMMs. The proposed framework provides a basis for stakeholder-based deterministic and probabilistic QC and decision support in circular factories.",
-  journal   = "2026 Conference on Circular Production Systems and Technologies (CCPT)",
-  publisher = "Springer",
-  year      =  2026,
-  language  = "en",
-  selected  = "false",
-  pdf       = "/doc/ccpt_gm_factory_control_bail.pdf",
-  draft     = "false",
-}
+
 
 @ARTICLE{darijani_gm_factor_graphs,
   title     = "Gaussian Mixture Belief Propagation for Hybrid Inference in Factor Graphs",
@@ -396,6 +214,7 @@ established GMM calculus, with exact and approximate steps made explicit.
   publisher = "IEEE",
   year      =  2026,
   language  = "en",
+  keywords  = "postprint,conference,IEEE,Gaussian Mixture, Probability",
   selected  = "false",
   draft     = "false",
 }
@@ -407,118 +226,16 @@ established GMM calculus, with exact and approximate steps made explicit.
   publisher = "AMA Service GmbH",
   year      =  2026,
   language  = "en",
+  keywords  = "postprint,conference",
   selected  = "false",
   draft     = "false",
 }
 
 
 
-@ARTICLE{darijani_ccpt_automatic_monte_carlo,
-  title     = "Automatic Gaussian Mixture Sampling for Uncertainty Management in Circular Factories",
-  author    = "Zahra Sadat Hajseyed Nasrollah and Ali Darijani and Mehdi Khabou and Stefan Dietrich and Volker Schulze and Jürgen Beyerer",
-  abstract  = "Returned components in circular manufacturing often form
-heterogeneous condition populations that are poorly represented by a single 
-Gaussian distribution. Such parts arrive with different usage, inspection, 
-repair, and degradation histories. As a result, product condition,
-process duration, and quality risk are better viewed as random variables
-with several condition regimes rather than as one homogeneous population. 
-In this work, we represent this structure using Gaussian mixture
-models (GMMs), which combine discrete regime information and continuous 
-variability in one probabilistic description. Many quantities needed
-for planning and risk assessment do not admit tractable closed-form 
-expressions once GMM uncertainties are propagated through nonlinear 
-engineering models or decision rules. We therefore present an automatic
-Monte Carlo sampling layer for GMM-based uncertainty propagation.
-The user specifies a tolerance and confidence level, and sampling continues 
-until the estimated confidence interval for the selected output quan-
-tity satisfies the requested precision or the maximum sampling budget
-is reached. The approach enables GMM-based uncertainty models to be
-used in simulation-based planning, routing, inspection, and quality 
-assessment in circular factories without manually fixing the Monte Carlo
-sample size in advance. We demonstrate the workflow with a proof of
-concept fatigue strength example for returned or treated metallic 
-components. Multimodal surface state uncertainty is propagated through a
-nonlinear fatigue strength relation and the output is assessed by its 
-moments and by a low strength probability.",
-  journal   = "2026 Conference on Circular Production Systems and Technologies (CCPT)",
-  publisher = "Springer",
-  year      =  2026,
-  language  = "en",
-  selected  = "false",
-  pdf       = "/doc/ccpt_automatic_monte_carlo.pdf",
-  draft     = "false",
-}
-
-@ARTICLE{darijani_ccpt_ded_reprocessed,
-  title     = "Probabilistic Process-Structure-Property Modelling for Hardness and Porosity Estimation in High-Speed DED-Reprocessed Components in the context of the Circular Factory",
-  author    = "Luisa Hoffmann and Mehdi Khabou and Helena Wexel and Ali Darijani and Jürgen Beyerer and Frederik Zanger and Volker Schulze and Stefan Dietrich and Michael
-Heizmann",
- abstract   = "In Circular Factory (CF) environments, used components are
-disassembled, characterized, and reprocessed, based on a reliable 
-estimation of the resulting material properties and taking measurement and
-remanufacturing uncertainties into consideration. For reprocessing steps
-such as High-Speed Laser Directed Energy Deposition (HS DED-LB), 
-uncertainties and process variability critically affect the robustness and sta-
-bility of process-structure-property predictions. Additionally, 
-measurements introduce uncertainties that propagate into the estimation of the
-post-process material state. For remanufactured structural components, hardness and porosity serve as key quality indicators describing the ma-
-terial state. Both are investigated as key determinants of fatigue 
-performance, since hardness governs local fatigue strength, while porosity acts
-as a stress concentrator that promotes early fatigue crack initiation and
-reduces fatigue strength and component lifetime. In HS DED-LB, laser
-power and scan speed govern the thermal input and thereby influence 
-microstructure development and resulting material properties. The process
-parameters can act as physically based features representing the thermal
-history and its fluctuations to correlate the process to the material state.
-To address this issue, Gaussian Mixture Models (GMMs) are adopted as
-a unified probabilistic framework to represent multimodal uncertainty
-and enable consistent inference under process variability and 
-measurement noise. This paper presents a probabilistic approach for modelling
-and fusing measurement and process uncertainties using GMMs, 
-resulting in probability density functions of hardness and porosity after HS
-DED-LB reprocessing. The approach enables uncertainty-aware 
-estimation of the material state and supports adaptive tuning of reprocessing
-parameters to achieve the desired target quality characteristics in circular
-factories.",
-  journal   = "2026 Conference on Circular Production Systems and Technologies (CCPT)",
-  publisher = "Springer",
-  year      =  2026,
-  language  = "en",
-  selected  = "false",
-  pdf       = "/doc/ccpt_ded_reprocessed.pdf",
-  draft     = "false",
-}
 
 
 
-@ARTICLE{darijani_ccpt_vison_circular_factory,
-  title     = "Bringing the Vision of Perpetual Innovative Products to Life - challenges and opportunities at the circular factory for angle grinders",
-  author    = "Patric Grauberger and Jonas Hemmerich and Nehal Afifi and Victor Mas and Dominik Koch and Edwin Blum and Kristian Vlajic and Mehdi Khabou and Helena Wexel and Gabriel Moser and Gisela Lanza and Albert Albers and Tobias Düser and Luisa Hoffmann and Michael Heizmann and Ali Darijani and Jürgen Beyerer and Frederik Zanger and Stefan Dietrich and Sven Matthiesen",
- abstract   = "In the circular economy, the contradiction between developing innovative 
- products and reusing products from the market is a huge challenge. On the one hand,
-products returned from the market are, by design, unable to meet the 
-requirements and functions of the newest product generation, hindering innovation in
-circularity. On the other hand, retaining the product’s added value is a 
-powerful lever for enabling sustainable circularity. Perpetual innovative products could
-solve this contradiction. However, the problem is that up to now it remains mostly a vision. This vision needs to address three key challenges to come to life:
-analyzing used products and subsystems, predicting functionality at the 
-individual level, and reprocessing subsystems in a way that enables them to fulfill
-the newest functions. In this paper, we illustrate the collaborative approach to
-address these challenges. We structure insights and the challenges encountered
-in various solutions for implementing this vision, using the example of a 
-circular factory for angle grinders. From incorporating asymmetrical degradation into
-product specifications to measuring strategies and reprocessing parameters, this
-paper shows how a vision can come to life. The uncovered insights and 
-difficulties reveal opportunities for further development and interdisciplinary research
-in circular factories.",
-  journal   = "2026 Conference on Circular Production Systems and Technologies (CCPT)",
-  publisher = "Springer",
-  year      =  2026,
-  language  = "en",
-  selected  = "false",
-  pdf       = "/doc/ccpt_bringing_the_vision.pdf",
-  draft     = "false",
-}
 
 
 
@@ -548,6 +265,7 @@ the cheapest classical method but surpasses these methods in
 terms of accuracy.",
   year          =  2026,
   keywords      = "Gaussian Mixture, Probability",
+  keywords      = "postprint,conference,IEEE,Gaussian Mixture, Probability",
   venue         = "Accepted to 2026 IEEE International Conference on Multisensor Fusion and Integration for Intelligent Systems (MFI)",
   draft         = "false",
 }
