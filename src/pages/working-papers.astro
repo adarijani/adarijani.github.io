@@ -1,0 +1,264 @@
+---
+import type { ProcessedPublication } from "@/types"
+
+import { PROFILE } from "@site-config"
+import { formatCount } from "@/lib/plural"
+import { loadAllWorkingPapers } from "@/lib/publications/working-papers"
+import { slugify } from "@/lib/string-manipulation"
+import CommonLayout from "@/layouts/CommonLayout.astro"
+import Dropdown from "@/components/base/Dropdown.astro"
+import Icon from "@/components/base/Icon.astro"
+import Link from "@/components/base/Link.astro"
+import TaxonomyChip from "@/components/base/TaxonomyChip.astro"
+import CardGroup from "@/components/base/card/CardGroup.astro"
+import Section from "@/components/layout/Section.astro"
+import PubCard from "@/components/publications/PubCard.astro"
+
+import "@/styles/chip-filter.css"
+
+const contactEmail = PROFILE.emails[0]
+const { papersByYear, years, allPapersFlat, allKeywords } =
+  await loadAllWorkingPapers()
+---
+
+<CommonLayout
+  title="Working Papers"
+  description="Early-stage working papers and opportunities to collaborate"
+  breadcrumbs={[{ label: "Working Papers", icon: "research" }]}
+  prose={false}
+  wide
+  celestial
+>
+  <section class="collaboration-note" aria-labelledby="collaboration-heading">
+    <h2 id="collaboration-heading">Looking for collaborators</h2>
+    <p>My work currently is developing a Geometric Gaussian Mixture Program.</p>
+    <p>
+      It is always interesting either to find theoretic tools like Measure
+      Theoretic Probability to help with the program itself or to find
+      applications in seemingly separate fields like Computer Graphics and
+      Stochastic Geometric Control.
+    </p>
+    <p>
+      If you share the same sentiment about collaboration then just drop me a
+      line at:<Link href={`mailto:${contactEmail}`} underline>
+        {contactEmail}
+      </Link>
+      .
+    </p>
+  </section>
+
+  <p class="publication-intro">
+    {formatCount(allPapersFlat.length, "working paper")}
+    · Early-stage drafts and work in progress. Ranging from abstracts to
+    preprint ready.
+  </p>
+
+  <div class="pub-controls">
+    <div class="pub-sort">
+      <Dropdown align="start" id="working-paper-sort-dropdown">
+        <button
+          slot="trigger"
+          data-dropdown-trigger
+          class="pub-sort-trigger"
+          aria-label="Sort working papers"
+        >
+          <Icon name="mingcute:sort-descending-line" size={16} />
+          <span data-sort-label>By Relevance</span>
+          <Icon name="chevron-down" size={14} />
+        </button>
+        <button
+          data-dropdown-item="relevance"
+          class="pub-sort-option"
+          aria-selected="true"
+        >
+          By Relevance
+        </button>
+        <button
+          data-dropdown-item="year"
+          class="pub-sort-option"
+          aria-selected="false"
+        >
+          By Year
+        </button>
+      </Dropdown>
+    </div>
+
+    {allKeywords.length > 0 && (
+      <div class="chip-filter-bar" role="group" aria-label="Filter working papers by tag">
+        {allKeywords.map(({ keyword, count }) => (
+          <TaxonomyChip
+            label={keyword}
+            count={count}
+            countNoun="working paper"
+            data-pub-tag-filter={slugify(keyword)}
+            aria-pressed="false"
+            aria-label={`Filter working papers by ${keyword}; ${formatCount(count, "working paper")}`}
+          />
+        ))}
+        <span class="chip-active-filter" data-active-filter hidden>
+          <TaxonomyChip label="Clear" prefix="×" tone="destructive" data-clear-filter aria-label="Clear working paper filter" />
+        </span>
+        <span class="sr-only" aria-live="polite" aria-atomic="true" data-working-paper-filter-status />
+      </div>
+    )}
+  </div>
+
+  <div data-pub-view="relevance">
+    {allPapersFlat.length > 0 ? (
+      <CardGroup>{allPapersFlat.map((paper: ProcessedPublication) => <PubCard pub={paper} />)}</CardGroup>
+    ) : (
+      <div class="empty-state">
+        <h2>Drafts are in progress</h2>
+        <p>There are no working papers ready to share yet. Please check back soon or get in touch to discuss a collaboration.</p>
+      </div>
+    )}
+  </div>
+
+  <div data-pub-view="year" hidden>
+    {years.length > 0 ? years.map((year) => (
+      <div data-pub-year-section={year}>
+        <Section title={year.toString()}>
+          <CardGroup>{papersByYear[year].map((paper: ProcessedPublication) => <PubCard pub={paper} />)}</CardGroup>
+        </Section>
+      </div>
+    )) : (
+      <div class="empty-state"><h2>Drafts are in progress</h2><p>There are no working papers ready to share yet.</p></div>
+    )}
+  </div>
+</CommonLayout>
+
+<script>
+  import { initChipFilter } from "@/lib/chip-filter"
+
+  function initWorkingPaperControls() {
+    const relevanceView = document.querySelector<HTMLElement>(
+      '[data-pub-view="relevance"]',
+    )
+    const yearView = document.querySelector<HTMLElement>(
+      '[data-pub-view="year"]',
+    )
+    const sortLabel = document.querySelector<HTMLElement>("[data-sort-label]")
+    const sortOptions = document.querySelectorAll<HTMLElement>(
+      "#working-paper-sort-dropdown [data-dropdown-item]",
+    )
+    if (
+      !relevanceView ||
+      !yearView ||
+      relevanceView.dataset.controlsInitialized === "true"
+    )
+      return
+    relevanceView.dataset.controlsInitialized = "true"
+    let currentSort = "relevance"
+    const chipFilter = initChipFilter({
+      itemSelector: "[data-pub-keywords]",
+      itemAttr: "pubKeywords",
+      filterButtonSelector: "[data-pub-tag-filter]",
+      filterButtonAttr: "pubTagFilter",
+      chipSelector: "[data-pub-tag]",
+      chipAttr: "pubTag",
+      groupSelector: "[data-pub-year-section]",
+      clearButtonSelector: "[data-clear-filter]",
+      activeIndicatorSelector: "[data-active-filter]",
+      statusSelector: "[data-working-paper-filter-status]",
+      getScope: () =>
+        currentSort === "relevance" ? relevanceView! : yearView!,
+    })
+
+    function switchSort(mode: string) {
+      currentSort = mode
+      relevanceView!.hidden = mode !== "relevance"
+      yearView!.hidden = mode !== "year"
+      if (sortLabel)
+        sortLabel.textContent =
+          mode === "relevance" ? "By Relevance" : "By Year"
+      sortOptions.forEach((option) =>
+        option.setAttribute(
+          "aria-selected",
+          option.dataset.dropdownItem === mode ? "true" : "false",
+        ),
+      )
+      chipFilter.applyFilter()
+    }
+
+    sortOptions.forEach((option) =>
+      option.addEventListener("click", () => {
+        const mode = option.dataset.dropdownItem
+        if (mode) switchSort(mode)
+      }),
+    )
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initWorkingPaperControls, {
+      once: true,
+    })
+  } else initWorkingPaperControls()
+  document.addEventListener("astro:page-load", initWorkingPaperControls)
+  document.addEventListener("astro:after-swap", initWorkingPaperControls)
+</script>
+
+<style>
+  .collaboration-note {
+    margin-block-end: var(--space-xl);
+    padding: var(--space-m) var(--space-l);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: color-mix(in oklab, var(--muted) 45%, transparent);
+  }
+
+  .collaboration-note h2 {
+    margin-block: 0 var(--space-2xs);
+    font-size: var(--step-1);
+  }
+  .collaboration-note p {
+    margin-block: var(--space-2xs) 0;
+    color: var(--muted-foreground);
+  }
+  .publication-intro,
+  .empty-state {
+    color: var(--muted-foreground);
+  }
+  .pub-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+  .pub-sort-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.375rem 0.75rem;
+    font-size: 0.875rem;
+    border: 1px solid var(--border);
+    border-radius: 0.375rem;
+    background: var(--background);
+    color: var(--foreground);
+    cursor: pointer;
+  }
+  #working-paper-sort-dropdown {
+    background: var(--background);
+  }
+  .pub-sort-option {
+    font-size: 0.875rem;
+  }
+  .pub-sort-option[aria-selected="true"] {
+    color: var(--primary-foreground);
+    font-weight: var(--font-weight-semibold);
+  }
+  .empty-state {
+    padding-block: var(--space-2xl);
+    text-align: center;
+  }
+  .empty-state h2 {
+    margin-block: 0 var(--space-2xs);
+    color: var(--muted-foreground);
+    font-size: var(--step-2);
+    font-weight: var(--font-weight-medium);
+  }
+  [data-pub-view][hidden],
+  .chip-active-filter[hidden] {
+    display: none;
+  }
+</style>
