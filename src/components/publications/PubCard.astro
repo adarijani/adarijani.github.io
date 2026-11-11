@@ -29,6 +29,7 @@ const hiddenAuthorsId = `publication-${slugify(pub.title)}-${pub.year ?? "unknow
   data-pub-selected={pub.selected ? "true" : "false"}
   data-pub-author-position={pub.authorPosition ?? Infinity}
   data-pub-keywords={pub.expandedKeywords?.map((k) => slugify(k)).join(",") ?? ""}
+  data-pub-status={pub.status ? slugify(pub.status) : ""}
   data-has-image={pub.image ? "true" : undefined}
 >
   {pub.image && (

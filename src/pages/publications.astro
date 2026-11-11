@@ -31,6 +31,14 @@ const equalContributionNote = [
     ),
   ),
 ].join(". ")
+const statusCounts = new Map<string, number>()
+for (const pub of allPublicationsFlat) {
+  if (pub.status)
+    statusCounts.set(pub.status, (statusCounts.get(pub.status) ?? 0) + 1)
+}
+const publicationStatuses = [...statusCounts.entries()].sort(([a], [b]) =>
+  a.localeCompare(b),
+)
 ---
 
 <CommonLayout
@@ -103,23 +111,38 @@ const equalContributionNote = [
               aria-label={`Filter publications by ${keyword}; ${formatCount(count, "publication")}`}
             />
           ))}
-          <span class="chip-active-filter" data-active-filter hidden>
-            <TaxonomyChip
-              label="Clear"
-              prefix="×"
-              tone="destructive"
-              data-clear-filter
-              aria-label="Clear publication filter"
-            />
-          </span>
-          <span
-            class="sr-only"
-            aria-live="polite"
-            aria-atomic="true"
-            data-publication-filter-status
-          />
         </div>
       )}
+    {publicationStatuses.length > 0 && (
+      <div class="chip-filter-bar" role="group" aria-label="Filter publications by status">
+        {publicationStatuses.map(([status, count]) => (
+          <TaxonomyChip
+            label={status}
+            count={count}
+            countNoun="publication"
+            prefix=""
+            data-pub-status-filter={slugify(status)}
+            aria-pressed="false"
+            aria-label={`Filter publications by status: ${status}; ${formatCount(count, "publication")}`}
+          />
+        ))}
+      </div>
+    )}
+    <span class="chip-active-filter" data-active-filter hidden>
+      <TaxonomyChip
+        label="Clear"
+        prefix="×"
+        tone="destructive"
+        data-clear-filter
+        aria-label="Clear publication filters"
+      />
+    </span>
+    <span
+      class="sr-only"
+      aria-live="polite"
+      aria-atomic="true"
+      data-publication-filter-status
+    />
     {equalContributionNote && (
         <p class="equal-contribution-note" set:html={equalContributionNote} />
       )}
@@ -165,8 +188,6 @@ const equalContributionNote = [
 </CommonLayout>
 
 <script>
-  import { initChipFilter } from "@/lib/chip-filter"
-
   function initPublicationControls() {
     const relevanceView = document.querySelector<HTMLElement>(
       '[data-pub-view="relevance"]',
@@ -188,20 +209,98 @@ const equalContributionNote = [
 
     let currentSort = "relevance"
 
-    const chipFilter = initChipFilter({
-      itemSelector: "[data-pub-keywords]",
-      itemAttr: "pubKeywords",
-      filterButtonSelector: "[data-pub-tag-filter]",
-      filterButtonAttr: "pubTagFilter",
-      chipSelector: "[data-pub-tag]",
-      chipAttr: "pubTag",
-      groupSelector: "[data-pub-year-section]",
-      clearButtonSelector: "[data-clear-filter]",
-      activeIndicatorSelector: "[data-active-filter]",
-      statusSelector: "[data-publication-filter-status]",
-      getScope: () =>
-        currentSort === "relevance" ? relevanceView! : yearView!,
+    let activeTag: string | null = null
+    let activeStatus: string | null = null
+
+    function applyFilters() {
+      const scope = currentSort === "relevance" ? relevanceView! : yearView!
+      const cards = [
+        ...scope.querySelectorAll<HTMLElement>("[data-pub-keywords]"),
+      ]
+      for (const card of cards) {
+        const keywords = (card.dataset.pubKeywords || "").split(",")
+        card.hidden =
+          (!!activeTag && !keywords.includes(activeTag)) ||
+          (!!activeStatus && card.dataset.pubStatus !== activeStatus)
+      }
+      yearView!
+        .querySelectorAll<HTMLElement>("[data-pub-year-section]")
+        .forEach((group) => {
+          group.hidden = ![
+            ...group.querySelectorAll<HTMLElement>("[data-pub-keywords]"),
+          ].some((card) => !card.hidden)
+        })
+      document
+        .querySelectorAll<HTMLButtonElement>(
+          "[data-pub-tag-filter], [data-pub-tag]",
+        )
+        .forEach((button) => {
+          button.setAttribute(
+            "aria-pressed",
+            button.dataset.pubTagFilter === activeTag ||
+              button.dataset.pubTag === activeTag
+              ? "true"
+              : "false",
+          )
+        })
+      document
+        .querySelectorAll<HTMLButtonElement>("[data-pub-status-filter]")
+        .forEach((button) => {
+          button.setAttribute(
+            "aria-pressed",
+            button.dataset.pubStatusFilter === activeStatus ? "true" : "false",
+          )
+        })
+      document
+        .querySelector<HTMLElement>("[data-active-filter]")
+        ?.toggleAttribute("hidden", !activeTag && !activeStatus)
+      const announcement = document.querySelector<HTMLElement>(
+        "[data-publication-filter-status]",
+      )
+      if (announcement) {
+        const visible = cards.filter((card) => !card.hidden).length
+        announcement.textContent =
+          activeTag || activeStatus
+            ? `${visible} filtered publications shown.`
+            : `All ${visible} publications shown.`
+      }
+    }
+
+    document
+      .querySelectorAll<HTMLButtonElement>("[data-pub-tag-filter]")
+      .forEach((button) => {
+        button.addEventListener("click", () => {
+          const value = button.dataset.pubTagFilter
+          if (value) activeTag = activeTag === value ? null : value
+          applyFilters()
+        })
+      })
+    document
+      .querySelectorAll<HTMLButtonElement>("[data-pub-status-filter]")
+      .forEach((button) => {
+        button.addEventListener("click", () => {
+          const value = button.dataset.pubStatusFilter
+          if (value) activeStatus = activeStatus === value ? null : value
+          applyFilters()
+        })
+      })
+    document.addEventListener("click", (event) => {
+      const chip = (event.target as Element).closest<HTMLButtonElement>(
+        "[data-pub-tag]",
+      )
+      if (chip?.dataset.pubTag) {
+        activeTag =
+          activeTag === chip.dataset.pubTag ? null : chip.dataset.pubTag
+        applyFilters()
+      }
     })
+    document
+      .querySelector("[data-clear-filter]")
+      ?.addEventListener("click", () => {
+        activeTag = null
+        activeStatus = null
+        applyFilters()
+      })
 
     function switchSort(mode: string) {
       currentSort = mode
@@ -226,7 +325,7 @@ const equalContributionNote = [
         )
       })
 
-      chipFilter.applyFilter()
+      applyFilters()
     }
 
     // Sort dropdown clicks
